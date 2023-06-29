@@ -5,8 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class ItemDto {
-    Long id;
+public class RequsetSalesItemDto {
     @NotEmpty
     String title;
     @NotEmpty

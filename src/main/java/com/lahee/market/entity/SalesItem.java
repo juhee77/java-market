@@ -1,6 +1,6 @@
 package com.lahee.market.entity;
 
-import com.lahee.market.dto.ItemDto;
+import com.lahee.market.dto.RequsetSalesItemDto;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -25,14 +25,14 @@ public class SalesItem {
     private String password;
 
 
-    public static SalesItem postNewItem(ItemDto itemDto) {
+    public static SalesItem postNewItem(RequsetSalesItemDto requsetSalesItemDto) {
         SalesItem salesItem = new SalesItem();
-        salesItem.description = itemDto.getDescription();
-        salesItem.title = itemDto.getTitle();
-        salesItem.minPriceWanted = itemDto.getMinPriceWanted();
+        salesItem.description = requsetSalesItemDto.getDescription();
+        salesItem.title = requsetSalesItemDto.getTitle();
+        salesItem.minPriceWanted = requsetSalesItemDto.getMinPriceWanted();
         salesItem.status = "판매중";
-        salesItem.writer = itemDto.getWriter();
-        salesItem.password = itemDto.getPassword();
+        salesItem.writer = requsetSalesItemDto.getWriter();
+        salesItem.password = requsetSalesItemDto.getPassword();
         return salesItem;
     }
 }
