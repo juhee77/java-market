@@ -2,7 +2,6 @@ spring:
   profiles:
     default: dev
 
-
 ---
 spring:
   config:
@@ -33,5 +32,5 @@ spring:
 
 logging:
   level:
-    root: debug
+    root: info
 #  config: file:logback-spring.xml
