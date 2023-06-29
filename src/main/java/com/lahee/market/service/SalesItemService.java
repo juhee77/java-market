@@ -1,5 +1,6 @@
 package com.lahee.market.service;
 
+import com.lahee.market.dto.DeleteItemDto;
 import com.lahee.market.dto.RequsetSalesItemDto;
 import com.lahee.market.dto.ResponseSalesItemDto;
 import com.lahee.market.entity.SalesItem;
@@ -102,6 +103,24 @@ public class SalesItemService {
         }
 
         item.update(requestDto);
+    }
+
+    @Transactional
+    public void deleteItem(Long id, DeleteItemDto requestDto) {
+        //item 객체 찾기
+        SalesItem item = salesItemRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        log.info("{}", requestDto);
+
+        //객체 작성자의 아이디 패스워드 일치 하는지 확인
+        if (!item.getWriter().equals(requestDto.getWriter())) {
+            throw new RuntimeException("잘못된 아이디 입니다.");
+        }
+        if (!item.getPassword().equals(requestDto.getPassword())) {
+            throw new RuntimeException("잘못된 패스워드 입니다.");
+        }
+
+        salesItemRepository.deleteById(id);
     }
 
 }

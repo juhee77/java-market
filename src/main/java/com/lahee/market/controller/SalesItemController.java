@@ -1,5 +1,6 @@
 package com.lahee.market.controller;
 
+import com.lahee.market.dto.DeleteItemDto;
 import com.lahee.market.dto.RequsetSalesItemDto;
 import com.lahee.market.dto.ResponseDto;
 import com.lahee.market.dto.ResponseSalesItemDto;
@@ -60,5 +61,12 @@ public class SalesItemController {
         return ResponseEntity.ok(ResponseDto.getSuccessInstance());
     }
 
-
+    @DeleteMapping("/{itemId}")
+    public ResponseEntity<ResponseDto> deleteItem(
+            @PathVariable("itemId") Long itemId,
+            @RequestBody DeleteItemDto deleteItemDto
+    ) {
+        salesItemService.deleteItem(itemId, deleteItemDto);
+        return ResponseEntity.ok(ResponseDto.getSuccessInstance());
+    }
 }
