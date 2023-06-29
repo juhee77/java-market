@@ -10,6 +10,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/items")
@@ -35,4 +38,27 @@ public class SalesItemController {
     public ResponseEntity<ResponseSalesItemDto> getOneItem(@PathVariable("itemId") Long itemId) {
         return ResponseEntity.ok(salesItemService.readOneItem(itemId));
     }
+
+    @PutMapping("/{itemId}")
+    public ResponseEntity<ResponseDto> saveItemImage(
+            @PathVariable("itemId") Long itemId,
+            @RequestBody @Valid RequsetSalesItemDto requsetSalesItemDto) {
+        salesItemService.update(itemId, requsetSalesItemDto);
+        return ResponseEntity.ok(ResponseDto.getSuccessInstance());
+    }
+
+
+    @PutMapping(value = "/{itemId}/image")
+    public ResponseEntity<ResponseDto> saveItemImage(
+            @PathVariable("itemId") Long itemId,
+            @RequestParam("image") MultipartFile image,
+            @RequestParam("writer") String writer,
+            @RequestParam("password") String password
+
+    ) throws IOException {
+        salesItemService.saveItemImage(itemId, image, writer, password);
+        return ResponseEntity.ok(ResponseDto.getSuccessInstance());
+    }
+
+
 }

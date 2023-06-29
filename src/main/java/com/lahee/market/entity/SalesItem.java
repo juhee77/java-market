@@ -35,4 +35,14 @@ public class SalesItem {
         salesItem.password = requsetSalesItemDto.getPassword();
         return salesItem;
     }
+
+    public void update(RequsetSalesItemDto requestDto) {
+        this.description = requestDto.getDescription();
+        this.title = requestDto.getTitle();
+        this.minPriceWanted = requestDto.getMinPriceWanted();
+    }
+
+    public void setImage(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 }
