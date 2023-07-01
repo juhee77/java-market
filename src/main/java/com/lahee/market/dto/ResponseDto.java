@@ -6,9 +6,9 @@ import lombok.Data;
 public class ResponseDto {
     String message;
 
-    public static ResponseDto getSuccessInstance(){
+    public static ResponseDto getSuccessInstance(String message){
         ResponseDto responseDto = new ResponseDto();
-        responseDto.setMessage("success");
+        responseDto.setMessage(message);
         return responseDto;
     }
 }

@@ -12,27 +12,34 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
+import org.springframework.restdocs.operation.preprocess.Preprocessors;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import static com.lahee.market.constants.ControllerMessage.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@AutoConfigureRestDocs
 @Transactional
 @ActiveProfiles("test")
 //데이터 통합 테스트
@@ -63,8 +70,15 @@ class SalesItemControllerTest {
         mockMvc.perform(post("/items")
                         .content(requestBody)
                         .contentType(MediaType.APPLICATION_JSON))
+
+                .andDo(MockMvcResultHandlers.print())
+                .andDo(MockMvcRestDocumentation.document("Items/POST/item 생성 조회",
+                        Preprocessors.preprocessRequest(prettyPrint()),
+                        Preprocessors.preprocessResponse(prettyPrint())))
+
                 .andExpectAll(
                         status().is2xxSuccessful(),
+                        jsonPath("message").value(SAVE_ITEM_MESSAGE),
                         content().contentType(MediaType.APPLICATION_JSON)
                 );
 
@@ -89,7 +103,12 @@ class SalesItemControllerTest {
 
         //when
         ResultActions perform = mockMvc.perform(get("/items/{itemId}", save.getId())
-                .contentType(MediaType.APPLICATION_JSON));
+                        .contentType(MediaType.APPLICATION_JSON))
+
+                .andDo(MockMvcResultHandlers.print())
+                .andDo(MockMvcRestDocumentation.document("Items/GET/item 단건 조회",
+                        Preprocessors.preprocessRequest(prettyPrint()),
+                        Preprocessors.preprocessResponse(prettyPrint())));
 
         //then
         perform.andExpectAll(
@@ -116,9 +135,14 @@ class SalesItemControllerTest {
 
         //when
         ResultActions perform = mockMvc.perform(get("/items")
-                .param("page", String.valueOf(2))
-                .param("limit", String.valueOf(10))
-                .contentType(MediaType.APPLICATION_JSON));
+                        .param("page", String.valueOf(2))
+                        .param("limit", String.valueOf(10))
+                        .contentType(MediaType.APPLICATION_JSON))
+
+                .andDo(MockMvcResultHandlers.print())
+                .andDo(MockMvcRestDocumentation.document("Items/GET/item 페이징 조회",
+                        Preprocessors.preprocessRequest(prettyPrint()),
+                        Preprocessors.preprocessResponse(prettyPrint())));
 
         //then (25개의 엘리먼트중 3쪽출력)
         perform.andExpectAll(
@@ -131,7 +155,7 @@ class SalesItemControllerTest {
     }
 
     @Test
-    @DisplayName("item 사진 업데이트 조회 (PUT /items/{itemId}/image)")
+    @DisplayName("item 사진 업데이트 (PUT /items/{itemId}/image)")
     @Disabled
     //사진 업로드의 경우 post지원시에  테스트 가능 //TODO 이미지 테스트 경우 해당 파일 제거하여 관리하도록
     public void saveItemPhoto() throws Exception {
@@ -150,8 +174,15 @@ class SalesItemControllerTest {
                         .param("writer", writer)
                         .param("password", password)
                         .contentType(MediaType.MULTIPART_FORM_DATA))
+
+                .andDo(MockMvcResultHandlers.print())
+                .andDo(MockMvcRestDocumentation.document("Items/PUT/item 사진 업데이트",
+                        Preprocessors.preprocessRequest(prettyPrint()),
+                        Preprocessors.preprocessResponse(prettyPrint())))
+
                 .andExpectAll(
                         status().is2xxSuccessful(),
+                        jsonPath("message").value(UPDATE_ITEM_IMAGE_MESSAGE),
                         content().contentType(MediaType.APPLICATION_JSON)
                 );
 
@@ -176,8 +207,15 @@ class SalesItemControllerTest {
         mockMvc.perform(put("/items/{itemId}", save.getId())
                         .content(requestBody)
                         .contentType(MediaType.APPLICATION_JSON))
+
+                .andDo(MockMvcResultHandlers.print())
+                .andDo(MockMvcRestDocumentation.document("Items/PUT/item 업데이트",
+                        Preprocessors.preprocessRequest(prettyPrint()),
+                        Preprocessors.preprocessResponse(prettyPrint())))
+
                 .andExpectAll(
                         status().is2xxSuccessful(),
+                        jsonPath("message").value(UPDATE_ITEM_MESSAGE),
                         content().contentType(MediaType.APPLICATION_JSON)
                 );
 
@@ -203,8 +241,15 @@ class SalesItemControllerTest {
         mockMvc.perform(delete("/items/{itemId}", save.getId())
                         .content(requestBody)
                         .contentType(MediaType.APPLICATION_JSON))
+
+                .andDo(MockMvcResultHandlers.print())
+                .andDo(MockMvcRestDocumentation.document("Items/DELETE/item 삭제",
+                        Preprocessors.preprocessRequest(prettyPrint()),
+                        Preprocessors.preprocessResponse(prettyPrint())))
+
                 .andExpectAll(
                         status().is2xxSuccessful(),
+                        jsonPath("message").value(DELETE_ITEM_MESSAGE),
                         content().contentType(MediaType.APPLICATION_JSON)
                 );
 
