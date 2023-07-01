@@ -33,7 +33,11 @@ public class Comment {
         comment.writer = dto.getWriter();
         comment.password = dto.getPassword();
         comment.salesItem = item;
-        comment.content = dto.getComment();
+        comment.content = dto.getContent();
         return comment;
+    }
+
+    public void update(RequestCommentDto dto) {
+        this.content = dto.getContent();
     }
 }

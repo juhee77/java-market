@@ -4,9 +4,7 @@ import com.lahee.market.dto.comment.RequestCommentDto;
 import com.lahee.market.dto.comment.ResponseCommentDto;
 import com.lahee.market.entity.Comment;
 import com.lahee.market.entity.SalesItem;
-import com.lahee.market.exception.CommentNotFoundException;
-import com.lahee.market.exception.CommentNotMatchItemException;
-import com.lahee.market.exception.ItemNotFoundException;
+import com.lahee.market.exception.*;
 import com.lahee.market.repository.CommentRepository;
 import com.lahee.market.repository.SalesItemRepository;
 import lombok.RequiredArgsConstructor;
@@ -48,5 +46,28 @@ public class CommentService {
             throw new CommentNotMatchItemException();
         }
         return ResponseCommentDto.fromEntity(comment);
+    }
+
+    @Transactional
+    public ResponseCommentDto updateComment(Long itemId, Long commentId, RequestCommentDto dto) {
+        Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
+        if (comment.getSalesItem().getId() != itemId) {
+            throw new CommentNotMatchItemException();
+        }
+
+        //아이디 비번 검증
+        checkCommentWriterAndPasswordAndThrowException(dto.getWriter(), dto.getPassword(), comment);
+        comment.update(dto);
+        return ResponseCommentDto.fromEntity(comment);
+    }
+
+
+    private static void checkCommentWriterAndPasswordAndThrowException(String writer, String password, Comment comment) {
+        if (!comment.getWriter().equals(writer)) {
+            throw new WriterNameNotMatchException();
+        }
+        if (!comment.getPassword().equals(password)) {
+            throw new PasswordNotMatchException();
+        }
     }
 }

@@ -29,12 +29,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.lahee.market.constants.ControllerMessage.SAVE_COMMENT_MESSAGE;
+import static com.lahee.market.constants.ControllerMessage.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -129,7 +128,7 @@ class CommentControllerTest {
 
 
         //when
-        ResultActions perform = mockMvc.perform(get("/items/{itemId}/comments/{commentId}", item.getId(),save.getId())
+        ResultActions perform = mockMvc.perform(get("/items/{itemId}/comments/{commentId}", item.getId(), save.getId())
                         .contentType(MediaType.APPLICATION_JSON))
 
                 .andDo(MockMvcResultHandlers.print())
@@ -146,6 +145,34 @@ class CommentControllerTest {
         );
     }
 
+    @Test
+    @DisplayName("comment 업데이트 확인 (PUT /items/{itemId}/comments/{commentId})")
+    public void updateItem() throws Exception {
+        //givne
+        ResponseCommentDto save = commentService.save(item.getId(), new RequestCommentDto("cWriter", "cPassword", "cContent"));
+        RequestCommentDto updateDto = new RequestCommentDto("cWriter", "cPassword", "MODIFY");
+        String requestBody = new ObjectMapper().writeValueAsString(updateDto);
+
+        //when
+        mockMvc.perform(put("/items/{itemId}/comments/{commentId}", item.getId(),save.getId())
+                        .content(requestBody)
+                        .contentType(MediaType.APPLICATION_JSON))
+
+                .andDo(MockMvcResultHandlers.print())
+                .andDo(MockMvcRestDocumentation.document("Comment/PUT/comment 업데이트",
+                        Preprocessors.preprocessRequest(prettyPrint()),
+                        Preprocessors.preprocessResponse(prettyPrint())))
+
+                .andExpectAll(
+                        status().is2xxSuccessful(),
+                        jsonPath("message").value(UPDATE_COMMENT_MESSAGE),
+                        content().contentType(MediaType.APPLICATION_JSON)
+                );
+
+        //then
+        Comment comment = commentRepository.findById(save.getId()).get();
+        assertThat(comment.getContent()).isEqualTo("MODIFY");
+    }
 
     @BeforeEach
     public void makeItem() {

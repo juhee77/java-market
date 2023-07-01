@@ -8,5 +8,5 @@ import lombok.Data;
 public class RequestCommentDto {
     String writer;
     String password;
-    String comment;
+    String content;
 }

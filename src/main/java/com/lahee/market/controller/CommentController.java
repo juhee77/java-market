@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import static com.lahee.market.constants.ControllerMessage.SAVE_COMMENT_MESSAGE;
+import static com.lahee.market.constants.ControllerMessage.UPDATE_COMMENT_MESSAGE;
 
 @RestController
 @RequestMapping("/items/{itemId}/comments")
@@ -37,8 +38,16 @@ public class CommentController {
 
     @GetMapping("/{commentId}")
     public ResponseEntity<ResponseCommentDto> findOneComment(
-            @PathVariable("itemId") Long itemId, @PathVariable("commentId")Long commentId){
+            @PathVariable("itemId") Long itemId, @PathVariable("commentId") Long commentId) {
         return ResponseEntity.ok(commentService.findOneById(itemId, commentId));
+    }
+
+    @PutMapping("/{commentId}")
+    public ResponseEntity<ResponseDto> updateComment(
+            @PathVariable("itemId") Long itemId, @PathVariable("commentId") Long commentId,
+            @Valid @RequestBody RequestCommentDto requestCommentDto) {
+        commentService.updateComment(itemId, commentId, requestCommentDto);
+        return ResponseEntity.ok(ResponseDto.getSuccessInstance(UPDATE_COMMENT_MESSAGE));
     }
 
 }

@@ -47,4 +47,18 @@ include::{snippets}/Comment/GET/comment 페이징 조회/http-response.adoc[]
 
 include::{snippets}/Comment/GET/comment 페이징 조회/curl-request.adoc[]
 
+== 댓글 수정
+
+=== Request
+
+include::{snippets}/Comment/PUT/comment 업데이트/http-request.adoc[]
+
+=== Response
+
+include::{snippets}/Comment/PUT/comment 업데이트/http-response.adoc[]
+
+==== test
+
+include::{snippets}/Comment/PUT/comment 업데이트/curl-request.adoc[]
+
 
