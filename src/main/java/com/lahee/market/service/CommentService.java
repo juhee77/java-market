@@ -1,6 +1,7 @@
 package com.lahee.market.service;
 
 import com.lahee.market.dto.comment.CommentReplyDto;
+import com.lahee.market.dto.comment.DeleteCommentDto;
 import com.lahee.market.dto.comment.RequestCommentDto;
 import com.lahee.market.dto.comment.ResponseCommentDto;
 import com.lahee.market.entity.Comment;
@@ -74,6 +75,19 @@ public class CommentService {
         checkItemWriterAndPasswordAndThrowException(dto.getWriter(), dto.getPassword(), salesItem);
         comment.updateReply(dto);
         return ResponseCommentDto.fromEntity(comment);
+    }
+
+    @Transactional
+    public void deleteComment(Long itemId, Long commentId, DeleteCommentDto dto) {
+        Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
+        if (comment.getSalesItem().getId() != itemId) {
+            throw new CommentNotMatchItemException();
+        }
+
+        //댓글을 올린사람이 맞는지 아이디와 비번 검증후 틀리는 경우 에러를 던진다.
+        checkCommentWriterAndPasswordAndThrowException(dto.getWriter(), dto.getPassword(), comment);
+        comment.getSalesItem().deleteComment(comment); //연관관계 메서드
+        commentRepository.deleteById(commentId);
     }
 
 

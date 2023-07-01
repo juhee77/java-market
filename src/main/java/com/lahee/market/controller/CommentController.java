@@ -2,6 +2,7 @@ package com.lahee.market.controller;
 
 import com.lahee.market.dto.ResponseDto;
 import com.lahee.market.dto.comment.CommentReplyDto;
+import com.lahee.market.dto.comment.DeleteCommentDto;
 import com.lahee.market.dto.comment.RequestCommentDto;
 import com.lahee.market.dto.comment.ResponseCommentDto;
 import com.lahee.market.service.CommentService;
@@ -58,4 +59,11 @@ public class CommentController {
         return ResponseEntity.ok(ResponseDto.getSuccessInstance(UPDATE_COMMENT_REPLY_MESSAGE));
     }
 
+    @DeleteMapping("/{commentId}")
+    public ResponseEntity<ResponseDto> deleteComment(
+            @PathVariable("itemId") Long itemId, @PathVariable("commentId") Long commentId,
+            @RequestBody DeleteCommentDto deleteCommentDto) {
+        commentService.deleteComment(itemId, commentId, deleteCommentDto);
+        return ResponseEntity.ok(ResponseDto.getSuccessInstance(DELETE_COMMENT_MESSAGE));
+    }
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lahee.market.dto.RequestSalesItemDto;
 import com.lahee.market.dto.ResponseSalesItemDto;
 import com.lahee.market.dto.comment.CommentReplyDto;
+import com.lahee.market.dto.comment.DeleteCommentDto;
 import com.lahee.market.dto.comment.RequestCommentDto;
 import com.lahee.market.dto.comment.ResponseCommentDto;
 import com.lahee.market.entity.Comment;
@@ -29,10 +30,13 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static com.lahee.market.constants.ControllerMessage.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -155,7 +159,7 @@ class CommentControllerTest {
         String requestBody = new ObjectMapper().writeValueAsString(updateDto);
 
         //when
-        mockMvc.perform(put("/items/{itemId}/comments/{commentId}", item.getId(),save.getId())
+        mockMvc.perform(put("/items/{itemId}/comments/{commentId}", item.getId(), save.getId())
                         .content(requestBody)
                         .contentType(MediaType.APPLICATION_JSON))
 
@@ -176,7 +180,6 @@ class CommentControllerTest {
     }
 
 
-
     @Test
     @DisplayName("comment reply 업데이트 확인 (PUT /items/{itemId}/comments/{commentId})/reply")
     public void updateCommentReply() throws Exception {
@@ -186,7 +189,7 @@ class CommentControllerTest {
         String requestBody = new ObjectMapper().writeValueAsString(updateDto);
 
         //when
-        mockMvc.perform(put("/items/{itemId}/comments/{commentId}/reply", item.getId(),save.getId())
+        mockMvc.perform(put("/items/{itemId}/comments/{commentId}/reply", item.getId(), save.getId())
                         .content(requestBody)
                         .contentType(MediaType.APPLICATION_JSON))
 
@@ -204,6 +207,37 @@ class CommentControllerTest {
         //then
         Comment comment = commentRepository.findById(save.getId()).get();
         assertThat(comment.getReply()).isEqualTo("REPLY");
+    }
+
+    @Test
+    @DisplayName("comment 삭제 확인 (DELETE /items/{itemId}/comments/{commentId})")
+    public void deleteComment() throws Exception {
+        //givne
+        String writer = "cWriter";
+        String password = "cPassword";
+        ResponseCommentDto save = commentService.save(item.getId(), new RequestCommentDto(writer, password, "cContent"));
+        String requestBody = new ObjectMapper().writeValueAsString(new DeleteCommentDto(writer, password));
+
+        //when
+        mockMvc.perform(delete("/items/{itemId}/comments/{commentId}", item.getId(), save.getId())
+                        .content(requestBody)
+                        .contentType(MediaType.APPLICATION_JSON))
+
+                .andDo(MockMvcResultHandlers.print())
+                .andDo(MockMvcRestDocumentation.document("Comment/DELETE/comment 삭제",
+                        Preprocessors.preprocessRequest(prettyPrint()),
+                        Preprocessors.preprocessResponse(prettyPrint())))
+
+                .andExpectAll(
+                        status().is2xxSuccessful(),
+                        jsonPath("message").value(DELETE_COMMENT_MESSAGE),
+                        content().contentType(MediaType.APPLICATION_JSON)
+                );
+
+        //then
+        assertThrows(NoSuchElementException.class, () -> commentRepository.findById(item.getId()).get());
+        // 글에서도 사라졌는지 확인한다.
+        assertFalse(salesItemRepository.findById(item.getId()).get().getComments().contains(save));
     }
 
     @BeforeEach

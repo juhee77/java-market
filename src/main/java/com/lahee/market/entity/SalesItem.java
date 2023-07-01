@@ -61,4 +61,8 @@ public class SalesItem {
             comments.add(comment);
         }
     }
+
+    public void deleteComment(Comment comment) {
+        comments.remove(comment);
+    }
 }

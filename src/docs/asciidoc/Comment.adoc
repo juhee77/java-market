@@ -75,4 +75,18 @@ include::{snippets}/Comment/PUT/comment reply 업데이트/http-response.adoc[]
 
 include::{snippets}/Comment/PUT/comment reply 업데이트/curl-request.adoc[]
 
+== 댓글 삭제
+
+=== Request
+
+include::{snippets}/Comment/DELETE/comment 삭제/http-request.adoc[]
+
+=== Response
+
+include::{snippets}/Comment/DELETE/comment 삭제/http-response.adoc[]
+
+==== test
+
+include::{snippets}/Comment/DELETE/comment 삭제/curl-request.adoc[]
+
 
