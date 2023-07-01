@@ -1,6 +1,6 @@
 package com.lahee.market.entity;
 
-import com.lahee.market.dto.RequsetSalesItemDto;
+import com.lahee.market.dto.RequestSalesItemDto;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -25,18 +25,18 @@ public class SalesItem {
     private String password;
 
 
-    public static SalesItem postNewItem(RequsetSalesItemDto requsetSalesItemDto) {
+    public static SalesItem postNewItem(RequestSalesItemDto requestSalesItemDto) {
         SalesItem salesItem = new SalesItem();
-        salesItem.description = requsetSalesItemDto.getDescription();
-        salesItem.title = requsetSalesItemDto.getTitle();
-        salesItem.minPriceWanted = requsetSalesItemDto.getMinPriceWanted();
+        salesItem.description = requestSalesItemDto.getDescription();
+        salesItem.title = requestSalesItemDto.getTitle();
+        salesItem.minPriceWanted = requestSalesItemDto.getMinPriceWanted();
         salesItem.status = "판매중";
-        salesItem.writer = requsetSalesItemDto.getWriter();
-        salesItem.password = requsetSalesItemDto.getPassword();
+        salesItem.writer = requestSalesItemDto.getWriter();
+        salesItem.password = requestSalesItemDto.getPassword();
         return salesItem;
     }
 
-    public void update(RequsetSalesItemDto requestDto) {
+    public void update(RequestSalesItemDto requestDto) {
         this.description = requestDto.getDescription();
         this.title = requestDto.getTitle();
         this.minPriceWanted = requestDto.getMinPriceWanted();

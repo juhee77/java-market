@@ -1,7 +1,7 @@
 package com.lahee.market.controller;
 
 import com.lahee.market.dto.DeleteItemDto;
-import com.lahee.market.dto.RequsetSalesItemDto;
+import com.lahee.market.dto.RequestSalesItemDto;
 import com.lahee.market.dto.ResponseDto;
 import com.lahee.market.dto.ResponseSalesItemDto;
 import com.lahee.market.service.SalesItemService;
@@ -23,8 +23,8 @@ public class SalesItemController {
     private final SalesItemService salesItemService;
 
     @PostMapping
-    public ResponseEntity<ResponseDto> saveItem(@RequestBody @Valid RequsetSalesItemDto requsetSalesItemDto) {
-        salesItemService.save(requsetSalesItemDto);
+    public ResponseEntity<ResponseDto> saveItem(@RequestBody @Valid RequestSalesItemDto requestSalesItemDto) {
+        salesItemService.save(requestSalesItemDto);
         return ResponseEntity.ok(ResponseDto.getSuccessInstance());
     }
 
@@ -41,15 +41,15 @@ public class SalesItemController {
     }
 
     @PutMapping("/{itemId}")
-    public ResponseEntity<ResponseDto> saveItemImage(
+    public ResponseEntity<ResponseDto> updateItem(
             @PathVariable("itemId") Long itemId,
-            @RequestBody @Valid RequsetSalesItemDto requsetSalesItemDto) {
-        salesItemService.update(itemId, requsetSalesItemDto);
+            @RequestBody @Valid RequestSalesItemDto requestSalesItemDto) {
+        salesItemService.update(itemId, requestSalesItemDto);
         return ResponseEntity.ok(ResponseDto.getSuccessInstance());
     }
 
 
-    @PutMapping(value = "/{itemId}/image")
+    @RequestMapping(value = "/{itemId}/image", method = {RequestMethod.PUT})
     public ResponseEntity<ResponseDto> saveItemImage(
             @PathVariable("itemId") Long itemId,
             @RequestParam("image") MultipartFile image,

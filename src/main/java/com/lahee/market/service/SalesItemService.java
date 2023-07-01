@@ -1,7 +1,7 @@
 package com.lahee.market.service;
 
 import com.lahee.market.dto.DeleteItemDto;
-import com.lahee.market.dto.RequsetSalesItemDto;
+import com.lahee.market.dto.RequestSalesItemDto;
 import com.lahee.market.dto.ResponseSalesItemDto;
 import com.lahee.market.entity.SalesItem;
 import com.lahee.market.exception.ItemNotFoundException;
@@ -32,8 +32,8 @@ public class SalesItemService {
     private final SalesItemRepository salesItemRepository;
 
     @Transactional
-    public void save(RequsetSalesItemDto requsetSalesItemDto) {
-        salesItemRepository.save(SalesItem.postNewItem(requsetSalesItemDto));
+    public ResponseSalesItemDto save(RequestSalesItemDto requestSalesItemDto) {
+        return ResponseSalesItemDto.fromEntity(salesItemRepository.save(SalesItem.postNewItem(requestSalesItemDto)));
     }
 
     public Page<ResponseSalesItemDto> readItemPaged(Integer page, Integer limit) {
@@ -71,8 +71,7 @@ public class SalesItemService {
         String profilePath = profileDir + ("item." + extension);
 
         try {
-            Path path = Path.of(profilePath);
-            image.transferTo(path);
+            image.transferTo(Path.of(profilePath));
         } catch (IOException e) {
             log.error(e.getMessage());
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -83,7 +82,7 @@ public class SalesItemService {
     }
 
     @Transactional
-    public void update(Long id, RequsetSalesItemDto requestDto) {
+    public void update(Long id, RequestSalesItemDto requestDto) {
         SalesItem item = findItemByIdAndThrowException(id);
         checkWriterAndPasswordAndThrowException(requestDto.getWriter(), requestDto.getPassword(), item);
 
