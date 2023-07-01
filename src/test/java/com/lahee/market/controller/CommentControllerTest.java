@@ -3,6 +3,7 @@ package com.lahee.market.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lahee.market.dto.RequestSalesItemDto;
 import com.lahee.market.dto.ResponseSalesItemDto;
+import com.lahee.market.dto.comment.CommentReplyDto;
 import com.lahee.market.dto.comment.RequestCommentDto;
 import com.lahee.market.dto.comment.ResponseCommentDto;
 import com.lahee.market.entity.Comment;
@@ -147,7 +148,7 @@ class CommentControllerTest {
 
     @Test
     @DisplayName("comment 업데이트 확인 (PUT /items/{itemId}/comments/{commentId})")
-    public void updateItem() throws Exception {
+    public void updateComment() throws Exception {
         //givne
         ResponseCommentDto save = commentService.save(item.getId(), new RequestCommentDto("cWriter", "cPassword", "cContent"));
         RequestCommentDto updateDto = new RequestCommentDto("cWriter", "cPassword", "MODIFY");
@@ -172,6 +173,37 @@ class CommentControllerTest {
         //then
         Comment comment = commentRepository.findById(save.getId()).get();
         assertThat(comment.getContent()).isEqualTo("MODIFY");
+    }
+
+
+
+    @Test
+    @DisplayName("comment reply 업데이트 확인 (PUT /items/{itemId}/comments/{commentId})/reply")
+    public void updateCommentReply() throws Exception {
+        //givne
+        ResponseCommentDto save = commentService.save(item.getId(), new RequestCommentDto("cWriter", "cPassword", "cContent"));
+        CommentReplyDto updateDto = new CommentReplyDto(item.getWriter(), item.getPassword(), "REPLY");
+        String requestBody = new ObjectMapper().writeValueAsString(updateDto);
+
+        //when
+        mockMvc.perform(put("/items/{itemId}/comments/{commentId}/reply", item.getId(),save.getId())
+                        .content(requestBody)
+                        .contentType(MediaType.APPLICATION_JSON))
+
+                .andDo(MockMvcResultHandlers.print())
+                .andDo(MockMvcRestDocumentation.document("Comment/PUT/comment reply 업데이트",
+                        Preprocessors.preprocessRequest(prettyPrint()),
+                        Preprocessors.preprocessResponse(prettyPrint())))
+
+                .andExpectAll(
+                        status().is2xxSuccessful(),
+                        jsonPath("message").value(UPDATE_COMMENT_REPLY_MESSAGE),
+                        content().contentType(MediaType.APPLICATION_JSON)
+                );
+
+        //then
+        Comment comment = commentRepository.findById(save.getId()).get();
+        assertThat(comment.getReply()).isEqualTo("REPLY");
     }
 
     @BeforeEach

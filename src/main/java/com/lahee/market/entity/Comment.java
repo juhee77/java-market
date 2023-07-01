@@ -1,5 +1,6 @@
 package com.lahee.market.entity;
 
+import com.lahee.market.dto.comment.CommentReplyDto;
 import com.lahee.market.dto.comment.RequestCommentDto;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -39,5 +40,9 @@ public class Comment {
 
     public void update(RequestCommentDto dto) {
         this.content = dto.getContent();
+    }
+
+    public void updateReply(CommentReplyDto dto) {
+        this.reply = dto.getReply();
     }
 }

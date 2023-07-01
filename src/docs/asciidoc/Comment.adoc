@@ -61,4 +61,18 @@ include::{snippets}/Comment/PUT/comment 업데이트/http-response.adoc[]
 
 include::{snippets}/Comment/PUT/comment 업데이트/curl-request.adoc[]
 
+== 댓글의 댓글 업데이트
+
+=== Request
+
+include::{snippets}/Comment/PUT/comment reply 업데이트/http-request.adoc[]
+
+=== Response
+
+include::{snippets}/Comment/PUT/comment reply 업데이트/http-response.adoc[]
+
+==== test
+
+include::{snippets}/Comment/PUT/comment reply 업데이트/curl-request.adoc[]
+
 

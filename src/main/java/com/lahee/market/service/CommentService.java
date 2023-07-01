@@ -1,5 +1,6 @@
 package com.lahee.market.service;
 
+import com.lahee.market.dto.comment.CommentReplyDto;
 import com.lahee.market.dto.comment.RequestCommentDto;
 import com.lahee.market.dto.comment.ResponseCommentDto;
 import com.lahee.market.entity.Comment;
@@ -61,12 +62,35 @@ public class CommentService {
         return ResponseCommentDto.fromEntity(comment);
     }
 
+    @Transactional
+    public ResponseCommentDto updateCommentReply(Long itemId, Long commentId, CommentReplyDto dto) {
+        Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
+        if (comment.getSalesItem().getId() != itemId) {
+            throw new CommentNotMatchItemException();
+        }
+        SalesItem salesItem = comment.getSalesItem();
+
+        //글을 올린 사람이 맞는지 아이디 비번 검증
+        checkItemWriterAndPasswordAndThrowException(dto.getWriter(), dto.getPassword(), salesItem);
+        comment.updateReply(dto);
+        return ResponseCommentDto.fromEntity(comment);
+    }
+
 
     private static void checkCommentWriterAndPasswordAndThrowException(String writer, String password, Comment comment) {
         if (!comment.getWriter().equals(writer)) {
             throw new WriterNameNotMatchException();
         }
         if (!comment.getPassword().equals(password)) {
+            throw new PasswordNotMatchException();
+        }
+    }
+
+    private static void checkItemWriterAndPasswordAndThrowException(String writer, String password, SalesItem item) {
+        if (!item.getWriter().equals(writer)) {
+            throw new WriterNameNotMatchException();
+        }
+        if (!item.getPassword().equals(password)) {
             throw new PasswordNotMatchException();
         }
     }

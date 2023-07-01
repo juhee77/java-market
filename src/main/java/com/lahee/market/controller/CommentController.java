@@ -1,6 +1,7 @@
 package com.lahee.market.controller;
 
 import com.lahee.market.dto.ResponseDto;
+import com.lahee.market.dto.comment.CommentReplyDto;
 import com.lahee.market.dto.comment.RequestCommentDto;
 import com.lahee.market.dto.comment.ResponseCommentDto;
 import com.lahee.market.service.CommentService;
@@ -11,8 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static com.lahee.market.constants.ControllerMessage.SAVE_COMMENT_MESSAGE;
-import static com.lahee.market.constants.ControllerMessage.UPDATE_COMMENT_MESSAGE;
+import static com.lahee.market.constants.ControllerMessage.*;
 
 @RestController
 @RequestMapping("/items/{itemId}/comments")
@@ -48,6 +48,14 @@ public class CommentController {
             @Valid @RequestBody RequestCommentDto requestCommentDto) {
         commentService.updateComment(itemId, commentId, requestCommentDto);
         return ResponseEntity.ok(ResponseDto.getSuccessInstance(UPDATE_COMMENT_MESSAGE));
+    }
+
+    @PutMapping("/{commentId}/reply")
+    public ResponseEntity<ResponseDto> updateComment(
+            @PathVariable("itemId") Long itemId, @PathVariable("commentId") Long commentId,
+            @Valid @RequestBody CommentReplyDto commentReplyDto) {
+        commentService.updateCommentReply(itemId, commentId, commentReplyDto);
+        return ResponseEntity.ok(ResponseDto.getSuccessInstance(UPDATE_COMMENT_REPLY_MESSAGE));
     }
 
 }
