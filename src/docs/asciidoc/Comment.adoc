@@ -5,7 +5,7 @@
 :toc: left
 :toclevels: 3
 
-== 아이템 업로드
+== 댓글 업로드
 
 === Request
 
@@ -18,4 +18,33 @@ include::{snippets}/Comment/POST/comment 생성/http-response.adoc[]
 ==== test
 
 include::{snippets}/Comment/POST/comment 생성/curl-request.adoc[]
+
+== 댓글 단건 조회
+
+=== Request
+
+include::{snippets}/Comment/GET/comment 단일 건 조회/http-request.adoc[]
+
+=== Response
+
+include::{snippets}/Comment/GET/comment 단일 건 조회/http-response.adoc[]
+
+==== test
+
+include::{snippets}/Comment/GET/comment 단일 건 조회/curl-request.adoc[]
+
+== 댓글 페이징 조회
+
+=== Request
+
+include::{snippets}/Comment/GET/comment 페이징 조회/http-request.adoc[]
+
+=== Response
+
+include::{snippets}/Comment/GET/comment 페이징 조회/http-response.adoc[]
+
+==== test
+
+include::{snippets}/Comment/GET/comment 페이징 조회/curl-request.adoc[]
+
 

@@ -2,10 +2,12 @@ package com.lahee.market.controller;
 
 import com.lahee.market.dto.ResponseDto;
 import com.lahee.market.dto.comment.RequestCommentDto;
+import com.lahee.market.dto.comment.ResponseCommentDto;
 import com.lahee.market.service.CommentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +25,20 @@ public class CommentController {
                                                    @Valid @RequestBody RequestCommentDto requestCommentDto) {
         commentService.save(itemId, requestCommentDto);
         return ResponseEntity.ok(ResponseDto.getSuccessInstance(SAVE_COMMENT_MESSAGE));
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<ResponseCommentDto>> findAllCommentsByItem(
+            @PathVariable("itemId") Long itemId,
+            @RequestParam(name = "page", defaultValue = "0") Integer page,
+            @RequestParam(name = "limit", defaultValue = "20") Integer limit) {
+        return ResponseEntity.ok(commentService.findAllEntityByItem(itemId, page, limit));
+    }
+
+    @GetMapping("/{commentId}")
+    public ResponseEntity<ResponseCommentDto> findOneComment(
+            @PathVariable("itemId") Long itemId, @PathVariable("commentId")Long commentId){
+        return ResponseEntity.ok(commentService.findOneById(itemId, commentId));
     }
 
 }
