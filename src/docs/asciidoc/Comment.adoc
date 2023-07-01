@@ -1,0 +1,21 @@
+= ITEM 문서
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 3
+
+== 아이템 업로드
+
+=== Request
+
+include::{snippets}/Comment/POST/comment 생성/http-request.adoc[]
+
+=== Response
+
+include::{snippets}/Comment/POST/comment 생성/http-response.adoc[]
+
+==== test
+
+include::{snippets}/Comment/POST/comment 생성/curl-request.adoc[]
+
