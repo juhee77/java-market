@@ -38,6 +38,9 @@ dependencies {
 	runtimeOnly 'org.hibernate.orm:hibernate-community-dialects:6.2.4.Final'
 
 
+	//h2
+	runtimeOnly 'com.h2database:h2'
+
 }
 
 tasks.named('test') {
