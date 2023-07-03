@@ -15,47 +15,44 @@ include::{snippets}/Items/POST/item 생성 조회/http-request.adoc[]
 
 include::{snippets}/Items/POST/item 생성 조회/http-response.adoc[]
 
-=== ㄱㄷㅅ
-include::{snippets}/Items/POST/item 생성 조회/httpie-request.adoc[]
-include::{snippets}/Items/POST/item 생성 조회/curl-request.adoc[]
-
-
-
-
 == 아이템 단건 조회
+
+=== Request
+
 include::{snippets}/Items/GET/item 단건 조회/http-request.adoc[]
 
 === Response
 
 include::{snippets}/Items/GET/item 단건 조회/http-response.adoc[]
 
-
-
 == 아이템 페이징 조회
+
+=== Request
+
 include::{snippets}/Items/GET/item 페이징 조회/http-request.adoc[]
 
 === Response
 
 include::{snippets}/Items/GET/item 페이징 조회/http-response.adoc[]
 
-
 == 아이템 수정
+
+=== Request
+
 include::{snippets}/Items/PUT/item 업데이트/http-request.adoc[]
 
 === Response
 
 include::{snippets}/Items/PUT/item 업데이트/http-response.adoc[]
 
-
-
 == 아이템 삭제
+
+=== Request
+
 include::{snippets}/Items/DELETE/item 삭제/http-request.adoc[]
 
 === Response
 
 include::{snippets}/Items/DELETE/item 삭제/http-response.adoc[]
 
-
-
 == 아이템 사진 업데이트
-

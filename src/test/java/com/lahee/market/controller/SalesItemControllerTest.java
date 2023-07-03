@@ -57,13 +57,8 @@ class SalesItemControllerTest {
     @Test
     @DisplayName("item 생성 조회 (POST /items)")
     public void saveItem() throws Exception {
-        //givne
-        String title = "title";
-        String description = "desc";
-        int minPriceWanted = 10000;
-        String writer = "writer";
-        String password = "password";
-        RequestSalesItemDto dto = new RequestSalesItemDto(title, description, minPriceWanted, writer, password);
+        //given
+        RequestSalesItemDto dto = getRequestSalesItemDto();
         String requestBody = new ObjectMapper().writeValueAsString(dto);
 
         //when
@@ -85,21 +80,16 @@ class SalesItemControllerTest {
         //then
         List<SalesItem> all = salesItemRepository.findAll();
         SalesItem salesItem = all.get(0);
-        assertThat(salesItem.getWriter()).isEqualTo(writer);
-        assertThat(salesItem.getPassword()).isEqualTo(password);
-        assertThat(salesItem.getTitle()).isEqualTo(title);
+        assertThat(salesItem.getWriter()).isEqualTo(dto.getWriter());
+        assertThat(salesItem.getPassword()).isEqualTo(dto.getPassword());
+        assertThat(salesItem.getTitle()).isEqualTo(dto.getTitle());
     }
 
     @Test
     @DisplayName("item 단건 조회 (GET /items/{itemId})")
     public void findOne() throws Exception {
-        //givne
-        String title = "title";
-        String description = "desc";
-        int minPriceWanted = 10000;
-        String writer = "writer";
-        String password = "password";
-        ResponseSalesItemDto save = salesItemService.save(new RequestSalesItemDto(title, description, minPriceWanted, writer, password));
+        //given
+        ResponseSalesItemDto save = salesItemService.save(getRequestSalesItemDto());
 
         //when
         ResultActions perform = mockMvc.perform(get("/items/{itemId}", save.getId())
@@ -123,11 +113,11 @@ class SalesItemControllerTest {
     @Test
     @DisplayName("item 페이징 조회 (GET /items)")
     public void findPaged() throws Exception {
-        //givne
+        //given
         for (int i = 0; i < 25; i++) {
             String title = "title" + i;
             String description = "desc" + i;
-            int minPriceWanted = 10000;
+            int minPriceWanted = 10000 * i;
             String writer = "writer" + i;
             String password = "password" + i;
             salesItemService.save(new RequestSalesItemDto(title, description, minPriceWanted, writer, password));
@@ -159,20 +149,16 @@ class SalesItemControllerTest {
     @Disabled
     //사진 업로드의 경우 post지원시에  테스트 가능 //TODO 이미지 테스트 경우 해당 파일 제거하여 관리하도록
     public void saveItemPhoto() throws Exception {
-        //givne
-        String title = "title";
-        String description = "desc";
-        int minPriceWanted = 10000;
-        String writer = "writer";
-        String password = "password";
-        ResponseSalesItemDto save = salesItemService.save(new RequestSalesItemDto(title, description, minPriceWanted, writer, password));
+        //given
+        RequestSalesItemDto reqDto = getRequestSalesItemDto();
+        ResponseSalesItemDto save = salesItemService.save(reqDto);
 
 
         //when
         mockMvc.perform(multipart("/items/{itemId}/image", save.getId())
                         .file(new MockMultipartFile("image", "image.jpg", "image/jpg", "<<jpg data>>".getBytes(StandardCharsets.UTF_8)))
-                        .param("writer", writer)
-                        .param("password", password)
+                        .param("writer", reqDto.getWriter())
+                        .param("password", reqDto.getPassword())
                         .contentType(MediaType.MULTIPART_FORM_DATA))
 
                 .andDo(MockMvcResultHandlers.print())
@@ -191,16 +177,14 @@ class SalesItemControllerTest {
         assertThat(salesItem.getImageUrl()).isEqualTo(String.format("/static/%d/item.jpg", save.getId()));
     }
 
-
     @Test
     @DisplayName("item 업데이트 확인 (PUT /items/{itemId})")
     public void updateItem() throws Exception {
-        //givne
-        int minPriceWanted = 10000;
-        String writer = "writer";
-        String password = "password";
-        ResponseSalesItemDto save = salesItemService.save(new RequestSalesItemDto("title", "desc", minPriceWanted, writer, password));
-        RequestSalesItemDto updateDto = new RequestSalesItemDto("MODIFY", "MODIFY", minPriceWanted, writer, password);
+        //given
+        String modify = "MODIFY";
+        RequestSalesItemDto reqDto = getRequestSalesItemDto();
+        ResponseSalesItemDto save = salesItemService.save(reqDto);
+        RequestSalesItemDto updateDto = new RequestSalesItemDto(modify, modify, reqDto.getMinPriceWanted(), reqDto.getWriter(), reqDto.getPassword());
         String requestBody = new ObjectMapper().writeValueAsString(updateDto);
 
         //when
@@ -221,21 +205,17 @@ class SalesItemControllerTest {
 
         //then
         SalesItem salesItem = salesItemRepository.findById(save.getId()).get();
-        assertThat(salesItem.getTitle()).isEqualTo("MODIFY");
-        assertThat(salesItem.getDescription()).isEqualTo("MODIFY");
+        assertThat(salesItem.getTitle()).isEqualTo(updateDto.getTitle());
+        assertThat(salesItem.getDescription()).isEqualTo(updateDto.getDescription());
     }
 
     @Test
     @DisplayName("item 삭제 확인 (DELETE /items/{itemId})")
     public void deleteItem() throws Exception {
-        //givne
-        String title = "title";
-        String desc = "desc";
-        int minPriceWanted = 10000;
-        String writer = "writer";
-        String password = "password";
-        ResponseSalesItemDto save = salesItemService.save(new RequestSalesItemDto(title, desc, minPriceWanted, writer, password));
-        String requestBody = new ObjectMapper().writeValueAsString(new DeleteItemDto(writer, password));
+        //given
+        RequestSalesItemDto reqDto = getRequestSalesItemDto();
+        ResponseSalesItemDto save = salesItemService.save(reqDto);
+        String requestBody = new ObjectMapper().writeValueAsString(new DeleteItemDto(reqDto.getWriter(), reqDto.getPassword()));
 
         //when
         mockMvc.perform(delete("/items/{itemId}", save.getId())
@@ -255,5 +235,14 @@ class SalesItemControllerTest {
 
         //then
         assertThrows(NoSuchElementException.class, () -> salesItemRepository.findById(save.getId()).get());
+    }
+
+    private static RequestSalesItemDto getRequestSalesItemDto() {
+        String title = "중고 맥북 팝니다";
+        String description = "2019년 맥북 프로 13인치 모델입니다";
+        int minPriceWanted = 10000;
+        String writer = "jeeho.dev";
+        String password = "1qaz2wsx";
+        return new RequestSalesItemDto(title, description, minPriceWanted, writer, password);
     }
 }

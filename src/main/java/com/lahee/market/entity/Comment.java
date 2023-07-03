@@ -21,7 +21,7 @@ public class Comment {
     private Long id;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "sales_item")
+    @JoinColumn(name = "item_id")
     private SalesItem salesItem;
     private String writer;
     private String password;

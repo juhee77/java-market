@@ -68,10 +68,7 @@ class NegotiationControllerTest {
     public void saveProposal() throws Exception {
         //given
         //item 생성
-        String pWriter = "jeeho.edu";
-        String pPassword = "qwerty1234";
-        Integer pSuggestedPrice = 100000;
-        RequestNegotiationDto dto = new RequestNegotiationDto(pWriter, pPassword, pSuggestedPrice);
+        RequestNegotiationDto dto = new RequestNegotiationDto("jeeho.edu", "qwerty1234", 100000);
         String requestBody = new ObjectMapper().writeValueAsString(dto);
 
         //when
@@ -94,8 +91,8 @@ class NegotiationControllerTest {
         List<Negotiation> all = negotiationRepository.findAll();
         Negotiation negotiation = all.get(0);
         assertThat(negotiation.getSalesItem().getId()).isEqualTo(item.getId());
-        assertThat(negotiation.getWriter()).isEqualTo(pWriter);
-        assertThat(negotiation.getSuggestedPrice()).isEqualTo(pSuggestedPrice);
+        assertThat(negotiation.getWriter()).isEqualTo(dto.getWriter());
+        assertThat(negotiation.getSuggestedPrice()).isEqualTo(dto.getSuggestedPrice());
     }
 
     @Test
@@ -160,16 +157,16 @@ class NegotiationControllerTest {
         );
     }
 
-
     @Test
     @DisplayName("proposal 업데이트 확인 (PUT /items/{itemId}/proposal/{proposalId})")
     public void updateProposal() throws Exception {
         //given
-        ResponseNegotiationDto save = negotiationService.save(item.getId(), new RequestNegotiationDto("cWriter", "cPassword", 1000));
+        RequestNegotiationDto reqDto = getRequestNegotiationDto();
+        ResponseNegotiationDto save = negotiationService.save(item.getId(), reqDto);
         Map<String, String> requestDto = new HashMap<>();
-        requestDto.put("writer", "cWriter");
-        requestDto.put("password", "cPassword");
-        requestDto.put("suggestedPrice", "50000");
+        requestDto.put("writer", reqDto.getWriter());
+        requestDto.put("password", reqDto.getPassword());
+        requestDto.put("suggestedPrice", String.valueOf(500000));
         String requestBody = new ObjectMapper().writeValueAsString(requestDto);
 
         //when
@@ -197,7 +194,7 @@ class NegotiationControllerTest {
     @DisplayName("proposal 상태 업데이트 확인 - 판매자가 제안을 수락하는 (PUT /items/{itemId}/proposal/{proposalId})")
     public void updateStatusProposal() throws Exception {
         //given
-        ResponseNegotiationDto save = negotiationService.save(item.getId(), new RequestNegotiationDto("pWriter", "pPassword", 1000));
+        ResponseNegotiationDto save = negotiationService.save(item.getId(), getRequestNegotiationDto());
         Map<String, String> requestDto = new HashMap<>();
         requestDto.put("writer", item.getWriter());
         requestDto.put("password", item.getPassword());
@@ -229,9 +226,9 @@ class NegotiationControllerTest {
     @DisplayName("proposal 상태 업데이트 확인 - 제안자가 확정하는 (PUT /items/{itemId}/proposal/{proposalId})")
     public void confirmationProposal() throws Exception {
         //given
-        RequestNegotiationDto dto = new RequestNegotiationDto("pWriter", "pPassword", 1000);
+        RequestNegotiationDto dto = getRequestNegotiationDto();
         ResponseNegotiationDto save = negotiationService.save(item.getId(), dto);
-        negotiationService.updateStatus(item.getId(),save.getId(),new UpdateNegotiationDto(item.getWriter(),item.getPassword(),save.getSuggestedPrice(),"수락"));
+        negotiationService.updateStatus(item.getId(), save.getId(), new UpdateNegotiationDto(item.getWriter(), item.getPassword(), save.getSuggestedPrice(), "수락"));
         Map<String, String> requestDto = new HashMap<>();
         requestDto.put("writer", dto.getWriter());
         requestDto.put("password", dto.getPassword());
@@ -260,12 +257,11 @@ class NegotiationControllerTest {
     }
 
 
-
     @Test
     @DisplayName("proposal 삭제 확인 (DELETE /items/{itemId}/proposal/{proposalId})")
     public void deleteComment() throws Exception {
         //given
-        RequestNegotiationDto dto = new RequestNegotiationDto("pWriter", "pPassword", 10000);
+        RequestNegotiationDto dto = getRequestNegotiationDto();
         ResponseNegotiationDto save = negotiationService.save(item.getId(), dto);
         String requestBody = new ObjectMapper().writeValueAsString(new DeleteCommentDto(dto.getWriter(), dto.getPassword()));
 
@@ -293,12 +289,19 @@ class NegotiationControllerTest {
 
     @BeforeEach
     public void makeItem() {
-        String title = "title";
-        String description = "desc";
+        String title = "중고 맥북 팝니다";
+        String description = "2019년 맥북 프로 13인치 모델입니다";
         int minPriceWanted = 10000;
-        String writer = "writer";
-        String password = "password";
+        String writer = "jeeho.dev";
+        String password = "1qaz2wsx";
         ResponseSalesItemDto save = salesItemService.save(new RequestSalesItemDto(title, description, minPriceWanted, writer, password));
         item = salesItemRepository.findById(save.getId()).get();
+    }
+
+    private static RequestNegotiationDto getRequestNegotiationDto() {
+        String pWriter = "jeeho.edu";
+        String pPassword = "qwerty1234";
+        int suggestedPrice = 1000000;
+        return new RequestNegotiationDto(pWriter, pPassword, suggestedPrice);
     }
 }

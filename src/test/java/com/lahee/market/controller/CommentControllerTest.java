@@ -66,10 +66,7 @@ class CommentControllerTest {
     public void saveItem() throws Exception {
         //given
         //item 생성
-        String cWriter = "jeeho.edu";
-        String cPassword = "qwerty1234";
-        String cContent = "할인 가능하신가요?";
-        RequestCommentDto dto = new RequestCommentDto(cWriter, cPassword, cContent);
+        RequestCommentDto dto = getRequestCommentDto();
         String requestBody = new ObjectMapper().writeValueAsString(dto);
 
         //when
@@ -92,14 +89,17 @@ class CommentControllerTest {
         List<Comment> all = commentRepository.findAll();
         Comment comment = all.get(0);
         assertThat(comment.getSalesItem().getId()).isEqualTo(item.getId());
-        assertThat(comment.getWriter()).isEqualTo(cWriter);
-        assertThat(comment.getContent()).isEqualTo(cContent);
+        assertThat(comment.getWriter()).isEqualTo("jeeho.edu");
+        assertThat(comment.getContent()).isEqualTo("할인 가능하신가요?");
     }
 
     @Test
     @DisplayName("comment 페이징 조회 (GET /items/{itemId}/comments)")
     public void findPagedComment() throws Exception {
-        //givne
+        //given
+        String cWriter = "jeeho.edu";
+        String cPassword = "qwerty1234";
+        String cContent = "할인 가능하신가요?";
         for (int i = 0; i < 25; i++) {
             commentService.save(item.getId(), new RequestCommentDto("cWriter" + i, "cPassword" + i, "cContent" + i));
         }
@@ -128,8 +128,9 @@ class CommentControllerTest {
     @Test
     @DisplayName("comment 단일건 조회 (GET /items/{itemId}/comments/{commentId})")
     public void findOneComment() throws Exception {
-        //givne
-        ResponseCommentDto save = commentService.save(item.getId(), new RequestCommentDto("cWriter", "cPassword", "cContent"));
+        //given
+        RequestCommentDto reqDto = getRequestCommentDto();
+        ResponseCommentDto save = commentService.save(item.getId(), reqDto);
 
 
         //when
@@ -153,9 +154,12 @@ class CommentControllerTest {
     @Test
     @DisplayName("comment 업데이트 확인 (PUT /items/{itemId}/comments/{commentId})")
     public void updateComment() throws Exception {
-        //givne
-        ResponseCommentDto save = commentService.save(item.getId(), new RequestCommentDto("cWriter", "cPassword", "cContent"));
-        RequestCommentDto updateDto = new RequestCommentDto("cWriter", "cPassword", "MODIFY");
+        //given
+        String modify = "MODIFY";
+        RequestCommentDto reqDto = getRequestCommentDto();
+        ResponseCommentDto save = commentService.save(item.getId(), reqDto);
+
+        RequestCommentDto updateDto = new RequestCommentDto(reqDto.getWriter(), reqDto.getPassword(), modify);
         String requestBody = new ObjectMapper().writeValueAsString(updateDto);
 
         //when
@@ -176,16 +180,18 @@ class CommentControllerTest {
 
         //then
         Comment comment = commentRepository.findById(save.getId()).get();
-        assertThat(comment.getContent()).isEqualTo("MODIFY");
+        assertThat(comment.getContent()).isEqualTo(modify);
     }
 
 
     @Test
     @DisplayName("comment reply 업데이트 확인 (PUT /items/{itemId}/comments/{commentId})/reply")
     public void updateCommentReply() throws Exception {
-        //givne
-        ResponseCommentDto save = commentService.save(item.getId(), new RequestCommentDto("cWriter", "cPassword", "cContent"));
-        CommentReplyDto updateDto = new CommentReplyDto(item.getWriter(), item.getPassword(), "REPLY");
+        //given
+        String reply = "REPLY";
+        RequestCommentDto reqDto = getRequestCommentDto();
+        ResponseCommentDto save = commentService.save(item.getId(), reqDto);
+        CommentReplyDto updateDto = new CommentReplyDto(item.getWriter(), item.getPassword(), reply);
         String requestBody = new ObjectMapper().writeValueAsString(updateDto);
 
         //when
@@ -206,17 +212,16 @@ class CommentControllerTest {
 
         //then
         Comment comment = commentRepository.findById(save.getId()).get();
-        assertThat(comment.getReply()).isEqualTo("REPLY");
+        assertThat(comment.getReply()).isEqualTo(reply);
     }
 
     @Test
     @DisplayName("comment 삭제 확인 (DELETE /items/{itemId}/comments/{commentId})")
     public void deleteComment() throws Exception {
-        //givne
-        String writer = "cWriter";
-        String password = "cPassword";
-        ResponseCommentDto save = commentService.save(item.getId(), new RequestCommentDto(writer, password, "cContent"));
-        String requestBody = new ObjectMapper().writeValueAsString(new DeleteCommentDto(writer, password));
+        //given
+        RequestCommentDto reqDto = getRequestCommentDto();
+        ResponseCommentDto save = commentService.save(item.getId(), reqDto);
+        String requestBody = new ObjectMapper().writeValueAsString(new DeleteCommentDto(reqDto.getWriter(), reqDto.getPassword()));
 
         //when
         mockMvc.perform(delete("/items/{itemId}/comments/{commentId}", item.getId(), save.getId())
@@ -235,19 +240,23 @@ class CommentControllerTest {
                 );
 
         //then
-        assertThrows(NoSuchElementException.class, () -> commentRepository.findById(item.getId()).get());
+        assertThrows(NoSuchElementException.class, () -> commentRepository.findById(save.getId()).get());
         // 글에서도 사라졌는지 확인한다.
         assertFalse(salesItemRepository.findById(item.getId()).get().getComments().contains(save));
     }
 
     @BeforeEach
     public void makeItem() {
-        String title = "title";
-        String description = "desc";
+        String title = "중고 맥북 팝니다";
+        String description = "2019년 맥북 프로 13인치 모델입니다";
         int minPriceWanted = 10000;
-        String writer = "writer";
-        String password = "password";
+        String writer = "jeeho.dev";
+        String password = "1qaz2wsx";
         ResponseSalesItemDto save = salesItemService.save(new RequestSalesItemDto(title, description, minPriceWanted, writer, password));
         item = salesItemRepository.findById(save.getId()).get();
+    }
+
+    private static RequestCommentDto getRequestCommentDto() {
+        return new RequestCommentDto("jeeho.edu", "qwerty1234", "할인 가능하신가요?");
     }
 }

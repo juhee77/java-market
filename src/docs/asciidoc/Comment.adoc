@@ -1,4 +1,4 @@
-= ITEM 문서
+= COMMENT 문서
 :doctype: book
 :icons: font
 :source-highlighter: highlightjs
