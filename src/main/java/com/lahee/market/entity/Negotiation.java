@@ -2,6 +2,8 @@ package com.lahee.market.entity;
 
 import com.lahee.market.dto.negotiation.RequestNegotiationDto;
 import com.lahee.market.dto.negotiation.UpdateNegotiationDto;
+import com.lahee.market.exception.PasswordNotMatchException;
+import com.lahee.market.exception.WriterNameNotMatchException;
 import jakarta.persistence.*;
 import lombok.Getter;
 
@@ -18,14 +20,11 @@ public class Negotiation {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "item_id")
     private SalesItem salesItem;
-
     private Integer suggestedPrice;
     @Enumerated(EnumType.STRING)
     private NegotiationStatus status;
-
     private String writer;
     private String password;
-
 
     public static Negotiation getEntityInstance(RequestNegotiationDto dto) {
         Negotiation negotiation = new Negotiation();
@@ -36,7 +35,19 @@ public class Negotiation {
         return negotiation;
     }
 
+    public void update(UpdateNegotiationDto dto) {
+        this.suggestedPrice = dto.getSuggestedPrice();
+    }
+
+    public void updateStatus(UpdateNegotiationDto dto) {
+        this.status = NegotiationStatus.findNegotiationStatus(dto.getStatus());
+    }
+
+    public void acceptStatus() {
+        this.status = NegotiationStatus.CONFIRMATION;
+    }
     //연관관계 편의 메서드
+
     public void setSalesItem(SalesItem item) {
         if (this.salesItem != null) {
             this.salesItem.getNegotiations().remove(this); //이전에 관계가 매핑 되어있다면 제거한다.
@@ -45,19 +56,14 @@ public class Negotiation {
         item.addNegotiation(this);
     }
 
-    public void update(UpdateNegotiationDto dto) {
-        this.suggestedPrice = dto.getSuggestedPrice();
-    }
-
-    //    public void updateStatus(UpdateNegotiationStatusDto dto) {
-//        this.status = NegotiationStatus.findNegotiationStatus(dto.getStatus());
-//    }
-    public void updateStatus(UpdateNegotiationDto dto) {
-        this.status = NegotiationStatus.findNegotiationStatus(dto.getStatus());
-    }
-
-    public void acceptStatus(UpdateNegotiationDto dto) {
-        this.status = NegotiationStatus.CONFIRMATION;
+    //인증 메서드
+    public void checkAuthAndThrowException(String writer, String password) {
+        if (!writer.equals(writer)) {
+            throw new WriterNameNotMatchException();
+        }
+        if (!password.equals(password)) {
+            throw new PasswordNotMatchException();
+        }
     }
 }
 

@@ -26,7 +26,7 @@ public class CommentController {
     public ResponseEntity<ResponseDto> saveComment(@PathVariable("itemId") Long itemId,
                                                    @Valid @RequestBody RequestCommentDto requestCommentDto) {
         commentService.save(itemId, requestCommentDto);
-        return ResponseEntity.ok(ResponseDto.getSuccessInstance(SAVE_COMMENT_MESSAGE));
+        return ResponseEntity.ok(ResponseDto.getInstance(SAVE_COMMENT_MESSAGE));
     }
 
     @GetMapping
@@ -48,7 +48,7 @@ public class CommentController {
             @PathVariable("itemId") Long itemId, @PathVariable("commentId") Long commentId,
             @Valid @RequestBody RequestCommentDto requestCommentDto) {
         commentService.updateComment(itemId, commentId, requestCommentDto);
-        return ResponseEntity.ok(ResponseDto.getSuccessInstance(UPDATE_COMMENT_MESSAGE));
+        return ResponseEntity.ok(ResponseDto.getInstance(UPDATE_COMMENT_MESSAGE));
     }
 
     @PutMapping("/{commentId}/reply")
@@ -56,7 +56,7 @@ public class CommentController {
             @PathVariable("itemId") Long itemId, @PathVariable("commentId") Long commentId,
             @Valid @RequestBody CommentReplyDto commentReplyDto) {
         commentService.updateCommentReply(itemId, commentId, commentReplyDto);
-        return ResponseEntity.ok(ResponseDto.getSuccessInstance(UPDATE_COMMENT_REPLY_MESSAGE));
+        return ResponseEntity.ok(ResponseDto.getInstance(UPDATE_COMMENT_REPLY_MESSAGE));
     }
 
     @DeleteMapping("/{commentId}")
@@ -64,6 +64,6 @@ public class CommentController {
             @PathVariable("itemId") Long itemId, @PathVariable("commentId") Long commentId,
             @RequestBody DeleteCommentDto deleteCommentDto) {
         commentService.deleteComment(itemId, commentId, deleteCommentDto);
-        return ResponseEntity.ok(ResponseDto.getSuccessInstance(DELETE_COMMENT_MESSAGE));
+        return ResponseEntity.ok(ResponseDto.getInstance(DELETE_COMMENT_MESSAGE));
     }
 }

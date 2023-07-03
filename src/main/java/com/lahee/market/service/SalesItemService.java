@@ -5,8 +5,6 @@ import com.lahee.market.dto.RequestSalesItemDto;
 import com.lahee.market.dto.ResponseSalesItemDto;
 import com.lahee.market.entity.SalesItem;
 import com.lahee.market.exception.ItemNotFoundException;
-import com.lahee.market.exception.PasswordNotMatchException;
-import com.lahee.market.exception.WriterNameNotMatchException;
 import com.lahee.market.repository.SalesItemRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +31,7 @@ public class SalesItemService {
 
     @Transactional
     public ResponseSalesItemDto save(RequestSalesItemDto requestSalesItemDto) {
-        return ResponseSalesItemDto.fromEntity(salesItemRepository.save(SalesItem.postNewItem(requestSalesItemDto)));
+        return ResponseSalesItemDto.fromEntity(salesItemRepository.save(SalesItem.getEntityInstance(requestSalesItemDto)));
     }
 
     public Page<ResponseSalesItemDto> readItemPaged(Integer page, Integer limit) {
@@ -43,17 +41,17 @@ public class SalesItemService {
     }
 
     public ResponseSalesItemDto readOneItem(Long id) {
-        SalesItem item = findItemByIdAndThrowException(id);
+        SalesItem item = salesItemRepository.findById(id).orElseThrow(ItemNotFoundException::new);
         return ResponseSalesItemDto.fromEntity(item);
     }
 
     @Transactional
     public void saveItemImage(Long id, MultipartFile image, String writer, String password) {
         //item 객체 찾기
-        SalesItem item = findItemByIdAndThrowException(id);
+        SalesItem item = salesItemRepository.findById(id).orElseThrow(ItemNotFoundException::new);
 
         //객체 작성자의 아이디 패스워드 일치 하는지 확인
-        checkWriterAndPasswordAndThrowException(writer, password, item);
+        item.checkAuthAndThrowException(writer, password);
 
         // 폴더를 만든다.
         String profileDir = String.format("media/%d/", id);
@@ -83,31 +81,16 @@ public class SalesItemService {
 
     @Transactional
     public void update(Long id, RequestSalesItemDto requestDto) {
-        SalesItem item = findItemByIdAndThrowException(id);
-        checkWriterAndPasswordAndThrowException(requestDto.getWriter(), requestDto.getPassword(), item);
-
+        SalesItem item = salesItemRepository.findById(id).orElseThrow(ItemNotFoundException::new);
+        item.checkAuthAndThrowException(requestDto.getWriter(), requestDto.getPassword());
         item.update(requestDto);
     }
 
     @Transactional
     public void deleteItem(Long id, DeleteItemDto requestDto) {
-        SalesItem item = findItemByIdAndThrowException(id);
-        checkWriterAndPasswordAndThrowException(requestDto.getWriter(), requestDto.getPassword(), item);
-
+        SalesItem item = salesItemRepository.findById(id).orElseThrow(ItemNotFoundException::new);
+        item.checkAuthAndThrowException(requestDto.getWriter(), requestDto.getPassword());
         salesItemRepository.deleteById(id);
-    }
-
-    private SalesItem findItemByIdAndThrowException(Long id) {
-        return salesItemRepository.findById(id).orElseThrow(ItemNotFoundException::new);
-    }
-
-    private static void checkWriterAndPasswordAndThrowException(String writer, String password, SalesItem item) {
-        if (!item.getWriter().equals(writer)) {
-            throw new WriterNameNotMatchException();
-        }
-        if (!item.getPassword().equals(password)) {
-            throw new PasswordNotMatchException();
-        }
     }
 
 }

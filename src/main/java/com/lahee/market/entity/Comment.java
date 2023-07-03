@@ -2,6 +2,8 @@ package com.lahee.market.entity;
 
 import com.lahee.market.dto.comment.CommentReplyDto;
 import com.lahee.market.dto.comment.RequestCommentDto;
+import com.lahee.market.exception.PasswordNotMatchException;
+import com.lahee.market.exception.WriterNameNotMatchException;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -28,14 +30,20 @@ public class Comment {
     private String content;
     private String reply;
 
-
-    public static Comment postNewComment(SalesItem item, RequestCommentDto dto) {
+    public static Comment getEntityInstance(RequestCommentDto dto) {
         Comment comment = new Comment();
         comment.writer = dto.getWriter();
         comment.password = dto.getPassword();
-        comment.salesItem = item;
         comment.content = dto.getContent();
         return comment;
+    }
+
+    public void setSalesItem(SalesItem item) {
+        if (this.salesItem != null) {
+            this.salesItem.getComments().remove(this); //이전에 관계가 매핑 되어있다면 제거한다.
+        }
+        this.salesItem = item;
+        item.addComment(this);
     }
 
     public void update(RequestCommentDto dto) {
@@ -44,5 +52,15 @@ public class Comment {
 
     public void updateReply(CommentReplyDto dto) {
         this.reply = dto.getReply();
+    }
+
+    //인증 메서드
+    public void checkAuthAndThrowException(String writer, String password) {
+        if (!writer.equals(writer)) {
+            throw new WriterNameNotMatchException();
+        }
+        if (!password.equals(password)) {
+            throw new PasswordNotMatchException();
+        }
     }
 }

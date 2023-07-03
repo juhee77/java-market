@@ -1,6 +1,8 @@
 package com.lahee.market.entity;
 
 import com.lahee.market.dto.RequestSalesItemDto;
+import com.lahee.market.exception.PasswordNotMatchException;
+import com.lahee.market.exception.WriterNameNotMatchException;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -37,7 +39,7 @@ public class SalesItem {
     private List<Negotiation> negotiations = new ArrayList<>();
 
 
-    public static SalesItem postNewItem(RequestSalesItemDto requestSalesItemDto) {
+    public static SalesItem getEntityInstance(RequestSalesItemDto requestSalesItemDto) {
         SalesItem salesItem = new SalesItem();
         salesItem.description = requestSalesItemDto.getDescription();
         salesItem.title = requestSalesItemDto.getTitle();
@@ -73,5 +75,15 @@ public class SalesItem {
 
     public void deleteComment(Comment comment) {
         comments.remove(comment);
+    }
+
+    //인증 메서드
+    public void checkAuthAndThrowException(String writer, String password) {
+        if (!writer.equals(writer)) {
+            throw new WriterNameNotMatchException();
+        }
+        if (!password.equals(password)) {
+            throw new PasswordNotMatchException();
+        }
     }
 }
