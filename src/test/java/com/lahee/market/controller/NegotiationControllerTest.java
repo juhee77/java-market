@@ -1,18 +1,21 @@
 package com.lahee.market.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lahee.market.dto.RequestSalesItemDto;
-import com.lahee.market.dto.ResponseSalesItemDto;
 import com.lahee.market.dto.comment.DeleteCommentDto;
 import com.lahee.market.dto.negotiation.RequestNegotiationDto;
 import com.lahee.market.dto.negotiation.ResponseNegotiationDto;
 import com.lahee.market.dto.negotiation.UpdateNegotiationDto;
+import com.lahee.market.dto.salesItem.RequestSalesItemDto;
+import com.lahee.market.dto.salesItem.ResponseSalesItemDto;
+import com.lahee.market.entity.ItemStatus;
 import com.lahee.market.entity.Negotiation;
+import com.lahee.market.entity.NegotiationStatus;
 import com.lahee.market.entity.SalesItem;
 import com.lahee.market.repository.NegotiationRepository;
 import com.lahee.market.repository.SalesItemRepository;
 import com.lahee.market.service.NegotiationService;
 import com.lahee.market.service.SalesItemService;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -51,7 +54,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class NegotiationControllerTest {
     @Autowired
     private MockMvc mockMvc;
-
     @Autowired
     private SalesItemRepository salesItemRepository;
     @Autowired
@@ -60,7 +62,8 @@ class NegotiationControllerTest {
     private SalesItemService salesItemService;
     @Autowired
     private NegotiationService negotiationService;
-
+    @Autowired
+    private EntityManager em;
     private static SalesItem item;
 
     @Test
@@ -228,7 +231,11 @@ class NegotiationControllerTest {
         //given
         RequestNegotiationDto dto = getRequestNegotiationDto();
         ResponseNegotiationDto save = negotiationService.save(item.getId(), dto);
-        negotiationService.updateStatus(item.getId(), save.getId(), new UpdateNegotiationDto(item.getWriter(), item.getPassword(), save.getSuggestedPrice(), "수락"));
+        for (int i = 0; i < 5; i++) { //구매 제안 확정후 변경 상태 확인을 위해서
+            negotiationService.save(item.getId(), new RequestNegotiationDto("pWriter" + i, "pPassword" + i, 10000 * i));
+        }
+
+        negotiationService.updateStatus(item.getId(), save.getId(), new UpdateNegotiationDto(item.getWriter(), item.getPassword(), save.getSuggestedPrice(), NegotiationStatus.ACCEPT.getName()));
         Map<String, String> requestDto = new HashMap<>();
         requestDto.put("writer", dto.getWriter());
         requestDto.put("password", dto.getPassword());
@@ -251,9 +258,18 @@ class NegotiationControllerTest {
                         content().contentType(MediaType.APPLICATION_JSON)
                 );
 
+        em.clear(); //캐시된것에서 불러오는것이 아닌 새로 동작하도록 한다.
+
         //then
         Negotiation negotiation = negotiationRepository.findById(save.getId()).get();
-        assertThat(negotiation.getStatus().getName()).isEqualTo(requestDto.get("status"));
+        assertThat(negotiation.getStatus()).isEqualTo(NegotiationStatus.CONFIRMATION); //제안의 상태 확인
+        assertThat(item.getStatus()).isEqualTo(ItemStatus.SOLD); // 제품의 상태 확인
+
+        List<Negotiation> bySalesItem = negotiationRepository.findBySalesItem(item);
+        for (Negotiation tempNegotiation : bySalesItem) {
+            if (tempNegotiation.equals(negotiation)) continue;
+            assertThat(tempNegotiation.getStatus()).isEqualTo(NegotiationStatus.REJECT);//나머지 제안의 상태 확인
+        }
     }
 
 

@@ -75,7 +75,7 @@ public class NegotiationService {
 
         //판매자의 아이디 비밀번호 확인
         salesItem.checkAuthAndThrowException(dto.getWriter(), dto.getPassword());
-        negotiation.updateStatus(dto);
+        negotiation.updateStatus(NegotiationStatus.findNegotiationStatus(dto.getStatus()));
     }
 
     @Transactional
@@ -85,11 +85,17 @@ public class NegotiationService {
 
         //제안자의 아이디 비밀번호 확인
         negotiation.checkAuthAndThrowException(dto.getWriter(), dto.getPassword());
+
         //수락 상태인 경우만 진행한다.
         if (negotiation.getStatus() != NegotiationStatus.ACCEPT) {
             throw new RuntimeException("수락 상태가 아니다 .");
         }
-        negotiation.acceptStatus();
+
+        SalesItem salesItem = salesItemRepository.findById(itemId).orElseThrow(ItemNotFoundException::new);
+        negotiation.acceptStatus(); //구매 제안의 상태를 확정으로
+        salesItem.updateSoldOutStatus(); //물품의 상태를 판매 완료로
+        //해당 아이템의 확정되지 않은 나머지 제안들을 REJECT 으로 바꾼다.
+        negotiationRepository.updateItemStatusToReject(salesItem);
     }
 
     private static void validItemNegotiation(Long itemId, Negotiation negotiation) {
