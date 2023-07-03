@@ -3,12 +3,11 @@ package com.lahee.market.service;
 import com.lahee.market.dto.negotiation.DeleteNegotiationDto;
 import com.lahee.market.dto.negotiation.RequestNegotiationDto;
 import com.lahee.market.dto.negotiation.ResponseNegotiationDto;
+import com.lahee.market.dto.negotiation.UpdateNegotiationDto;
 import com.lahee.market.entity.Negotiation;
+import com.lahee.market.entity.NegotiationStatus;
 import com.lahee.market.entity.SalesItem;
-import com.lahee.market.exception.ItemNotFoundException;
-import com.lahee.market.exception.NegotationNotMatchItemException;
-import com.lahee.market.exception.PasswordNotMatchException;
-import com.lahee.market.exception.WriterNameNotMatchException;
+import com.lahee.market.exception.*;
 import com.lahee.market.repository.NegotiationRepository;
 import com.lahee.market.repository.SalesItemRepository;
 import lombok.RequiredArgsConstructor;
@@ -51,14 +50,14 @@ public class NegotiationService {
 
 
     @Transactional
-    public ResponseNegotiationDto update(Long itemId, Long proposalId, RequestNegotiationDto dto) {
+    public ResponseNegotiationDto update(Long itemId, Long proposalId, UpdateNegotiationDto dto) {
         Negotiation negotiation = negotiationRepository.findById(proposalId).orElseThrow(NegotationNotMatchItemException::new);
 
         if (negotiation.getSalesItem().getId() != itemId) {
             throw new NegotationNotMatchItemException();
         }
 
-        checkNegotiationWriterAndPasswordAndThrowException(dto.getWriter(), dto.getPassword(), negotiation);
+        checkWriterAndPasswordAndThrowException(dto.getWriter(), dto.getPassword(), negotiation);
         negotiation.update(dto);
         return fromEntity(negotiation);
     }
@@ -70,15 +69,58 @@ public class NegotiationService {
             throw new NegotationNotMatchItemException();
         }
 
-        checkNegotiationWriterAndPasswordAndThrowException(dto.getWriter(), dto.getPassword(), negotiation);
+        checkWriterAndPasswordAndThrowException(dto.getWriter(), dto.getPassword(), negotiation);
         negotiationRepository.delete(negotiation);
+    }
+
+//    public void updateStatus(Long itemId, Long proposalId, UpdateNegotiationStatusDto dto) {
+//        SalesItem salesItem = salesItemRepository.findById(itemId).orElseThrow(ItemNotFoundException::new);
+//        Negotiation negotiation = negotiationRepository.findById(proposalId).orElseThrow(NegotiationNotFoundException::new);
+//
+//        checkWriterAndPasswordAndThrowException(dto.getWriter(), dto.getPassword(), salesItem);
+//        if(salesItem.getId() != negotiation.getSalesItem().getId()) throw new NegotationNotMatchItemException();
+//
+//        negotiation.updateStatus(dto);
+//    }
+
+    @Transactional
+    public void updateStatus(Long itemId, Long proposalId, UpdateNegotiationDto dto) { //아이템 판매자가 하는 결정
+        SalesItem salesItem = salesItemRepository.findById(itemId).orElseThrow(ItemNotFoundException::new);
+        Negotiation negotiation = negotiationRepository.findById(proposalId).orElseThrow(NegotiationNotFoundException::new);
+
+        checkWriterAndPasswordAndThrowException(dto.getWriter(), dto.getPassword(), salesItem);
+        if (salesItem.getId() != negotiation.getSalesItem().getId()) throw new NegotationNotMatchItemException();
+
+        negotiation.updateStatus(dto);
+    }
+
+    @Transactional
+    public void acceptProposal(Long itemId, Long proposalId, UpdateNegotiationDto dto) { //제안자가 확정하는 결정
+        SalesItem salesItem = salesItemRepository.findById(itemId).orElseThrow(ItemNotFoundException::new);
+        Negotiation negotiation = negotiationRepository.findById(proposalId).orElseThrow(NegotiationNotFoundException::new);
+
+        checkWriterAndPasswordAndThrowException(dto.getWriter(), dto.getPassword(), negotiation);
+        if (salesItem.getId() != negotiation.getSalesItem().getId()) throw new NegotationNotMatchItemException();
+        if (negotiation.getStatus() != NegotiationStatus.ACCEPT) {
+            throw new RuntimeException("수락 상태가 아니다 .");
+        }
+        negotiation.acceptStatus(dto);
     }
 
     private boolean checkItemWriterAndPassword(String writer, String password, SalesItem item) {
         return item.getWriter().equals(writer) && item.getPassword().equals(password);
     }
 
-    private static void checkNegotiationWriterAndPasswordAndThrowException(String writer, String password, Negotiation negotiation) {
+    private static void checkWriterAndPasswordAndThrowException(String writer, String password, Negotiation negotiation) {
+        if (!negotiation.getWriter().equals(writer)) {
+            throw new WriterNameNotMatchException();
+        }
+        if (!negotiation.getPassword().equals(password)) {
+            throw new PasswordNotMatchException();
+        }
+    }
+
+    private static void checkWriterAndPasswordAndThrowException(String writer, String password, SalesItem negotiation) {
         if (!negotiation.getWriter().equals(writer)) {
             throw new WriterNameNotMatchException();
         }

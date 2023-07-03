@@ -1,6 +1,7 @@
 package com.lahee.market.entity;
 
 import com.lahee.market.dto.negotiation.RequestNegotiationDto;
+import com.lahee.market.dto.negotiation.UpdateNegotiationDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 
@@ -44,7 +45,19 @@ public class Negotiation {
         item.addNegotiation(this);
     }
 
-    public void update(RequestNegotiationDto dto) {
+    public void update(UpdateNegotiationDto dto) {
         this.suggestedPrice = dto.getSuggestedPrice();
     }
+
+    //    public void updateStatus(UpdateNegotiationStatusDto dto) {
+//        this.status = NegotiationStatus.findNegotiationStatus(dto.getStatus());
+//    }
+    public void updateStatus(UpdateNegotiationDto dto) {
+        this.status = NegotiationStatus.findNegotiationStatus(dto.getStatus());
+    }
+
+    public void acceptStatus(UpdateNegotiationDto dto) {
+        this.status = NegotiationStatus.CONFIRMATION;
+    }
 }
+

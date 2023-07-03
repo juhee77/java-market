@@ -6,6 +6,7 @@ import com.lahee.market.dto.ResponseSalesItemDto;
 import com.lahee.market.dto.comment.DeleteCommentDto;
 import com.lahee.market.dto.negotiation.RequestNegotiationDto;
 import com.lahee.market.dto.negotiation.ResponseNegotiationDto;
+import com.lahee.market.dto.negotiation.UpdateNegotiationDto;
 import com.lahee.market.entity.Negotiation;
 import com.lahee.market.entity.SalesItem;
 import com.lahee.market.repository.NegotiationRepository;
@@ -28,7 +29,9 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 import static com.lahee.market.constants.ControllerMessage.*;
@@ -97,7 +100,7 @@ class NegotiationControllerTest {
 
     @Test
     @DisplayName("proposal 페이징 조회 - 판매자 (GET /items/{itemId}/proposal)")
-    public void findPagedProsal() throws Exception {
+    public void findPagedProposal() throws Exception {
         //given
         for (int i = 0; i < 10; i++) {
             negotiationService.save(item.getId(), new RequestNegotiationDto("pWriter" + i, "pPassword" + i, 10000));
@@ -126,7 +129,7 @@ class NegotiationControllerTest {
 
     @Test
     @DisplayName("proposal 페이징 조회 - 제안 작성자 (GET /items/{itemId}/proposal)")
-    public void findPagedProsal2() throws Exception {
+    public void findPagedProposal2() throws Exception {
         //given
         for (int i = 0; i < 5; i++) {
             negotiationService.save(item.getId(), new RequestNegotiationDto("pWriter", "pPassword", i * 1000));
@@ -163,8 +166,11 @@ class NegotiationControllerTest {
     public void updateProposal() throws Exception {
         //given
         ResponseNegotiationDto save = negotiationService.save(item.getId(), new RequestNegotiationDto("cWriter", "cPassword", 1000));
-        RequestNegotiationDto updateDto = new RequestNegotiationDto("cWriter", "cPassword", 50000);
-        String requestBody = new ObjectMapper().writeValueAsString(updateDto);
+        Map<String, String> requestDto = new HashMap<>();
+        requestDto.put("writer", "cWriter");
+        requestDto.put("password", "cPassword");
+        requestDto.put("suggestedPrice", "50000");
+        String requestBody = new ObjectMapper().writeValueAsString(requestDto);
 
         //when
         mockMvc.perform(put("/items/{itemId}/proposal/{proposalId}", item.getId(), save.getId())
@@ -184,8 +190,76 @@ class NegotiationControllerTest {
 
         //then
         Negotiation negotiation = negotiationRepository.findById(save.getId()).get();
-        assertThat(negotiation.getSuggestedPrice()).isEqualTo(updateDto.getSuggestedPrice());
+        assertThat(negotiation.getSuggestedPrice()).isEqualTo(Integer.parseInt(requestDto.get("suggestedPrice")));
     }
+
+    @Test
+    @DisplayName("proposal 상태 업데이트 확인 - 판매자가 제안을 수락하는 (PUT /items/{itemId}/proposal/{proposalId})")
+    public void updateStatusProposal() throws Exception {
+        //given
+        ResponseNegotiationDto save = negotiationService.save(item.getId(), new RequestNegotiationDto("pWriter", "pPassword", 1000));
+        Map<String, String> requestDto = new HashMap<>();
+        requestDto.put("writer", item.getWriter());
+        requestDto.put("password", item.getPassword());
+        requestDto.put("status", "수락");
+        String requestBody = new ObjectMapper().writeValueAsString(requestDto);
+
+        //when
+        mockMvc.perform(put("/items/{itemId}/proposal/{proposalId}", item.getId(), save.getId())
+                        .content(requestBody)
+                        .contentType(MediaType.APPLICATION_JSON))
+
+                .andDo(MockMvcResultHandlers.print())
+                .andDo(MockMvcRestDocumentation.document("Proposal/PUT/proposal 상태(수락,거절) 업데이트",
+                        Preprocessors.preprocessRequest(prettyPrint()),
+                        Preprocessors.preprocessResponse(prettyPrint())))
+
+                .andExpectAll(
+                        status().is2xxSuccessful(),
+                        jsonPath("message").value(UPDATE_PROPOSAL_STATUS_MESSAGE),
+                        content().contentType(MediaType.APPLICATION_JSON)
+                );
+
+        //then
+        Negotiation negotiation = negotiationRepository.findById(save.getId()).get();
+        assertThat(negotiation.getStatus().getName()).isEqualTo(requestDto.get("status"));
+    }
+
+    @Test
+    @DisplayName("proposal 상태 업데이트 확인 - 제안자가 확정하는 (PUT /items/{itemId}/proposal/{proposalId})")
+    public void confirmationProposal() throws Exception {
+        //given
+        RequestNegotiationDto dto = new RequestNegotiationDto("pWriter", "pPassword", 1000);
+        ResponseNegotiationDto save = negotiationService.save(item.getId(), dto);
+        negotiationService.updateStatus(item.getId(),save.getId(),new UpdateNegotiationDto(item.getWriter(),item.getPassword(),save.getSuggestedPrice(),"수락"));
+        Map<String, String> requestDto = new HashMap<>();
+        requestDto.put("writer", dto.getWriter());
+        requestDto.put("password", dto.getPassword());
+        requestDto.put("status", "확정");
+        String requestBody = new ObjectMapper().writeValueAsString(requestDto);
+
+        //when
+        mockMvc.perform(put("/items/{itemId}/proposal/{proposalId}", item.getId(), save.getId())
+                        .content(requestBody)
+                        .contentType(MediaType.APPLICATION_JSON))
+
+                .andDo(MockMvcResultHandlers.print())
+                .andDo(MockMvcRestDocumentation.document("Proposal/PUT/proposal 상태(확정) 업데이트",
+                        Preprocessors.preprocessRequest(prettyPrint()),
+                        Preprocessors.preprocessResponse(prettyPrint())))
+
+                .andExpectAll(
+                        status().is2xxSuccessful(),
+                        jsonPath("message").value(CONFIRMATION_PROPOSAL_MESSAGE),
+                        content().contentType(MediaType.APPLICATION_JSON)
+                );
+
+        //then
+        Negotiation negotiation = negotiationRepository.findById(save.getId()).get();
+        assertThat(negotiation.getStatus().getName()).isEqualTo(requestDto.get("status"));
+    }
+
+
 
     @Test
     @DisplayName("proposal 삭제 확인 (DELETE /items/{itemId}/proposal/{proposalId})")

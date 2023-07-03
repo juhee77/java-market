@@ -1,4 +1,4 @@
-= ITEM 문서
+= Negotiation 문서
 :doctype: book
 :icons: font
 :source-highlighter: highlightjs
@@ -75,4 +75,31 @@ include::{snippets}/Proposal/DELETE/proposal 삭제/http-response.adoc[]
 
 include::{snippets}/Proposal/DELETE/proposal 삭제/curl-request.adoc[]
 
+== Negotiation 상태 수정 case : 판매자가 수락하는 경우
+
+=== Request
+
+include::{snippets}/Proposal/PUT/proposal 상태(수락,거절) 업데이트/http-request.adoc[]
+
+=== Response
+
+include::{snippets}/Proposal/PUT/proposal 상태(수락,거절) 업데이트/http-response.adoc[]
+
+==== test
+
+include::{snippets}/Proposal/PUT/proposal 상태(수락,거절) 업데이트/curl-request.adoc[]
+
+== Negotiation 상태 수정 : 제안자가 확정하는 경우
+
+=== Request
+
+include::{snippets}/Proposal/PUT/proposal 상태(확정) 업데이트/http-request.adoc[]
+
+=== Response
+
+include::{snippets}/Proposal/PUT/proposal 상태(확정) 업데이트/http-response.adoc[]
+
+==== test
+
+include::{snippets}/Proposal/PUT/proposal 상태(확정) 업데이트/curl-request.adoc[]
 
