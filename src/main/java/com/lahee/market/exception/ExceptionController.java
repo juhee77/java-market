@@ -24,7 +24,7 @@ public class ExceptionController {
     }
 
     @ExceptionHandler(Status403Exception.class)
-    public ResponseEntity<ResponseDto> handleForbidden(WriterNameNotMatchException e) {
+    public ResponseEntity<ResponseDto> handleForbidden(Status403Exception e) {
         ResponseDto response = new ResponseDto();
         response.setMessage(e.getMessage());
         return ResponseEntity.status(403).body(response);
