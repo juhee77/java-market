@@ -1,5 +1,6 @@
 package com.lahee.market.service;
 
+import com.lahee.market.dto.negotiation.DeleteNegotiationDto;
 import com.lahee.market.dto.negotiation.RequestNegotiationDto;
 import com.lahee.market.dto.negotiation.ResponseNegotiationDto;
 import com.lahee.market.entity.Negotiation;
@@ -51,16 +52,26 @@ public class NegotiationService {
 
     @Transactional
     public ResponseNegotiationDto update(Long itemId, Long proposalId, RequestNegotiationDto dto) {
-        SalesItem salesItem = salesItemRepository.findById(itemId).orElseThrow(ItemNotFoundException::new);
         Negotiation negotiation = negotiationRepository.findById(proposalId).orElseThrow(NegotationNotMatchItemException::new);
 
-        if (negotiation.getSalesItem().getId() != salesItem.getId()) {
+        if (negotiation.getSalesItem().getId() != itemId) {
             throw new NegotationNotMatchItemException();
         }
 
         checkNegotiationWriterAndPasswordAndThrowException(dto.getWriter(), dto.getPassword(), negotiation);
         negotiation.update(dto);
         return fromEntity(negotiation);
+    }
+
+    @Transactional
+    public void delete(Long itemId, Long proposalId, DeleteNegotiationDto dto) {
+        Negotiation negotiation = negotiationRepository.findById(proposalId).orElseThrow(NegotationNotMatchItemException::new);
+        if (negotiation.getSalesItem().getId() != itemId) {
+            throw new NegotationNotMatchItemException();
+        }
+
+        checkNegotiationWriterAndPasswordAndThrowException(dto.getWriter(), dto.getPassword(), negotiation);
+        negotiationRepository.delete(negotiation);
     }
 
     private boolean checkItemWriterAndPassword(String writer, String password, SalesItem item) {

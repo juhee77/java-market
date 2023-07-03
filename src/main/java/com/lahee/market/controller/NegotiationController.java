@@ -1,6 +1,7 @@
 package com.lahee.market.controller;
 
 import com.lahee.market.dto.ResponseDto;
+import com.lahee.market.dto.negotiation.DeleteNegotiationDto;
 import com.lahee.market.dto.negotiation.RequestNegotiationDto;
 import com.lahee.market.dto.negotiation.ResponseNegotiationDto;
 import com.lahee.market.service.NegotiationService;
@@ -11,8 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static com.lahee.market.constants.ControllerMessage.SAVE_PROPOSAL_MESSAGE;
-import static com.lahee.market.constants.ControllerMessage.UPDATE_PROPOSAL_MESSAGE;
+import static com.lahee.market.constants.ControllerMessage.*;
 
 @RestController
 @RequestMapping("/items/{itemId}/proposal")
@@ -44,5 +44,13 @@ public class NegotiationController {
             @RequestBody RequestNegotiationDto dto) {
         negotiationService.update(itemId, proposalId, dto);
         return ResponseEntity.ok(ResponseDto.getSuccessInstance(UPDATE_PROPOSAL_MESSAGE));
+    }
+
+    @DeleteMapping("/{proposalId}")
+    public ResponseEntity<ResponseDto> deleteProposal(
+            @PathVariable("itemId") Long itemId, @PathVariable("proposalId") Long proposalId,
+            @RequestBody DeleteNegotiationDto dto) {
+        negotiationService.delete(itemId, proposalId, dto);
+        return ResponseEntity.ok(ResponseDto.getSuccessInstance(DELETE_PROPOSAL_MESSAGE));
     }
 }

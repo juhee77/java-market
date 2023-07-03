@@ -47,7 +47,6 @@ include::{snippets}/Proposal/GET/proposal 페이징 조회 - 제안 작성자의
 
 include::{snippets}/Proposal/GET/proposal 페이징 조회 - 제안 작성자의 경우/curl-request.adoc[]
 
-
 == Negotiation 수정
 
 === Request
@@ -61,5 +60,19 @@ include::{snippets}/Proposal/PUT/proposal 업데이트/http-response.adoc[]
 ==== test
 
 include::{snippets}/Proposal/PUT/proposal 업데이트/curl-request.adoc[]
+
+== Negotiation 삭제
+
+=== Request
+
+include::{snippets}/Proposal/DELETE/proposal 삭제/http-request.adoc[]
+
+=== Response
+
+include::{snippets}/Proposal/DELETE/proposal 삭제/http-response.adoc[]
+
+==== test
+
+include::{snippets}/Proposal/DELETE/proposal 삭제/curl-request.adoc[]
 
 

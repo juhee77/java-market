@@ -3,11 +3,9 @@ package com.lahee.market.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lahee.market.dto.RequestSalesItemDto;
 import com.lahee.market.dto.ResponseSalesItemDto;
-import com.lahee.market.dto.comment.RequestCommentDto;
-import com.lahee.market.dto.comment.ResponseCommentDto;
+import com.lahee.market.dto.comment.DeleteCommentDto;
 import com.lahee.market.dto.negotiation.RequestNegotiationDto;
 import com.lahee.market.dto.negotiation.ResponseNegotiationDto;
-import com.lahee.market.entity.Comment;
 import com.lahee.market.entity.Negotiation;
 import com.lahee.market.entity.SalesItem;
 import com.lahee.market.repository.NegotiationRepository;
@@ -31,10 +29,13 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static com.lahee.market.constants.ControllerMessage.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -184,6 +185,36 @@ class NegotiationControllerTest {
         //then
         Negotiation negotiation = negotiationRepository.findById(save.getId()).get();
         assertThat(negotiation.getSuggestedPrice()).isEqualTo(updateDto.getSuggestedPrice());
+    }
+
+    @Test
+    @DisplayName("proposal 삭제 확인 (DELETE /items/{itemId}/proposal/{proposalId})")
+    public void deleteComment() throws Exception {
+        //given
+        RequestNegotiationDto dto = new RequestNegotiationDto("pWriter", "pPassword", 10000);
+        ResponseNegotiationDto save = negotiationService.save(item.getId(), dto);
+        String requestBody = new ObjectMapper().writeValueAsString(new DeleteCommentDto(dto.getWriter(), dto.getPassword()));
+
+        //when
+        mockMvc.perform(delete("/items/{itemId}/proposal/{proposalId}", item.getId(), save.getId())
+                        .content(requestBody)
+                        .contentType(MediaType.APPLICATION_JSON))
+
+                .andDo(MockMvcResultHandlers.print())
+                .andDo(MockMvcRestDocumentation.document("proposal/DELETE/proposal 삭제",
+                        Preprocessors.preprocessRequest(prettyPrint()),
+                        Preprocessors.preprocessResponse(prettyPrint())))
+
+                .andExpectAll(
+                        status().is2xxSuccessful(),
+                        jsonPath("message").value(DELETE_PROPOSAL_MESSAGE),
+                        content().contentType(MediaType.APPLICATION_JSON)
+                );
+
+        //then
+        assertThrows(NoSuchElementException.class, () -> negotiationRepository.findById(save.getId()).get());
+        // 글에서도 사라졌는지 확인한다.
+        assertFalse(salesItemRepository.findById(item.getId()).get().getNegotiations().contains(save));
     }
 
     @BeforeEach
