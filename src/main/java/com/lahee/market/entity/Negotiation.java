@@ -44,4 +44,7 @@ public class Negotiation {
         item.addNegotiation(this);
     }
 
+    public void update(RequestNegotiationDto dto) {
+        this.suggestedPrice = dto.getSuggestedPrice();
+    }
 }

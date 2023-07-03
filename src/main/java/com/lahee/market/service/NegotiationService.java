@@ -5,6 +5,9 @@ import com.lahee.market.dto.negotiation.ResponseNegotiationDto;
 import com.lahee.market.entity.Negotiation;
 import com.lahee.market.entity.SalesItem;
 import com.lahee.market.exception.ItemNotFoundException;
+import com.lahee.market.exception.NegotationNotMatchItemException;
+import com.lahee.market.exception.PasswordNotMatchException;
+import com.lahee.market.exception.WriterNameNotMatchException;
 import com.lahee.market.repository.NegotiationRepository;
 import com.lahee.market.repository.SalesItemRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +17,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static com.lahee.market.dto.negotiation.ResponseNegotiationDto.fromEntity;
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +33,7 @@ public class NegotiationService {
         SalesItem salesItem = salesItemRepository.findById(itemId).orElseThrow(ItemNotFoundException::new);
         Negotiation saved = Negotiation.getEntityInstance(dto);
         saved.setSalesItem(salesItem);
-        return ResponseNegotiationDto.fromEntity(negotiationRepository.save(saved));
+        return fromEntity(negotiationRepository.save(saved));
     }
 
     public Page<ResponseNegotiationDto> findAllEntityByItem(Long itemId, String writer, String password, Integer page, Integer limit) {
@@ -44,7 +49,30 @@ public class NegotiationService {
     }
 
 
+    @Transactional
+    public ResponseNegotiationDto update(Long itemId, Long proposalId, RequestNegotiationDto dto) {
+        SalesItem salesItem = salesItemRepository.findById(itemId).orElseThrow(ItemNotFoundException::new);
+        Negotiation negotiation = negotiationRepository.findById(proposalId).orElseThrow(NegotationNotMatchItemException::new);
+
+        if (negotiation.getSalesItem().getId() != salesItem.getId()) {
+            throw new NegotationNotMatchItemException();
+        }
+
+        checkNegotiationWriterAndPasswordAndThrowException(dto.getWriter(), dto.getPassword(), negotiation);
+        negotiation.update(dto);
+        return fromEntity(negotiation);
+    }
+
     private boolean checkItemWriterAndPassword(String writer, String password, SalesItem item) {
         return item.getWriter().equals(writer) && item.getPassword().equals(password);
+    }
+
+    private static void checkNegotiationWriterAndPasswordAndThrowException(String writer, String password, Negotiation negotiation) {
+        if (!negotiation.getWriter().equals(writer)) {
+            throw new WriterNameNotMatchException();
+        }
+        if (!negotiation.getPassword().equals(password)) {
+            throw new PasswordNotMatchException();
+        }
     }
 }
