@@ -56,10 +56,10 @@ public class Comment {
 
     //인증 메서드
     public void checkAuthAndThrowException(String writer, String password) {
-        if (!writer.equals(writer)) {
+        if (!this.writer.equals(writer)) {
             throw new WriterNameNotMatchException();
         }
-        if (!password.equals(password)) {
+        if (!this.password.equals(password)) {
             throw new PasswordNotMatchException();
         }
     }

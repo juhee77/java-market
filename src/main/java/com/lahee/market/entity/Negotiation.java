@@ -39,8 +39,8 @@ public class Negotiation {
         this.suggestedPrice = dto.getSuggestedPrice();
     }
 
-    public void updateStatus(UpdateNegotiationDto dto) {
-        this.status = NegotiationStatus.findNegotiationStatus(dto.getStatus());
+    public void updateStatus(NegotiationStatus status) {
+        this.status = status;
     }
 
     public void acceptStatus() {
@@ -58,10 +58,10 @@ public class Negotiation {
 
     //인증 메서드
     public void checkAuthAndThrowException(String writer, String password) {
-        if (!writer.equals(writer)) {
+        if (!this.writer.equals(writer)) {
             throw new WriterNameNotMatchException();
         }
-        if (!password.equals(password)) {
+        if (!this.password.equals(password)) {
             throw new PasswordNotMatchException();
         }
     }
