@@ -19,7 +19,7 @@ import static jakarta.persistence.FetchType.LAZY;
 @Table(name = "sales_item")
 public class SalesItem {
     @Id
-    @Column(unique = true,nullable = false)
+    @Column(unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
     private String title;
@@ -32,6 +32,9 @@ public class SalesItem {
 
     @OneToMany(fetch = LAZY, mappedBy = "salesItem", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(fetch = LAZY, mappedBy = "salesItem", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Negotiation> negotiations = new ArrayList<>();
 
 
     public static SalesItem postNewItem(RequestSalesItemDto requestSalesItemDto) {
@@ -56,9 +59,15 @@ public class SalesItem {
     }
 
     //연관관계 편의 메소드
-    public void setItem(Comment comment) {
+    public void addComment(Comment comment) {
         if (!comments.contains(comment)) {
             comments.add(comment);
+        }
+    }
+
+    public void addNegotiation(Negotiation negotiation) {
+        if (!negotiations.contains(negotiation)) {
+            negotiations.add(negotiation);
         }
     }
 

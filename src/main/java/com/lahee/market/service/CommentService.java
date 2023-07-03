@@ -30,7 +30,7 @@ public class CommentService {
     public ResponseCommentDto save(Long itemId, RequestCommentDto requestCommentDto) {
         SalesItem salesItem = salesItemRepository.findById(itemId).orElseThrow(ItemNotFoundException::new);
         Comment comment = Comment.postNewComment(salesItem, requestCommentDto);
-        salesItem.setItem(comment);
+        salesItem.addComment(comment);
         commentRepository.save(comment);
         return ResponseCommentDto.fromEntity(comment);
     }
