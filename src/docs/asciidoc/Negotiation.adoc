@@ -19,5 +19,32 @@ include::{snippets}/Negotiation/POST/negotiation 생성/http-response.adoc[]
 
 include::{snippets}/Negotiation/POST/negotiation 생성/curl-request.adoc[]
 
+== Negotiation 페이징 조회(case : 판매자)
+
+=== Request
+
+include::{snippets}/Proposal/GET/proposal 페이징 조회 - 판매자의 경우/http-request.adoc[]
+
+=== Response
+
+include::{snippets}/Proposal/GET/proposal 페이징 조회 - 판매자의 경우/http-response.adoc[]
+
+==== test
+
+include::{snippets}/Proposal/GET/proposal 페이징 조회 - 판매자의 경우/curl-request.adoc[]
+
+== Negotiation 페이징 조회(case : 제안 작성자)
+
+=== Request
+
+include::{snippets}/Proposal/GET/proposal 페이징 조회 - 제안 작성자의 경우/http-request.adoc[]
+
+=== Response
+
+include::{snippets}/Proposal/GET/proposal 페이징 조회 - 제안 작성자의 경우/http-response.adoc[]
+
+==== test
+
+include::{snippets}/Proposal/GET/proposal 페이징 조회 - 제안 작성자의 경우/curl-request.adoc[]
 
 
