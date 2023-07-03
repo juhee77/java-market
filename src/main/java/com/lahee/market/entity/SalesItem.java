@@ -1,6 +1,6 @@
 package com.lahee.market.entity;
 
-import com.lahee.market.dto.RequestSalesItemDto;
+import com.lahee.market.dto.salesItem.RequestSalesItemDto;
 import com.lahee.market.exception.PasswordNotMatchException;
 import com.lahee.market.exception.WriterNameNotMatchException;
 import jakarta.persistence.*;
@@ -23,12 +23,13 @@ public class SalesItem {
     @Id
     @Column(unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
     private String title;
     private String description;
     private String imageUrl;
     private Integer minPriceWanted;
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private ItemStatus status;
     private String writer;
     private String password;
 
@@ -44,7 +45,7 @@ public class SalesItem {
         salesItem.description = requestSalesItemDto.getDescription();
         salesItem.title = requestSalesItemDto.getTitle();
         salesItem.minPriceWanted = requestSalesItemDto.getMinPriceWanted();
-        salesItem.status = "판매중";
+        salesItem.status = ItemStatus.SELL;
         salesItem.writer = requestSalesItemDto.getWriter();
         salesItem.password = requestSalesItemDto.getPassword();
         return salesItem;
@@ -85,5 +86,9 @@ public class SalesItem {
         if (!password.equals(password)) {
             throw new PasswordNotMatchException();
         }
+    }
+
+    public void updateSoldOutStatus() {
+        this.status = ItemStatus.SOLD;
     }
 }

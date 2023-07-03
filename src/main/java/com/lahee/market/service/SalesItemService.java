@@ -1,8 +1,8 @@
 package com.lahee.market.service;
 
-import com.lahee.market.dto.DeleteItemDto;
-import com.lahee.market.dto.RequestSalesItemDto;
-import com.lahee.market.dto.ResponseSalesItemDto;
+import com.lahee.market.dto.salesItem.DeleteItemDto;
+import com.lahee.market.dto.salesItem.RequestSalesItemDto;
+import com.lahee.market.dto.salesItem.ResponseSalesItemDto;
 import com.lahee.market.entity.SalesItem;
 import com.lahee.market.exception.ItemNotFoundException;
 import com.lahee.market.repository.SalesItemRepository;

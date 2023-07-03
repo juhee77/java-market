@@ -2,9 +2,9 @@ package com.lahee.market.controller;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lahee.market.dto.DeleteItemDto;
-import com.lahee.market.dto.RequestSalesItemDto;
-import com.lahee.market.dto.ResponseSalesItemDto;
+import com.lahee.market.dto.salesItem.DeleteItemDto;
+import com.lahee.market.dto.salesItem.RequestSalesItemDto;
+import com.lahee.market.dto.salesItem.ResponseSalesItemDto;
 import com.lahee.market.entity.SalesItem;
 import com.lahee.market.repository.SalesItemRepository;
 import com.lahee.market.service.SalesItemService;

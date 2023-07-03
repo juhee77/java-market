@@ -1,4 +1,4 @@
-package com.lahee.market.dto;
+package com.lahee.market.dto.salesItem;
 
 import com.lahee.market.entity.SalesItem;
 import lombok.Data;
@@ -17,7 +17,7 @@ public class ResponseSalesItemDto {
         dto.setDescription(item.getDescription());
         dto.setTitle(item.getTitle());
         dto.setMinPriceWanted(item.getMinPriceWanted());
-        dto.setStatus(item.getStatus());
+        dto.setStatus(item.getStatus().toString());
         return dto;
     }
 }

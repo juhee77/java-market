@@ -1,4 +1,4 @@
-package com.lahee.market.dto;
+package com.lahee.market.dto.salesItem;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;

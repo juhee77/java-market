@@ -1,9 +1,9 @@
 package com.lahee.market.controller;
 
-import com.lahee.market.dto.DeleteItemDto;
-import com.lahee.market.dto.RequestSalesItemDto;
+import com.lahee.market.dto.salesItem.DeleteItemDto;
+import com.lahee.market.dto.salesItem.RequestSalesItemDto;
 import com.lahee.market.dto.ResponseDto;
-import com.lahee.market.dto.ResponseSalesItemDto;
+import com.lahee.market.dto.salesItem.ResponseSalesItemDto;
 import com.lahee.market.service.SalesItemService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
