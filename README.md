@@ -20,13 +20,13 @@
 
 ## 📄 요구사항 명세
 ### 판매자
-물픔 등록, 수정, 사진 등록, 댓글에 대한 응답, 제안에 대한 응답을 제공한다.  
+물픔 등록, 수정, 사진 등록, 물품 수정, 물품 삭제, 댓글에 대한 응답, 제안에 대한 응답 기능을 제공합니다.
 추가로 판매자가 제품을 삭제하는 경우 관련 댓글과,응답을 모두 삭제하도록 하였습니다.
 제품 등록시점에는 `판매중` 상태로 등록됩니다.
 ### 댓글 작성자
 댓글을 작성, 수정, 삭제, 조회 할 수 있습니다.
 ### 제안 작성자
-제안을 작성, 수정 할 수 있습니다.  
+제안을 작성, 수정, 삭제 할 수 있습니다.  
 제안 작성 시점에는 `제안`상태로 등록됩니다.  
 제안에 대해 판매자가 `수락`한 경우 제안자가 `확정`을 보내면 거래가 완료됩니다.    
 거래가 완료되면 해당 아이템에 대한 다른 제안들을 모두 `거절`상태가 됩니다. 또한 아이템의 상태가 `판매완료`로 변경 됩니다.
@@ -40,12 +40,14 @@
 
 ### API 설계
 `Rest docs`, build후 spring boot 실행 후에 실행해주세요 
-#### [Comment API 명세서](http://localhost:8080/static/docs/Comment.html) 
-[마크다운 파일](src/docs/Comment.md)
-#### [Item API 명세서](http://localhost:8080/static/docs/SalesItem.html) 
-[마크다운 파일](src/docs/SalesItem.md)
+#### [Comment API 명세서](http://localhost:8080/static/docs/Comment.html)
+#### [Item API 명세서](http://localhost:8080/static/docs/SalesItem.html)
 #### [Negotiation API 명세서](http://localhost:8080/static/docs/Negotiation.html)    
-[마크다운 파일](src/docs/Negotiation.md)    
+
+`마크다운 파일` 링크 클릭시 api 마크다운 문서로 이동합니다   
+[아이템 마크다운 파일](src/docs/SalesItem.md)     
+[코멘트 마크다운 파일](src/docs/Comment.md)     
+[제안 마크다운 파일](src/docs/Negotiation.md)     
 
 `post man json 파일` import 하여 사용할 수 있습니다.
 #### [miniporject.postman_collection.json](readme/mutsamarket.json)
@@ -75,6 +77,21 @@ jpa를 이용하여 관계 매핑을 진행하였습니다.
 `NegotiationNotFoundException.java`
 
 ---
+
+### 프로젝트 실행 방법
+스프링 부트 3버전대는 자바 17부터 지원하기 때문에 자바17로 설정되어 있어야 합니다.  
+또한 sqlite가 설치되어있어야 합니다.
+
+다운받고자 하는 파일로 cd 명령어를 이용해서 이동합니다.
+1. 깃 클론   
+`git clone https://github.com/likelion-backend-5th/MiniProject_Basic_ParkJuhee.git` 을 실행합니다. 
+2. 그래들을 빌드합니다.  
+인텔리제이에서는 사이드 바에서 gradle -> build를 실행합니다.  
+그래들이 설치 되어 있다면 cli환경에서 `gradlew build` 을 입력하는 방법도 있습니다.  
+빌드 후에는 src/main/resources/static/docs 아래 html파일이 생성된것을 확인할 수 있습니다.  
+3. boot run을 실행합니다.  
+인텔리제에서는 com/lahee/market/MutsaMarketApplication. java파일을 실행시키면 됩니다  
+cli 환경에서 jar 파일을 실행하는 경우는 `cd build/libs`, `java -jar market-0.0.1-SNAPSHOT.jar`을 차례로 실행시킵니다.
 
 ## 프로젝트 실행 기간
 1인 프로젝트 2023/06/30 ~ 2023/07/04
