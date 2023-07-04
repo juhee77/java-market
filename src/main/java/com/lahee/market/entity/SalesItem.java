@@ -78,6 +78,10 @@ public class SalesItem {
         comments.remove(comment);
     }
 
+    public void deleteNegotiation(Negotiation negotiation) {
+        negotiations.remove(negotiation);
+    }
+
     //인증 메서드
     public void checkAuthAndThrowException(String writer, String password) {
         if (!this.writer.equals(writer)) {

@@ -2,6 +2,7 @@ package com.lahee.market.entity;
 
 import com.lahee.market.dto.comment.CommentReplyDto;
 import com.lahee.market.dto.comment.RequestCommentDto;
+import com.lahee.market.exception.CommentNotMatchItemException;
 import com.lahee.market.exception.PasswordNotMatchException;
 import com.lahee.market.exception.WriterNameNotMatchException;
 import jakarta.persistence.*;
@@ -61,6 +62,13 @@ public class Comment {
         }
         if (!this.password.equals(password)) {
             throw new PasswordNotMatchException();
+        }
+    }
+
+    //아이템에 속한 코멘트가 맞는지 확인한다.
+    public void validItemIdInURL(Long itemId) {
+        if (salesItem.getId() != itemId) {
+            throw new CommentNotMatchItemException();
         }
     }
 }
