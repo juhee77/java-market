@@ -62,15 +62,25 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
-asciidoctor {
+asciidoctor { // asciidoctor 작업 구성
 	inputs.dir snippetsDir
 	configurations 'asciidoctorExt'
 	dependsOn test
 }
 
-bootJar {
+// static/docs 폴더 비우기
+asciidoctor.doFirst {
+	delete file('src/main/resources/static/docs')
+}
+
+// asccidoctor 작업 이후 생성된 HTML 파일을 static/docs 로 copy
+task copyDocument(type: Copy) {
 	dependsOn asciidoctor
-	from ("${asciidoctor.outputDir}/html5") {
-		into 'static/docs'
-	}
+	from file("build/docs/asciidoc")
+	into file("src/main/resources/static/docs")
+}
+
+// build 의 의존작업 명시
+build {
+	dependsOn copyDocument
 }

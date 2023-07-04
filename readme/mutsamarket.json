@@ -1,0 +1,757 @@
+{
+	"info": {
+		"_postman_id": "d80d610d-f39e-48e0-9be5-24d676d7b1ee",
+		"name": "miniporject",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20454273"
+	},
+	"item": [
+		{
+			"name": "comment",
+			"item": [
+				{
+					"name": "댓글 생성",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=UTF-8"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"writer\" : \"asdf\",\n  \"password\" : \"asdf\",\n  \"content\" : \"할인 가능하신가요?\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/items/1/comments",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"items",
+								"1",
+								"comments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "페이징 조회(댓글)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/items/1/comments?page=0&limit=5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"items",
+								"1",
+								"comments"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "limit",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "댓글 조회 단일건",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/items/1/comments/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"items",
+								"1",
+								"comments",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "댓글 수정",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"writer\" : \"asdf\",\n  \"password\" : \"asdf\",\n  \"content\" : \"MODIFY\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/items/1/comments/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"items",
+								"1",
+								"comments",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "댓글 reply(응답)저장",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=UTF-8"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"writer\": \"qwer\",\n    \"password\": \"qwer\",\n   \"reply\" : \"안될걸용\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/items/1/comments/3/reply",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"items",
+								"1",
+								"comments",
+								"3",
+								"reply"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "댓글 삭제",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=UTF-8"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"writer\" : \"asdf\",\n  \"password\" : \"asdf\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/items/1/comments/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"items",
+								"1",
+								"comments",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "item",
+			"item": [
+				{
+					"name": "아이템 생성",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"qwer\",\n    \"description\": \"qwer\",\n    \"minPriceWanted\": 12000,\n    \"writer\": \"qwer\",\n    \"password\": \"qwer\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/items",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"items"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "페이징 조회(아이템)",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/items?page=0&limit=30",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"items"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "limit",
+									"value": "30"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "단일 건 조회",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/items/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"items",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "아이템 수정",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"MODIFY\",\n    \"description\": \"2019년 d맥asdf북 프로 13인치 모델입니다\",\n    \"minPriceWanted\": 1000000,\n    \"writer\": \"qwer\",\n    \"password\": \"qwer\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/items/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"items",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "아이템 사진 업데이트",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/Users/bagjuhui/Downloads/free-icon-lion-of-judah-3436890.png"
+								},
+								{
+									"key": "writer",
+									"value": "qwer",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "qwer",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8080/items/1/image",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"items",
+								"1",
+								"image"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "이미지 저장 확인",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/static/1/item.png",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"static",
+								"1",
+								"item.png"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "아이템 삭제",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"writer\": \"qwer\",\n    \"password\": \"qwer\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/items/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"items",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "proposal",
+			"item": [
+				{
+					"name": "proposal 생성",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=UTF-8"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"writer\" : \"zxcv\",\n  \"password\" : \"zxcv\",\n  \"suggestedPrice\" : 100000\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/items/1/proposal",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"items",
+								"1",
+								"proposal"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "판매자가 자신에게 온 제안들을 확인",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=UTF-8"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/items/1/proposal?writer=qwer&password=qwer&page=0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"items",
+								"1",
+								"proposal"
+							],
+							"query": [
+								{
+									"key": "writer",
+									"value": "qwer"
+								},
+								{
+									"key": "password",
+									"value": "qwer"
+								},
+								{
+									"key": "page",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "제안자가 자신의 제안을 확인",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=UTF-8"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/items/1/proposal?writer=zxcv&password=zxcv&page=0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"items",
+								"1",
+								"proposal"
+							],
+							"query": [
+								{
+									"key": "writer",
+									"value": "zxcv"
+								},
+								{
+									"key": "password",
+									"value": "zxcv"
+								},
+								{
+									"key": "page",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "제안자가 자신의 제안을 수정",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=UTF-8"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"suggestedPrice\" : \"500000\",\n  \"password\" : \"zxcv\",\n  \"writer\" : \"zxcv\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/items/1/proposal/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"items",
+								"1",
+								"proposal",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "제안자가 자신의 제안을 삭제",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=UTF-8"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"writer\" : \"zxcv\",\n  \"password\" : \"zxcv\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/items/1/proposal/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"items",
+								"1",
+								"proposal",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "아이템 판매자가 제안을 수락",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=UTF-8"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"writer\": \"qwer\",\n    \"password\": \"qwer\",\n    \"status\" : \"수락\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/items/1/proposal/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"items",
+								"1",
+								"proposal",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "제안자가 구매를 확정하는 경우",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=UTF-8"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"password\" : \"zxcv\",\n  \"writer\" : \"zxcv\",\n  \"status\" : \"확정\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/items/1/proposal/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"items",
+								"1",
+								"proposal",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "docs",
+			"item": [
+				{
+					"name": "댓글 명세서(Comment)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/static/docs/Comment.html",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"static",
+								"docs",
+								"Comment.html"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "판매 명세서(SalesItem)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/static/docs/SalesItem.html",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"static",
+								"docs",
+								"SalesItem.html"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "\b협상 명세서(Negotiation)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/static/docs/Negotiation.html",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"static",
+								"docs",
+								"Negotiation.html"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "itemId",
+			"value": "1"
+		}
+	]
+}
