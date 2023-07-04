@@ -7,9 +7,7 @@ import com.lahee.market.dto.negotiation.UpdateNegotiationDto;
 import com.lahee.market.entity.Negotiation;
 import com.lahee.market.entity.NegotiationStatus;
 import com.lahee.market.entity.SalesItem;
-import com.lahee.market.exception.ItemNotFoundException;
-import com.lahee.market.exception.NegotationNotMatchItemException;
-import com.lahee.market.exception.NegotiationNotFoundException;
+import com.lahee.market.exception.*;
 import com.lahee.market.repository.NegotiationRepository;
 import com.lahee.market.repository.SalesItemRepository;
 import lombok.RequiredArgsConstructor;
@@ -52,7 +50,7 @@ public class NegotiationService {
 
     @Transactional
     public ResponseNegotiationDto update(Long itemId, Long proposalId, UpdateNegotiationDto dto) {
-        Negotiation negotiation = negotiationRepository.findById(proposalId).orElseThrow(NegotationNotMatchItemException::new);
+        Negotiation negotiation = negotiationRepository.findById(proposalId).orElseThrow(NegotiationNotMatchItemException::new);
         validItemNegotiation(itemId, negotiation);
         negotiation.checkAuthAndThrowException(dto.getWriter(), dto.getPassword());
         negotiation.update(dto);
@@ -61,7 +59,7 @@ public class NegotiationService {
 
     @Transactional
     public void delete(Long itemId, Long proposalId, DeleteNegotiationDto dto) {
-        Negotiation negotiation = negotiationRepository.findById(proposalId).orElseThrow(NegotationNotMatchItemException::new);
+        Negotiation negotiation = negotiationRepository.findById(proposalId).orElseThrow(NegotiationNotMatchItemException::new);
         validItemNegotiation(itemId, negotiation);
         negotiation.checkAuthAndThrowException(dto.getWriter(), dto.getPassword());
         negotiationRepository.delete(negotiation);
@@ -88,19 +86,19 @@ public class NegotiationService {
 
         //수락 상태인 경우만 진행한다.
         if (negotiation.getStatus() != NegotiationStatus.ACCEPT) {
-            throw new RuntimeException("수락 상태가 아니다 .");
+            throw new NegotiationInvalidStatusException();
         }
 
         SalesItem salesItem = salesItemRepository.findById(itemId).orElseThrow(ItemNotFoundException::new);
         negotiation.acceptStatus(); //구매 제안의 상태를 확정으로
         salesItem.updateSoldOutStatus(); //물품의 상태를 판매 완료로
         //해당 아이템의 확정되지 않은 나머지 제안들을 REJECT 으로 바꾼다.
-        negotiationRepository.updateItemStatusToReject(salesItem);
+        negotiationRepository.updateItemStatusToReject(salesItem,proposalId);
     }
 
     private static void validItemNegotiation(Long itemId, Negotiation negotiation) {
         if (itemId != negotiation.getSalesItem().getId()) {
-            throw new NegotationNotMatchItemException();
+            throw new NegotiationNotMatchItemException();
         }
     }
 

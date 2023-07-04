@@ -19,6 +19,6 @@ public interface NegotiationRepository extends JpaRepository<Negotiation, Long> 
     List<Negotiation> findBySalesItem(SalesItem item);
 
     @Modifying
-    @Query("UPDATE Negotiation o Set o.status='REJECT' WHERE o.salesItem = :item and o.status = 'SUGGEST'")
-    void updateItemStatusToReject(@Param("item") SalesItem item);
+    @Query("UPDATE Negotiation o Set o.status='REJECT' WHERE o.salesItem = :item and o.id != :nId")
+    void updateItemStatusToReject(@Param("item") SalesItem item, @Param("nId") Long negotiationId);
 }

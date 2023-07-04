@@ -5,12 +5,12 @@ import com.lahee.market.dto.negotiation.DeleteNegotiationDto;
 import com.lahee.market.dto.negotiation.RequestNegotiationDto;
 import com.lahee.market.dto.negotiation.ResponseNegotiationDto;
 import com.lahee.market.dto.negotiation.UpdateNegotiationDto;
+import com.lahee.market.exception.StatusException;
 import com.lahee.market.service.NegotiationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -56,7 +56,7 @@ public class NegotiationController {
             negotiationService.updateStatus(itemId, proposalId, requestNegotiationDto);
             return ResponseEntity.ok(getInstance(UPDATE_PROPOSAL_STATUS_MESSAGE));
         }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(getInstance(NOT_SUPPORTED_STATUS));
+        throw new StatusException();
     }
 
     @DeleteMapping("/{proposalId}")
