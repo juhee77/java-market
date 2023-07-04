@@ -58,7 +58,7 @@ public class SalesItemController {
     @DeleteMapping("/{itemId}")
     public ResponseEntity<ResponseDto> deleteItem(
             @PathVariable("itemId") Long itemId,
-            @RequestBody DeleteItemDto deleteItemDto
+            @Valid @RequestBody DeleteItemDto deleteItemDto
     ) {
         salesItemService.deleteItem(itemId, deleteItemDto);
         return ResponseEntity.ok(ResponseDto.getInstance(DELETE_ITEM_MESSAGE));

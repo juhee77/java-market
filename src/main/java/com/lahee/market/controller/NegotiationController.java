@@ -5,7 +5,7 @@ import com.lahee.market.dto.negotiation.DeleteNegotiationDto;
 import com.lahee.market.dto.negotiation.RequestNegotiationDto;
 import com.lahee.market.dto.negotiation.ResponseNegotiationDto;
 import com.lahee.market.dto.negotiation.UpdateNegotiationDto;
-import com.lahee.market.exception.StatusException;
+import com.lahee.market.exception.InvalidRequestException;
 import com.lahee.market.service.NegotiationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +43,13 @@ public class NegotiationController {
     @PutMapping(value = "/{proposalId}")
     public ResponseEntity<ResponseDto> updateProposal(
             @PathVariable("itemId") Long itemId, @PathVariable("proposalId") Long proposalId,
-            @RequestBody UpdateNegotiationDto requestNegotiationDto) {
+            @Valid @RequestBody UpdateNegotiationDto requestNegotiationDto) {
+        //status, price 가격이 둘다 없는 경우(잘못된 요청)
+        if (requestNegotiationDto.getStatus() == null && requestNegotiationDto.getSuggestedPrice() == null) {
+            throw new InvalidRequestException();
+        }
+
+
         if (requestNegotiationDto.getStatus() == null) { //제안 가격 수정의 경우
             negotiationService.update(itemId, proposalId, requestNegotiationDto);
             return ResponseEntity.ok(getInstance(UPDATE_PROPOSAL_MESSAGE));
@@ -51,18 +57,16 @@ public class NegotiationController {
             //제안자가 확정을 하는 경우
             negotiationService.acceptProposal(itemId, proposalId, requestNegotiationDto);
             return ResponseEntity.ok(getInstance(CONFIRMATION_PROPOSAL_MESSAGE));
-        } else if (requestNegotiationDto.getStatus().equals("수락") || requestNegotiationDto.getStatus().equals("거절")) {
-            //판매자가 수락, 거부 결정을 하는 경우
+        } else { // 수락, 거절중 하나이다. (status는 null, 수락, 거절, 확정 중 하나이다)
             negotiationService.updateStatus(itemId, proposalId, requestNegotiationDto);
             return ResponseEntity.ok(getInstance(UPDATE_PROPOSAL_STATUS_MESSAGE));
         }
-        throw new StatusException();
     }
 
     @DeleteMapping("/{proposalId}")
     public ResponseEntity<ResponseDto> deleteProposal(
             @PathVariable("itemId") Long itemId, @PathVariable("proposalId") Long proposalId,
-            @RequestBody DeleteNegotiationDto dto) {
+            @Valid @RequestBody DeleteNegotiationDto dto) {
         negotiationService.delete(itemId, proposalId, dto);
         return ResponseEntity.ok(getInstance(DELETE_PROPOSAL_MESSAGE));
     }
