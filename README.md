@@ -41,11 +41,11 @@
 ### API 설계
 `Rest docs`, build후 spring boot 실행 후에 실행해주세요 
 #### [Comment API 명세서](http://localhost:8080/static/docs/Comment.html) 
-[파일위치](src/main/resources/static/docs/Comment.html)
+[마크다운 파일](src/docs/Comment.md)
 #### [Item API 명세서](http://localhost:8080/static/docs/SalesItem.html) 
-[파일위치](src/main/resources/static/docs/SalesItem.html)
+[마크다운 파일](src/docs/SalesItem.md)
 #### [Negotiation API 명세서](http://localhost:8080/static/docs/Negotiation.html)    
-[파일위치](src/main/resources/static/docs/Negotiation.html)    
+[마크다운 파일](src/docs/Negotiation.md)    
 
 `post man json 파일` import 하여 사용할 수 있습니다.
 #### [miniporject.postman_collection.json](readme/mutsamarket.json)
@@ -63,7 +63,7 @@ jpa를 이용하여 관계 매핑을 진행하였습니다.
 `CommentNotMatchItemException.java` : 댓글과 아이템의 URL 매치가 되지 않는 경우   
 `NegotiationNotMatchItemException.java` : 제안과 아이템의 URL 매치가 되지 않는 경우  
 `NegotiationInvalidStatusException.java` : 수락상태가 아닌데 확정하려고 하는 경우  
-`InvalidRequestException.java` : 잚못된 요청   
+`InvalidRequestException.java` : 잘못된 요청   
 
 #### 403 : 접근 제한 
 `PasswordNotMatchException.java`: 비밀번호가 틀린 경우  
