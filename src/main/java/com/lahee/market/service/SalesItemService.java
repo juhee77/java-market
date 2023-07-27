@@ -1,11 +1,13 @@
 package com.lahee.market.service;
 
-import com.lahee.market.dto.salesItem.DeleteItemDto;
 import com.lahee.market.dto.salesItem.RequestSalesItemDto;
 import com.lahee.market.dto.salesItem.ResponseSalesItemDto;
 import com.lahee.market.entity.SalesItem;
+import com.lahee.market.entity.User;
 import com.lahee.market.exception.ItemNotFoundException;
+import com.lahee.market.exception.UserNotFoundException;
 import com.lahee.market.repository.SalesItemRepository;
+import com.lahee.market.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -21,6 +23,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,10 +31,17 @@ import java.nio.file.Path;
 @Transactional(readOnly = true)
 public class SalesItemService {
     private final SalesItemRepository salesItemRepository;
+    private final UserRepository userRepository;
 
     @Transactional
-    public ResponseSalesItemDto save(RequestSalesItemDto requestSalesItemDto) {
-        return ResponseSalesItemDto.fromEntity(salesItemRepository.save(SalesItem.getEntityInstance(requestSalesItemDto)));
+    public ResponseSalesItemDto save(RequestSalesItemDto requestSalesItemDto, String username) {
+        Optional<User> findedUser = userRepository.findByUsername(username);
+        if (findedUser.isEmpty()) {
+            throw new UserNotFoundException("시큐리티에 저장되어 있는 이름이 데이터 베이스에 없습니다.");
+        }
+
+        SalesItem salesItem = SalesItem.getEntityInstance(requestSalesItemDto, findedUser.get());
+        return ResponseSalesItemDto.fromEntity(salesItemRepository.save(salesItem));
     }
 
     public Page<ResponseSalesItemDto> readItemPaged(Integer page, Integer limit) {
@@ -46,12 +56,9 @@ public class SalesItemService {
     }
 
     @Transactional
-    public void saveItemImage(Long id, MultipartFile image, String writer, String password) {
+    public void saveItemImage(Long id, MultipartFile image) {
         //item 객체 찾기
         SalesItem item = salesItemRepository.findById(id).orElseThrow(ItemNotFoundException::new);
-
-        //객체 작성자의 아이디 패스워드 일치 하는지 확인
-//        item.checkAuthAndThrowException(writer, password);
 
         // 폴더를 만든다.
         String profileDir = String.format("media/%d/", id);
@@ -82,14 +89,14 @@ public class SalesItemService {
     @Transactional
     public void update(Long id, RequestSalesItemDto requestDto) {
         SalesItem item = salesItemRepository.findById(id).orElseThrow(ItemNotFoundException::new);
-//        item.checkAuthAndThrowException(requestDto.getWriter(), requestDto.getPassword());
         item.update(requestDto);
     }
 
     @Transactional
-    public void deleteItem(Long id, DeleteItemDto requestDto) {
-        SalesItem item = salesItemRepository.findById(id).orElseThrow(ItemNotFoundException::new);
-//        item.checkAuthAndThrowException(requestDto.getWriter(), requestDto.getPassword());
+    public void deleteItem(Long id) {
+        if (salesItemRepository.findById(id).isEmpty()) {
+            throw new ItemNotFoundException();
+        }
         salesItemRepository.deleteById(id);
     }
 

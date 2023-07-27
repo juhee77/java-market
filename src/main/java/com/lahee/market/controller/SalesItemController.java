@@ -1,10 +1,10 @@
 package com.lahee.market.controller;
 
-import com.lahee.market.dto.salesItem.DeleteItemDto;
-import com.lahee.market.dto.salesItem.RequestSalesItemDto;
 import com.lahee.market.dto.ResponseDto;
+import com.lahee.market.dto.salesItem.RequestSalesItemDto;
 import com.lahee.market.dto.salesItem.ResponseSalesItemDto;
 import com.lahee.market.service.SalesItemService;
+import com.lahee.market.util.SecurityUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +24,7 @@ public class SalesItemController {
 
     @PostMapping
     public ResponseEntity<ResponseDto> saveItem(@RequestBody @Valid RequestSalesItemDto requestSalesItemDto) {
-        salesItemService.save(requestSalesItemDto);
+        salesItemService.save(requestSalesItemDto, SecurityUtil.getCurrentUsername());
         return ResponseEntity.ok(ResponseDto.getInstance(SAVE_ITEM_MESSAGE));
     }
 
@@ -47,20 +47,16 @@ public class SalesItemController {
         return ResponseEntity.ok(ResponseDto.getInstance(UPDATE_ITEM_MESSAGE));
     }
 
-    @RequestMapping(value = "/{itemId}/image", method = {RequestMethod.PUT})
+    @RequestMapping(value = "/{itemId}/image", method = {RequestMethod.PUT, RequestMethod.POST})
     public ResponseEntity<ResponseDto> saveItemImage(
-            @PathVariable("itemId") Long itemId, @RequestParam("image") MultipartFile image,
-            @RequestParam("writer") String writer, @RequestParam("password") String password) {
-        salesItemService.saveItemImage(itemId, image, writer, password);
+            @PathVariable("itemId") Long itemId, @RequestParam("image") MultipartFile image) {
+        salesItemService.saveItemImage(itemId, image);
         return ResponseEntity.ok(ResponseDto.getInstance(UPDATE_ITEM_IMAGE_MESSAGE));
     }
 
     @DeleteMapping("/{itemId}")
-    public ResponseEntity<ResponseDto> deleteItem(
-            @PathVariable("itemId") Long itemId,
-            @Valid @RequestBody DeleteItemDto deleteItemDto
-    ) {
-        salesItemService.deleteItem(itemId, deleteItemDto);
+    public ResponseEntity<ResponseDto> deleteItem(@PathVariable("itemId") Long itemId) {
+        salesItemService.deleteItem(itemId);
         return ResponseEntity.ok(ResponseDto.getInstance(DELETE_ITEM_MESSAGE));
     }
 }

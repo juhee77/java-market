@@ -36,9 +36,9 @@ public class UserService {
     @Transactional
     public UserResponseDto signup(SignupDto signupDto) {
         User user = new User().builder()
+                .username(signupDto.getUsername())
                 .password(passwordEncoder.encode(signupDto.getPassword()))
                 .nickname(signupDto.getNickname())
-                .username(signupDto.getUsername())
                 .build();
 
         return UserResponseDto.fromEntity(userRepository.save(user));

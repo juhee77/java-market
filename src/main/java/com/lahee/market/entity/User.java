@@ -24,13 +24,15 @@ public class User {
     private String password;
     private String nickname;
 
-
+    @Builder.Default
     @OneToMany(fetch = LAZY, mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(fetch = LAZY, mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Negotiation> negotiations = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(fetch = LAZY, mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SalesItem> salesItems = new ArrayList<>();
 
@@ -43,5 +45,13 @@ public class User {
                 ", password='" + password + '\'' +
                 ", nickname='" + nickname + '\'' +
                 '}';
+    }
+
+
+    //연관관계 메서드
+    public void addItem(SalesItem salesItem) {
+        if (!salesItems.contains(salesItem)) {
+            salesItems.add(salesItem);
+        }
     }
 }

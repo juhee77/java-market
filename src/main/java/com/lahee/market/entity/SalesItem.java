@@ -1,8 +1,6 @@
 package com.lahee.market.entity;
 
 import com.lahee.market.dto.salesItem.RequestSalesItemDto;
-import com.lahee.market.exception.PasswordNotMatchException;
-import com.lahee.market.exception.WriterNameNotMatchException;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -42,12 +40,13 @@ public class SalesItem {
     private List<Negotiation> negotiations = new ArrayList<>();
 
 
-    public static SalesItem getEntityInstance(RequestSalesItemDto requestSalesItemDto) {
+    public static SalesItem getEntityInstance(RequestSalesItemDto requestSalesItemDto, User user) {
         SalesItem salesItem = new SalesItem();
         salesItem.description = requestSalesItemDto.getDescription();
         salesItem.title = requestSalesItemDto.getTitle();
         salesItem.minPriceWanted = requestSalesItemDto.getMinPriceWanted();
         salesItem.status = ItemStatus.SELL;
+        salesItem.addUser(user);
         return salesItem;
     }
 
@@ -62,6 +61,11 @@ public class SalesItem {
     }
 
     //연관관계 편의 메소드
+    private void addUser(User user) {
+        this.user = user;
+        user.addItem(this);
+    }
+
     public void addComment(Comment comment) {
         if (!comments.contains(comment)) {
             comments.add(comment);

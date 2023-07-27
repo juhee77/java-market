@@ -10,10 +10,6 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class UpdateNegotiationDto {
-    @NotBlank
-    String writer;
-    @NotBlank
-    String password;
     @PositiveOrZero
     Integer suggestedPrice;
     @NegoStatusWhiteList
