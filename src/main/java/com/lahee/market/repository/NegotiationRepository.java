@@ -14,7 +14,7 @@ import java.util.List;
 public interface NegotiationRepository extends JpaRepository<Negotiation, Long> {
     Page<Negotiation> findBySalesItem(SalesItem item, Pageable pageable);
 
-    Page<Negotiation> findBySalesItemAndWriterAndPassword(SalesItem item, String writer, String password, Pageable pageable);
+//    Page<Negotiation> findBySalesItemAndWriterAndPassword(SalesItem item, String writer, String password, Pageable pageable);
 
     List<Negotiation> findBySalesItem(SalesItem item);
 

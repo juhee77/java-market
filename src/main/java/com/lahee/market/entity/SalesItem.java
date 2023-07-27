@@ -30,8 +30,10 @@ public class SalesItem {
     private Integer minPriceWanted;
     @Enumerated(EnumType.STRING)
     private ItemStatus status;
-    private String writer;
-    private String password;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @OneToMany(fetch = LAZY, mappedBy = "salesItem", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
@@ -46,8 +48,6 @@ public class SalesItem {
         salesItem.title = requestSalesItemDto.getTitle();
         salesItem.minPriceWanted = requestSalesItemDto.getMinPriceWanted();
         salesItem.status = ItemStatus.SELL;
-        salesItem.writer = requestSalesItemDto.getWriter();
-        salesItem.password = requestSalesItemDto.getPassword();
         return salesItem;
     }
 
@@ -80,16 +80,6 @@ public class SalesItem {
 
     public void deleteNegotiation(Negotiation negotiation) {
         negotiations.remove(negotiation);
-    }
-
-    //인증 메서드
-    public void checkAuthAndThrowException(String writer, String password) {
-        if (!this.writer.equals(writer)) {
-            throw new WriterNameNotMatchException();
-        }
-        if (!this.password.equals(password)) {
-            throw new PasswordNotMatchException();
-        }
     }
 
     public void updateSoldOutStatus() {

@@ -54,7 +54,7 @@ public class CommentService {
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
         comment.validItemIdInURL(itemId);
 
-        comment.checkAuthAndThrowException(dto.getWriter(), dto.getPassword());//아이디 비번 검증
+//        comment.checkAuthAndThrowException(dto.getWriter(), dto.getPassword());//아이디 비번 검증
         comment.update(dto);
         return ResponseCommentDto.fromEntity(comment);
     }
@@ -64,7 +64,7 @@ public class CommentService {
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
         comment.validItemIdInURL(itemId);
 
-        comment.getSalesItem().checkAuthAndThrowException(dto.getWriter(), dto.getPassword());//판매자의 아이디 비번 검증
+//        comment.getSalesItem().checkAuthAndThrowException(dto.getWriter(), dto.getPassword());//판매자의 아이디 비번 검증
         comment.updateReply(dto);
         return ResponseCommentDto.fromEntity(comment);
     }
@@ -74,7 +74,7 @@ public class CommentService {
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
         comment.validItemIdInURL(itemId);//아이템에 속한 코멘트가 맞는지 확인한다.
 
-        comment.checkAuthAndThrowException(dto.getWriter(), dto.getPassword());//제안 작석장의 아이디 비번을 검증한다.
+//        comment.checkAuthAndThrowException(dto.getWriter(), dto.getPassword());//제안 작석장의 아이디 비번을 검증한다.
         comment.getSalesItem().deleteComment(comment); //객체 사이에서도 제거한다.
         commentRepository.deleteById(commentId);
     }

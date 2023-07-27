@@ -22,15 +22,16 @@ public class Negotiation {
     @JoinColumn(name = "item_id")
     private SalesItem salesItem;
     private Integer suggestedPrice;
+
     @Enumerated(EnumType.STRING)
     private NegotiationStatus status;
-    private String writer;
-    private String password;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public static Negotiation getEntityInstance(RequestNegotiationDto dto) {
         Negotiation negotiation = new Negotiation();
-        negotiation.password = dto.getPassword();
-        negotiation.writer = dto.getWriter();
         negotiation.suggestedPrice = dto.getSuggestedPrice();
         negotiation.status = NegotiationStatus.SUGGEST;
         return negotiation;
@@ -55,16 +56,6 @@ public class Negotiation {
         }
         this.salesItem = item;
         item.addNegotiation(this);
-    }
-
-    //인증 메서드
-    public void checkAuthAndThrowException(String writer, String password) {
-        if (!this.writer.equals(writer)) {
-            throw new WriterNameNotMatchException();
-        }
-        if (!this.password.equals(password)) {
-            throw new PasswordNotMatchException();
-        }
     }
 
     //아이템에 속한 제안이 맞는지 확인한다.

@@ -26,15 +26,16 @@ public class Comment {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "item_id")
     private SalesItem salesItem;
-    private String writer;
-    private String password;
+
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
     private String content;
     private String reply;
 
     public static Comment getEntityInstance(RequestCommentDto dto) {
         Comment comment = new Comment();
-        comment.writer = dto.getWriter();
-        comment.password = dto.getPassword();
         comment.content = dto.getContent();
         return comment;
     }
@@ -55,15 +56,6 @@ public class Comment {
         this.reply = dto.getReply();
     }
 
-    //인증 메서드
-    public void checkAuthAndThrowException(String writer, String password) {
-        if (!this.writer.equals(writer)) {
-            throw new WriterNameNotMatchException();
-        }
-        if (!this.password.equals(password)) {
-            throw new PasswordNotMatchException();
-        }
-    }
 
     //아이템에 속한 코멘트가 맞는지 확인한다.
     public void validItemIdInURL(Long itemId) {

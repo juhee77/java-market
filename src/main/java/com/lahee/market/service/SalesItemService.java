@@ -51,7 +51,7 @@ public class SalesItemService {
         SalesItem item = salesItemRepository.findById(id).orElseThrow(ItemNotFoundException::new);
 
         //객체 작성자의 아이디 패스워드 일치 하는지 확인
-        item.checkAuthAndThrowException(writer, password);
+//        item.checkAuthAndThrowException(writer, password);
 
         // 폴더를 만든다.
         String profileDir = String.format("media/%d/", id);
@@ -82,14 +82,14 @@ public class SalesItemService {
     @Transactional
     public void update(Long id, RequestSalesItemDto requestDto) {
         SalesItem item = salesItemRepository.findById(id).orElseThrow(ItemNotFoundException::new);
-        item.checkAuthAndThrowException(requestDto.getWriter(), requestDto.getPassword());
+//        item.checkAuthAndThrowException(requestDto.getWriter(), requestDto.getPassword());
         item.update(requestDto);
     }
 
     @Transactional
     public void deleteItem(Long id, DeleteItemDto requestDto) {
         SalesItem item = salesItemRepository.findById(id).orElseThrow(ItemNotFoundException::new);
-        item.checkAuthAndThrowException(requestDto.getWriter(), requestDto.getPassword());
+//        item.checkAuthAndThrowException(requestDto.getWriter(), requestDto.getPassword());
         salesItemRepository.deleteById(id);
     }
 
