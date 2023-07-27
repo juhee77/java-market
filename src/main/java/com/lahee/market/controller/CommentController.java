@@ -2,10 +2,10 @@ package com.lahee.market.controller;
 
 import com.lahee.market.dto.ResponseDto;
 import com.lahee.market.dto.comment.CommentReplyDto;
-import com.lahee.market.dto.comment.DeleteCommentDto;
 import com.lahee.market.dto.comment.RequestCommentDto;
 import com.lahee.market.dto.comment.ResponseCommentDto;
 import com.lahee.market.service.CommentService;
+import com.lahee.market.util.SecurityUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import static com.lahee.market.constants.ControllerMessage.*;
+import static com.lahee.market.util.SecurityUtil.getCurrentUsername;
 
 @RestController
 @RequestMapping("/items/{itemId}/comments")
@@ -25,7 +26,7 @@ public class CommentController {
     @PostMapping
     public ResponseEntity<ResponseDto> saveComment(@PathVariable("itemId") Long itemId,
                                                    @Valid @RequestBody RequestCommentDto requestCommentDto) {
-        commentService.save(itemId, requestCommentDto);
+        commentService.save(itemId, requestCommentDto, SecurityUtil.getCurrentUsername());
         return ResponseEntity.ok(ResponseDto.getInstance(SAVE_COMMENT_MESSAGE));
     }
 
@@ -47,23 +48,22 @@ public class CommentController {
     public ResponseEntity<ResponseDto> updateComment(
             @PathVariable("itemId") Long itemId, @PathVariable("commentId") Long commentId,
             @Valid @RequestBody RequestCommentDto requestCommentDto) {
-        commentService.updateComment(itemId, commentId, requestCommentDto);
+        commentService.updateComment(itemId, commentId, requestCommentDto,getCurrentUsername());
         return ResponseEntity.ok(ResponseDto.getInstance(UPDATE_COMMENT_MESSAGE));
     }
 
     @PutMapping("/{commentId}/reply")
-    public ResponseEntity<ResponseDto> updateComment(
+    public ResponseEntity<ResponseDto> replyComment(
             @PathVariable("itemId") Long itemId, @PathVariable("commentId") Long commentId,
             @Valid @RequestBody CommentReplyDto commentReplyDto) {
-        commentService.updateCommentReply(itemId, commentId, commentReplyDto);
+        commentService.updateCommentReply(itemId, commentId, commentReplyDto,getCurrentUsername());
         return ResponseEntity.ok(ResponseDto.getInstance(UPDATE_COMMENT_REPLY_MESSAGE));
     }
 
     @DeleteMapping("/{commentId}")
     public ResponseEntity<ResponseDto> deleteComment(
-            @PathVariable("itemId") Long itemId, @PathVariable("commentId") Long commentId,
-            @Valid @RequestBody DeleteCommentDto deleteCommentDto) {
-        commentService.deleteComment(itemId, commentId, deleteCommentDto);
+            @PathVariable("itemId") Long itemId, @PathVariable("commentId") Long commentId) {
+        commentService.deleteComment(itemId, commentId, getCurrentUsername());
         return ResponseEntity.ok(ResponseDto.getInstance(DELETE_COMMENT_MESSAGE));
     }
 }

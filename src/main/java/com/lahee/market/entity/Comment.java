@@ -3,8 +3,6 @@ package com.lahee.market.entity;
 import com.lahee.market.dto.comment.CommentReplyDto;
 import com.lahee.market.dto.comment.RequestCommentDto;
 import com.lahee.market.exception.CommentNotMatchItemException;
-import com.lahee.market.exception.PasswordNotMatchException;
-import com.lahee.market.exception.WriterNameNotMatchException;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -34,18 +32,12 @@ public class Comment {
     private String content;
     private String reply;
 
-    public static Comment getEntityInstance(RequestCommentDto dto) {
+    public static Comment getEntityInstance(RequestCommentDto dto, User user, SalesItem salesItem) {
         Comment comment = new Comment();
         comment.content = dto.getContent();
+        comment.setUser(user);
+        comment.setSalesItem(salesItem);
         return comment;
-    }
-
-    public void setSalesItem(SalesItem item) {
-        if (this.salesItem != null) {
-            this.salesItem.getComments().remove(this); //이전에 관계가 매핑 되어있다면 제거한다.
-        }
-        this.salesItem = item;
-        item.addComment(this);
     }
 
     public void update(RequestCommentDto dto) {
@@ -56,11 +48,47 @@ public class Comment {
         this.reply = dto.getReply();
     }
 
+    //연관관계 편의 메서드
+    private void setUser(User user) {
+        if (this.user != null) {
+            this.user.getComments().remove(this);
+        }
+        this.user = user;
+        user.addComment(this);
+    }
 
+    public void setSalesItem(SalesItem item) {
+        if (this.salesItem != null) {
+            this.salesItem.getComments().remove(this); //이전에 관계가 매핑 되어있다면 제거한다.
+        }
+        this.salesItem = item;
+        item.addComment(this);
+    }
+
+    public void delete() {
+        user.deleteComment(this);
+        salesItem.deleteComment(this);
+    }
+
+    //인증메서드
     //아이템에 속한 코멘트가 맞는지 확인한다.
+
     public void validItemIdInURL(Long itemId) {
         if (salesItem.getId() != itemId) {
             throw new CommentNotMatchItemException();
+        }
+    }
+    //아이템에 속한 유저와 로그인한 유저가 맞는지 확인한다.
+
+    public void validCommentUser(User user) {
+        if (this.user != user) {
+            throw new CommentNotMatchItemException("해당 코멘트를 작성한 유저가 아닙니다 ");
+        }
+    }
+
+    public void validItemUser(User user) {
+        if (this.salesItem.getUser() != user) {
+            throw new CommentNotMatchItemException("해당 코멘트가 작성된 아이템의 작성자가 아닙니다 ");
         }
     }
 }
