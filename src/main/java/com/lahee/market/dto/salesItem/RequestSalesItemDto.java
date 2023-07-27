@@ -13,16 +13,11 @@ public class RequestSalesItemDto {
     String description;
     @NotNull @PositiveOrZero
     Integer minPriceWanted;
-    @NotBlank
-    String writer;
-    @NotBlank
-    String password;
 
-    public RequestSalesItemDto(String title, String description, Integer minPriceWanted, String writer, String password) {
+
+    public RequestSalesItemDto(String title, String description, Integer minPriceWanted) {
         this.title = title;
         this.description = description;
         this.minPriceWanted = minPriceWanted;
-        this.writer = writer;
-        this.password = password;
     }
 }

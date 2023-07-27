@@ -4,7 +4,6 @@ import com.lahee.market.dto.ResponseDto;
 import com.lahee.market.dto.salesItem.RequestSalesItemDto;
 import com.lahee.market.dto.salesItem.ResponseSalesItemDto;
 import com.lahee.market.service.SalesItemService;
-import com.lahee.market.util.SecurityUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import static com.lahee.market.constants.ControllerMessage.*;
+import static com.lahee.market.util.SecurityUtil.getCurrentUsername;
 
 @RestController
 @RequestMapping("/items")
@@ -24,7 +24,7 @@ public class SalesItemController {
 
     @PostMapping
     public ResponseEntity<ResponseDto> saveItem(@RequestBody @Valid RequestSalesItemDto requestSalesItemDto) {
-        salesItemService.save(requestSalesItemDto, SecurityUtil.getCurrentUsername());
+        salesItemService.save(requestSalesItemDto, getCurrentUsername());
         return ResponseEntity.ok(ResponseDto.getInstance(SAVE_ITEM_MESSAGE));
     }
 
@@ -43,20 +43,20 @@ public class SalesItemController {
     @PutMapping("/{itemId}")
     public ResponseEntity<ResponseDto> updateItem(
             @PathVariable("itemId") Long itemId, @RequestBody @Valid RequestSalesItemDto requestSalesItemDto) {
-        salesItemService.update(itemId, requestSalesItemDto);
+        salesItemService.update(itemId, requestSalesItemDto, getCurrentUsername());
         return ResponseEntity.ok(ResponseDto.getInstance(UPDATE_ITEM_MESSAGE));
     }
 
     @RequestMapping(value = "/{itemId}/image", method = {RequestMethod.PUT, RequestMethod.POST})
     public ResponseEntity<ResponseDto> saveItemImage(
             @PathVariable("itemId") Long itemId, @RequestParam("image") MultipartFile image) {
-        salesItemService.saveItemImage(itemId, image);
+        salesItemService.saveItemImage(itemId, image, getCurrentUsername());
         return ResponseEntity.ok(ResponseDto.getInstance(UPDATE_ITEM_IMAGE_MESSAGE));
     }
 
     @DeleteMapping("/{itemId}")
     public ResponseEntity<ResponseDto> deleteItem(@PathVariable("itemId") Long itemId) {
-        salesItemService.deleteItem(itemId);
+        salesItemService.deleteItem(itemId, getCurrentUsername());
         return ResponseEntity.ok(ResponseDto.getInstance(DELETE_ITEM_MESSAGE));
     }
 }

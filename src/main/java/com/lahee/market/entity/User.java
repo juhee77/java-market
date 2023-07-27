@@ -54,4 +54,8 @@ public class User {
             salesItems.add(salesItem);
         }
     }
+
+    public void removeItem(SalesItem item) {
+        salesItems.remove(item);
+    }
 }

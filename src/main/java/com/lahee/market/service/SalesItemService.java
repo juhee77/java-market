@@ -25,6 +25,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
 
+import static com.lahee.market.constants.ControllerMessage.SECURITY_INVALID_USERNAME;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -35,12 +37,9 @@ public class SalesItemService {
 
     @Transactional
     public ResponseSalesItemDto save(RequestSalesItemDto requestSalesItemDto, String username) {
-        Optional<User> findedUser = userRepository.findByUsername(username);
-        if (findedUser.isEmpty()) {
-            throw new UserNotFoundException("시큐리티에 저장되어 있는 이름이 데이터 베이스에 없습니다.");
-        }
+        User user = getUser(username);
 
-        SalesItem salesItem = SalesItem.getEntityInstance(requestSalesItemDto, findedUser.get());
+        SalesItem salesItem = SalesItem.getEntityInstance(requestSalesItemDto, user);
         return ResponseSalesItemDto.fromEntity(salesItemRepository.save(salesItem));
     }
 
@@ -56,9 +55,12 @@ public class SalesItemService {
     }
 
     @Transactional
-    public void saveItemImage(Long id, MultipartFile image) {
+    public void saveItemImage(Long id, MultipartFile image, String username) {
         //item 객체 찾기
         SalesItem item = salesItemRepository.findById(id).orElseThrow(ItemNotFoundException::new);
+
+        User user = getUser(username);
+        item.validItemIdInURL(user); //해당 유저가 제어건을 가지고 있는지 확인한다.
 
         // 폴더를 만든다.
         String profileDir = String.format("media/%d/", id);
@@ -87,17 +89,33 @@ public class SalesItemService {
     }
 
     @Transactional
-    public void update(Long id, RequestSalesItemDto requestDto) {
+    public void update(Long id, RequestSalesItemDto requestDto, String username) {
         SalesItem item = salesItemRepository.findById(id).orElseThrow(ItemNotFoundException::new);
+
+        User user = getUser(username);
+        item.validItemIdInURL(user); //해당 유저가 제어건을 가지고 있는지 확인한다.
+
         item.update(requestDto);
     }
 
     @Transactional
-    public void deleteItem(Long id) {
-        if (salesItemRepository.findById(id).isEmpty()) {
-            throw new ItemNotFoundException();
-        }
+    public void deleteItem(Long id, String username) {
+        SalesItem item = salesItemRepository.findById(id).orElseThrow(ItemNotFoundException::new);
+
+        User user = getUser(username);
+        item.validItemIdInURL(user);//해당 유저가 제어건을 가지고 있는지 확인한다.
+
+        //연관관계중 제거
+        user.removeItem(item);
+
         salesItemRepository.deleteById(id);
     }
 
+    private User getUser(String username) {
+        Optional<User> user = userRepository.findByUsername(username);
+        if (user.isEmpty()) {
+            throw new UserNotFoundException(SECURITY_INVALID_USERNAME);
+        }
+        return user.get();
+    }
 }
