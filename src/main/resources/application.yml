@@ -10,6 +10,10 @@ spring:
   web:
     resources:
       static-locations: file:media/,classpath:/static
+
+jwt:
+  secret: n714+9J8YzJPHXwB/j+D4TiXc8lr70oADvuEMH0y1r/t5juDBzEA0dsaN4p3AsLdZ/t20lOViNOSCTHP1RKjOA==
+  accessExpirationTime: 3600
 ---
 spring:
   config:
@@ -30,7 +34,7 @@ spring:
 
 logging:
   level:
-    root: info
+    root: debug
 #  config: file:logback-spring.xml
 
 ---
@@ -40,7 +44,7 @@ spring:
     activate:
       on-profile: test
   datasource:
-    url: jdbc:h2:mem:testdb
+    url: jdbc:h2:mem:testdb;DATABASE_TO_UPPER=FALSE
     driver-class-name: org.h2.Driver
     username: sa
     password: password
@@ -50,3 +54,6 @@ spring:
     show-sql: true
     database: h2
     database-platform: org.hibernate.dialect.H2Dialect
+    properties:
+      hibernate:
+        globally_quoted_identifiers: true

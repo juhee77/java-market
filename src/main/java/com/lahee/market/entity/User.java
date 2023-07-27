@@ -68,4 +68,14 @@ public class User {
     public void deleteComment(Comment comment) {
         comments.remove(comment);
     }
+
+    public void addNegotiation(Negotiation negotiation) {
+        if (!negotiations.contains(negotiation)) {
+            negotiations.add(negotiation);
+        }
+    }
+
+    public void deleteNegotiation(Negotiation negotiation) {
+        negotiations.remove(negotiation);
+    }
 }

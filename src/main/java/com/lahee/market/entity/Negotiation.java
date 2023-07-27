@@ -3,8 +3,6 @@ package com.lahee.market.entity;
 import com.lahee.market.dto.negotiation.RequestNegotiationDto;
 import com.lahee.market.dto.negotiation.UpdateNegotiationDto;
 import com.lahee.market.exception.NegotiationNotMatchItemException;
-import com.lahee.market.exception.PasswordNotMatchException;
-import com.lahee.market.exception.WriterNameNotMatchException;
 import jakarta.persistence.*;
 import lombok.Getter;
 
@@ -30,10 +28,12 @@ public class Negotiation {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public static Negotiation getEntityInstance(RequestNegotiationDto dto) {
+    public static Negotiation getEntityInstance(RequestNegotiationDto dto, SalesItem item, User user) {
         Negotiation negotiation = new Negotiation();
         negotiation.suggestedPrice = dto.getSuggestedPrice();
         negotiation.status = NegotiationStatus.SUGGEST;
+        negotiation.setSalesItem(item); //연관관계 매핑
+        negotiation.setUser(user);
         return negotiation;
     }
 
@@ -58,11 +58,36 @@ public class Negotiation {
         item.addNegotiation(this);
     }
 
+    public void setUser(User user) {
+        if (this.user != null) {
+            this.user.getNegotiations().remove(this);
+        }
+        this.user = user;
+        user.addNegotiation(this);
+    }
+
     //아이템에 속한 제안이 맞는지 확인한다.
     public void validItemIdInURL(Long itemId) {
-        if (itemId != this.salesItem.getId()) {
+        if (!itemId.equals(this.salesItem.getId())) {
             throw new NegotiationNotMatchItemException();
         }
+    }
+
+    public void validNegotiationUser(User user) {
+        if (this.user != user) {
+            throw new NegotiationNotMatchItemException("이 제안을 작성한 제안자가 아닙니다.");
+        }
+    }
+
+    public void validItemUser(User user) {
+        if (this.salesItem.getUser() != user) {
+            throw new NegotiationNotMatchItemException("해당 제안 아이템의 작성자가 아닙니다.");
+        }
+    }
+
+    public void delete() {
+        salesItem.deleteNegotiation(this);
+        user.deleteNegotiation(this);
     }
 }
 
