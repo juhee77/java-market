@@ -11,4 +11,10 @@ public class ResponseDto {
         responseDto.setMessage(message);
         return responseDto;
     }
+
+    public static ResponseDto getInstance(Object object) {
+        ResponseDto responseDto = new ResponseDto();
+        responseDto.setMessage(object.toString());
+        return responseDto;
+    }
 }
