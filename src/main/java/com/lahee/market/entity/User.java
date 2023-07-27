@@ -58,4 +58,14 @@ public class User {
     public void removeItem(SalesItem item) {
         salesItems.remove(item);
     }
+
+    public void addComment(Comment comment) {
+        if (!comments.contains(comment)) {
+            comments.add(comment);
+        }
+    }
+
+    public void deleteComment(Comment comment) {
+        comments.remove(comment);
+    }
 }

@@ -1,15 +1,10 @@
 package com.lahee.market.util;
 
-
-import com.lahee.market.entity.User;
 import com.lahee.market.exception.UserNotFoundException;
-import com.lahee.market.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.Optional;
 
 @Slf4j
 public class SecurityUtil {

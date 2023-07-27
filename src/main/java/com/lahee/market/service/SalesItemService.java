@@ -5,9 +5,7 @@ import com.lahee.market.dto.salesItem.ResponseSalesItemDto;
 import com.lahee.market.entity.SalesItem;
 import com.lahee.market.entity.User;
 import com.lahee.market.exception.ItemNotFoundException;
-import com.lahee.market.exception.UserNotFoundException;
 import com.lahee.market.repository.SalesItemRepository;
-import com.lahee.market.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -25,19 +23,17 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
 
-import static com.lahee.market.constants.ControllerMessage.SECURITY_INVALID_USERNAME;
-
 @Service
 @RequiredArgsConstructor
 @Slf4j
 @Transactional(readOnly = true)
 public class SalesItemService {
     private final SalesItemRepository salesItemRepository;
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     @Transactional
     public ResponseSalesItemDto save(RequestSalesItemDto requestSalesItemDto, String username) {
-        User user = getUser(username);
+        User user = userService.getUser(username);
 
         SalesItem salesItem = SalesItem.getEntityInstance(requestSalesItemDto, user);
         return ResponseSalesItemDto.fromEntity(salesItemRepository.save(salesItem));
@@ -50,16 +46,15 @@ public class SalesItemService {
     }
 
     public ResponseSalesItemDto readOneItem(Long id) {
-        SalesItem item = salesItemRepository.findById(id).orElseThrow(ItemNotFoundException::new);
+        SalesItem item = getSalesItem(id);
         return ResponseSalesItemDto.fromEntity(item);
     }
 
     @Transactional
     public void saveItemImage(Long id, MultipartFile image, String username) {
         //item 객체 찾기
-        SalesItem item = salesItemRepository.findById(id).orElseThrow(ItemNotFoundException::new);
-
-        User user = getUser(username);
+        User user = userService.getUser(username);
+        SalesItem item = getSalesItem(id);
         item.validItemIdInURL(user); //해당 유저가 제어건을 가지고 있는지 확인한다.
 
         // 폴더를 만든다.
@@ -90,19 +85,18 @@ public class SalesItemService {
 
     @Transactional
     public void update(Long id, RequestSalesItemDto requestDto, String username) {
-        SalesItem item = salesItemRepository.findById(id).orElseThrow(ItemNotFoundException::new);
+        User user = userService.getUser(username);
+        SalesItem item = getSalesItem(id);
 
-        User user = getUser(username);
         item.validItemIdInURL(user); //해당 유저가 제어건을 가지고 있는지 확인한다.
-
         item.update(requestDto);
     }
 
     @Transactional
     public void deleteItem(Long id, String username) {
-        SalesItem item = salesItemRepository.findById(id).orElseThrow(ItemNotFoundException::new);
+        SalesItem item = getSalesItem(id);
 
-        User user = getUser(username);
+        User user = userService.getUser(username);
         item.validItemIdInURL(user);//해당 유저가 제어건을 가지고 있는지 확인한다.
 
         //연관관계중 제거
@@ -111,11 +105,11 @@ public class SalesItemService {
         salesItemRepository.deleteById(id);
     }
 
-    private User getUser(String username) {
-        Optional<User> user = userRepository.findByUsername(username);
-        if (user.isEmpty()) {
-            throw new UserNotFoundException(SECURITY_INVALID_USERNAME);
+    public SalesItem getSalesItem(Long itemId) {
+        Optional<SalesItem> item = salesItemRepository.findById(itemId);
+        if (item.isEmpty()) {
+            throw new ItemNotFoundException();
         }
-        return user.get();
+        return item.get();
     }
 }

@@ -2,7 +2,6 @@ package com.lahee.market.entity;
 
 import com.lahee.market.dto.salesItem.RequestSalesItemDto;
 import com.lahee.market.exception.ItemNotMatchUserException;
-import com.lahee.market.exception.NegotiationNotMatchItemException;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -92,7 +91,7 @@ public class SalesItem {
         this.status = ItemStatus.SOLD;
     }
 
-    //아이템이 해당 유저의 것이 맞는지 확인한다.
+    //해당 유저가 등록한 아이템이 아니다.
     public void validItemIdInURL(User user) {
         if (!this.user.equals(user)) {
             throw new ItemNotMatchUserException();
