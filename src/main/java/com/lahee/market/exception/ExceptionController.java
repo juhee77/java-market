@@ -1,12 +1,10 @@
 package com.lahee.market.exception;
 
-import com.lahee.market.dto.ResponseDto;
+import com.lahee.market.dto.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.HashMap;
@@ -15,33 +13,16 @@ import java.util.Map;
 @RestControllerAdvice
 @Slf4j
 public class ExceptionController {
-    @ExceptionHandler(Status400Exception.class)
-    public ResponseEntity<ResponseDto> handleIllegalState(Status400Exception e) {
-        ResponseDto response = new ResponseDto();
-        response.setMessage(e.getMessage());
-        return ResponseEntity.badRequest().body(response);
-    }
-
-    @ExceptionHandler(Status404Exception.class)
-    public ResponseEntity<ResponseDto> handleNotFound(Status404Exception e) {
-        ResponseDto response = new ResponseDto();
-        response.setMessage(e.getMessage());
-        return ResponseEntity.status(404).body(response);
-    }
-
-    @ExceptionHandler(Status403Exception.class)
-    public ResponseEntity<ResponseDto> handleForbidden(Status403Exception e) {
-        ResponseDto response = new ResponseDto();
-        response.setMessage(e.getMessage());
-        return ResponseEntity.status(403).body(response);
+    @ExceptionHandler(CustomException.class)
+    public ApiResponse<ErrorResponseDto> handleException(CustomException e) {
+        ErrorCode errorCode = e.errorCode;
+        ErrorResponseDto errorResponseDto = ErrorResponseDto.fromEntity(errorCode);
+        return new ApiResponse<>(HttpStatus.valueOf(errorCode.status), errorResponseDto);
     }
 
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map<String, Object> handleValidationException(
-            MethodArgumentNotValidException exception
-    ) {
+    public ApiResponse<Map<String, Object>> handleValidationException(MethodArgumentNotValidException exception) {
         Map<String, Object> errors = new HashMap<>();
         exception.getBindingResult().getFieldErrors().forEach(error -> {
             String fieldName = error.getField();
@@ -49,15 +30,15 @@ public class ExceptionController {
             errors.put(fieldName, errorMessage);
         });
 
-        return errors;
+        return new ApiResponse<>(HttpStatus.BAD_REQUEST, errors);
     }
 
 
     //처리되지 못한 예외 사항을 체크하기 위해서 테스트 용도
     @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<ResponseDto> handleOtherError(RuntimeException e) {
-        ResponseDto response = new ResponseDto();
-        response.setMessage(String.format("예외 처리 하지 않음 : %s ", e.getMessage()));
-        return ResponseEntity.status(400).body(response);
+    public ApiResponse<String> handleOtherError(RuntimeException e) {
+        ApiResponse<String> response = new ApiResponse<>(HttpStatus.valueOf(400));
+        response.setData(String.format("예외 처리 하지 않음 : %s ", e.getMessage()));
+        return response;
     }
 }

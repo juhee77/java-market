@@ -5,7 +5,8 @@ import com.lahee.market.dto.user.SignupDto;
 import com.lahee.market.dto.user.TokenDto;
 import com.lahee.market.dto.user.UserResponseDto;
 import com.lahee.market.entity.User;
-import com.lahee.market.exception.UserNotFoundException;
+import com.lahee.market.exception.CustomException;
+import com.lahee.market.exception.ErrorCode;
 import com.lahee.market.jwt.JwtTokenUtils;
 import com.lahee.market.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
-
-import static com.lahee.market.constants.ControllerMessage.SECURITY_INVALID_USERNAME;
 
 @Service
 @RequiredArgsConstructor
@@ -50,7 +49,7 @@ public class UserService {
     public User getUser(String username) {
         Optional<User> user = userRepository.findByUsername(username);
         if (user.isEmpty()) {
-            throw new UserNotFoundException(SECURITY_INVALID_USERNAME);
+            throw new CustomException(ErrorCode.SECURITY_INVALID_USER);
         }
         return user.get();
     }

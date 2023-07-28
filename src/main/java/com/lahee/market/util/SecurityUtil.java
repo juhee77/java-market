@@ -1,6 +1,7 @@
 package com.lahee.market.util;
 
-import com.lahee.market.exception.UserNotFoundException;
+import com.lahee.market.exception.CustomException;
+import com.lahee.market.exception.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,7 +15,7 @@ public class SecurityUtil {
 
         if (authentication == null) {
             log.debug("context에 정보가 없습니다.");
-            throw new UserNotFoundException("context에 정보가 없음");
+            throw new CustomException(ErrorCode.SECURITY_INVALID_USER_CONTEXT);
         }
 
         String username = null;

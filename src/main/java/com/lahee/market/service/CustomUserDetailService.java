@@ -1,6 +1,7 @@
 package com.lahee.market.service;
 
-import com.lahee.market.exception.UserNotFoundException;
+import com.lahee.market.exception.CustomException;
+import com.lahee.market.exception.ErrorCode;
 import com.lahee.market.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,14 +26,14 @@ public class CustomUserDetailService implements UserDetailsService {
         Optional<org.springframework.security.core.userdetails.User> user = findedUser.map(this::createUser);
 
         if (!findedUser.isPresent()) {
-            throw new UserNotFoundException();
+            throw new CustomException(ErrorCode.USER_NOT_FOUND_EXCEPTION);
         }
 
         return user.get();
     }
 
     private org.springframework.security.core.userdetails.User createUser(com.lahee.market.entity.User user) {
-        log.info("CUSTOM USER DETAIL SERVICE 유저 생성!!");
+        log.info("created security user");
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), new ArrayList<>());
     }
 

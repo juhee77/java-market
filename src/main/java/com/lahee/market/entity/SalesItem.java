@@ -1,7 +1,8 @@
 package com.lahee.market.entity;
 
 import com.lahee.market.dto.salesItem.RequestSalesItemDto;
-import com.lahee.market.exception.ItemNotMatchUserException;
+import com.lahee.market.exception.CustomException;
+import com.lahee.market.exception.ErrorCode;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -98,7 +99,7 @@ public class SalesItem extends BaseEntity {
     //해당 유저가 등록한 아이템이 아니다.
     public void validItemIdInURL(User user) {
         if (!this.user.equals(user)) {
-            throw new ItemNotMatchUserException();
+            throw new CustomException(ErrorCode.ITEM_NOT_IN_USER_EXCEPTION);
         }
     }
 }

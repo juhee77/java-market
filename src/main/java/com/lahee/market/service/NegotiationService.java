@@ -7,8 +7,8 @@ import com.lahee.market.entity.Negotiation;
 import com.lahee.market.entity.NegotiationStatus;
 import com.lahee.market.entity.SalesItem;
 import com.lahee.market.entity.User;
-import com.lahee.market.exception.NegotiationInvalidStatusException;
-import com.lahee.market.exception.NegotiationNotFoundException;
+import com.lahee.market.exception.CustomException;
+import com.lahee.market.exception.ErrorCode;
 import com.lahee.market.repository.NegotiationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -94,7 +94,7 @@ public class NegotiationService {
 
         //수락 상태인 경우만 진행한다.
         if (negotiation.getStatus() != NegotiationStatus.ACCEPT) {
-            throw new NegotiationInvalidStatusException();
+            throw new CustomException(ErrorCode.NEGOTIATION_INVALID_STATUS_EXCEPTION);
         }
 
         SalesItem salesItem = salesItemService.getSalesItem(itemId);
@@ -108,7 +108,7 @@ public class NegotiationService {
     public Negotiation getNegotiation(Long negotiationId) {
         Optional<Negotiation> negotiation = negotiationRepository.findById(negotiationId);
         if (negotiation.isEmpty()) {
-            throw new NegotiationNotFoundException();
+            throw new CustomException(ErrorCode.NEGOTIATION_NOT_FOUND_EXCEPTION);
         }
         return negotiation.get();
     }

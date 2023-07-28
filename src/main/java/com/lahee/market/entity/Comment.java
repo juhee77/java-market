@@ -2,7 +2,8 @@ package com.lahee.market.entity;
 
 import com.lahee.market.dto.comment.CommentReplyDto;
 import com.lahee.market.dto.comment.RequestCommentDto;
-import com.lahee.market.exception.CommentNotMatchItemException;
+import com.lahee.market.exception.CustomException;
+import com.lahee.market.exception.ErrorCode;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -79,20 +80,20 @@ public class Comment extends BaseEntity {
 
     public void validItemIdInURL(Long itemId) {
         if (salesItem.getId() != itemId) {
-            throw new CommentNotMatchItemException();
+            throw new CustomException(ErrorCode.COMMENT_NOT_IN_ITEM_EXCEPTION);
         }
     }
     //아이템에 속한 유저와 로그인한 유저가 맞는지 확인한다.
 
     public void validCommentUser(User user) {
         if (this.user != user) {
-            throw new CommentNotMatchItemException("해당 코멘트를 작성한 유저가 아닙니다 ");
+            throw new CustomException(ErrorCode.INVALID_COMMENT_USER);
         }
     }
 
     public void validItemUser(User user) {
         if (this.salesItem.getUser() != user) {
-            throw new CommentNotMatchItemException("해당 코멘트가 작성된 아이템의 작성자가 아닙니다 ");
+            throw new CustomException(ErrorCode.INVALID_COMMENT_ITEM_USER);
         }
     }
 }

@@ -4,7 +4,8 @@ import com.lahee.market.dto.salesItem.RequestSalesItemDto;
 import com.lahee.market.dto.salesItem.ResponseSalesItemDto;
 import com.lahee.market.entity.SalesItem;
 import com.lahee.market.entity.User;
-import com.lahee.market.exception.ItemNotFoundException;
+import com.lahee.market.exception.CustomException;
+import com.lahee.market.exception.ErrorCode;
 import com.lahee.market.repository.SalesItemRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -108,7 +109,7 @@ public class SalesItemService {
     public SalesItem getSalesItem(Long itemId) {
         Optional<SalesItem> item = salesItemRepository.findById(itemId);
         if (item.isEmpty()) {
-            throw new ItemNotFoundException();
+            throw new CustomException(ErrorCode.ITEM_NOT_FOUND_EXCEPTION);
         }
         return item.get();
     }

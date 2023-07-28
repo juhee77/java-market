@@ -4,7 +4,8 @@ import com.lahee.market.dto.ResponseDto;
 import com.lahee.market.dto.negotiation.RequestNegotiationDto;
 import com.lahee.market.dto.negotiation.ResponseNegotiationDto;
 import com.lahee.market.dto.negotiation.UpdateNegotiationDto;
-import com.lahee.market.exception.InvalidRequestException;
+import com.lahee.market.exception.CustomException;
+import com.lahee.market.exception.ErrorCode;
 import com.lahee.market.service.NegotiationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -44,7 +45,7 @@ public class NegotiationController {
             @Valid @RequestBody UpdateNegotiationDto requestNegotiationDto) {
         //status, price 가격이 둘다 없는 경우(잘못된 요청)
         if (requestNegotiationDto.getStatus() == null && requestNegotiationDto.getSuggestedPrice() == null) {
-            throw new InvalidRequestException();
+            throw new CustomException(ErrorCode.INVALID_REQUEST);
         }
 
         if (requestNegotiationDto.getStatus() == null) { //제안 가격 수정의 경우

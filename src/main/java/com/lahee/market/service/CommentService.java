@@ -6,7 +6,8 @@ import com.lahee.market.dto.comment.ResponseCommentDto;
 import com.lahee.market.entity.Comment;
 import com.lahee.market.entity.SalesItem;
 import com.lahee.market.entity.User;
-import com.lahee.market.exception.CommentNotFoundException;
+import com.lahee.market.exception.CustomException;
+import com.lahee.market.exception.ErrorCode;
 import com.lahee.market.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -83,7 +84,7 @@ public class CommentService {
     public Comment getComment(Long commendId) {
         Optional<Comment> comment = commentRepository.findById(commendId);
         if (comment.isEmpty()) {
-            throw new CommentNotFoundException();
+            throw new CustomException(ErrorCode.COMMENT_NOT_FOUND_EXCEPTION);
         }
         return comment.get();
     }

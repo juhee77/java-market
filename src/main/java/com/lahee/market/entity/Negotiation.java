@@ -2,7 +2,8 @@ package com.lahee.market.entity;
 
 import com.lahee.market.dto.negotiation.RequestNegotiationDto;
 import com.lahee.market.dto.negotiation.UpdateNegotiationDto;
-import com.lahee.market.exception.NegotiationNotMatchItemException;
+import com.lahee.market.exception.CustomException;
+import com.lahee.market.exception.ErrorCode;
 import jakarta.persistence.*;
 import lombok.Getter;
 import org.hibernate.annotations.SQLDelete;
@@ -15,7 +16,7 @@ import static jakarta.persistence.FetchType.LAZY;
 @Table(name = "negotiation")
 @SQLDelete(sql = "UPDATE negotiation SET deleted_at = datetime('now')  WHERE id = ?")
 @Where(clause = "deleted_at IS NULL")
-public class Negotiation extends BaseEntity  {
+public class Negotiation extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -73,19 +74,19 @@ public class Negotiation extends BaseEntity  {
     //아이템에 속한 제안이 맞는지 확인한다.
     public void validItemIdInURL(Long itemId) {
         if (!itemId.equals(this.salesItem.getId())) {
-            throw new NegotiationNotMatchItemException();
+            throw new CustomException(ErrorCode.NEGOTIATION_NOT_ITEM_EXCEPTION);
         }
     }
 
     public void validNegotiationUser(User user) {
         if (this.user != user) {
-            throw new NegotiationNotMatchItemException("이 제안을 작성한 제안자가 아닙니다.");
+            throw new CustomException(ErrorCode.INVALID_NEGOTIATION_EXCEPTION);
         }
     }
 
     public void validItemUser(User user) {
         if (this.salesItem.getUser() != user) {
-            throw new NegotiationNotMatchItemException("해당 제안 아이템의 작성자가 아닙니다.");
+            throw new CustomException(ErrorCode.INVALID_NEGOTIATION_USER_EXCEPTION);
         }
     }
 
