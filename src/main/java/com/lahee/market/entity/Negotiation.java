@@ -5,13 +5,17 @@ import com.lahee.market.dto.negotiation.UpdateNegotiationDto;
 import com.lahee.market.exception.NegotiationNotMatchItemException;
 import jakarta.persistence.*;
 import lombok.Getter;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import static jakarta.persistence.FetchType.LAZY;
 
 @Getter
 @Entity
 @Table(name = "negotiation")
-public class Negotiation {
+@SQLDelete(sql = "UPDATE negotiation SET deleted_at = datetime('now')  WHERE id = ?")
+@Where(clause = "deleted_at IS NULL")
+public class Negotiation extends BaseEntity  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -8,6 +8,8 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import static jakarta.persistence.FetchType.LAZY;
 
@@ -16,7 +18,9 @@ import static jakarta.persistence.FetchType.LAZY;
 @Getter
 @Entity
 @Table(name = "comment")
-public class Comment {
+@SQLDelete(sql = "UPDATE comment SET deleted_at = datetime('now') WHERE id = ?")
+@Where(clause = "deleted_at IS NULL")
+public class Comment extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
