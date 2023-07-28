@@ -4,6 +4,7 @@ import com.lahee.market.dto.user.TokenDto;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -41,7 +42,8 @@ public class JwtTokenUtils {
         String accessToken = Jwts.builder()
                 .setClaims(Jwts.claims()
                         .setSubject(userDetails.getUsername())
-                        .setIssuedAt(expiredTime))
+                        .setIssuedAt(Date.from(Instant.now()))
+                        .setExpiration(expiredTime))
                 .signWith(signinKey)
                 .compact();
 
@@ -52,7 +54,6 @@ public class JwtTokenUtils {
                 .build();
     }
     public Authentication getAuthentication(String accessToken) {
-
 
         Claims claims = Jwts
                 .parserBuilder()

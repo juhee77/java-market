@@ -43,7 +43,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
                 log.info("인증 정보를 저장했습니다 {}", username);
             } else {
-                log.info("access token 이 비워져 있습니다.");
+                log.info("access token에 에러가 있습니다.");
             }
         } catch (ExpiredJwtException e) {
             log.info("만료된 Access 토큰입니다.");
