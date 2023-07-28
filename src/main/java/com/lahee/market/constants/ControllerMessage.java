@@ -16,6 +16,4 @@ public final class ControllerMessage {
     public static final String DELETE_PROPOSAL_MESSAGE = "제안을 삭제했습니다.";
     public static final String UPDATE_PROPOSAL_STATUS_MESSAGE = "제안의 상태가 변경되었습니다.";
     public static final String CONFIRMATION_PROPOSAL_MESSAGE = "구매가 확정되었습니다.";
-
-    public static final String SECURITY_INVALID_USERNAME = "시큐리티에 저장되어 있는 유저의 이름이 데이터 베이스에 없습니다.";
 }

@@ -1,5 +1,6 @@
 package com.lahee.market.controller;
 
+import com.lahee.market.dto.ApiResponse;
 import com.lahee.market.dto.ResponseDto;
 import com.lahee.market.dto.comment.CommentReplyDto;
 import com.lahee.market.dto.comment.RequestCommentDto;
@@ -10,10 +11,11 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import static com.lahee.market.constants.ControllerMessage.*;
+import static com.lahee.market.dto.ResponseDto.getInstance;
 import static com.lahee.market.util.SecurityUtil.getCurrentUsername;
 
 @RestController
@@ -24,46 +26,46 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping
-    public ResponseEntity<ResponseDto> saveComment(@PathVariable("itemId") Long itemId,
-                                                   @Valid @RequestBody RequestCommentDto requestCommentDto) {
+    public ApiResponse<ResponseDto> saveComment(@PathVariable("itemId") Long itemId,
+                                                @Valid @RequestBody RequestCommentDto requestCommentDto) {
         commentService.save(itemId, requestCommentDto, SecurityUtil.getCurrentUsername());
-        return ResponseEntity.ok(ResponseDto.getInstance(SAVE_COMMENT_MESSAGE));
+        return new ApiResponse<>(HttpStatus.OK, getInstance(SAVE_COMMENT_MESSAGE));
     }
 
     @GetMapping
-    public ResponseEntity<Page<ResponseCommentDto>> findAllCommentsByItem(
+    public ApiResponse<Page<ResponseCommentDto>> findAllCommentsByItem(
             @PathVariable("itemId") Long itemId,
             @RequestParam(name = "page", defaultValue = "0") Integer page,
             @RequestParam(name = "limit", defaultValue = "20") Integer limit) {
-        return ResponseEntity.ok(commentService.findAllEntityByItem(itemId, page, limit));
+        return new ApiResponse<>(HttpStatus.OK, commentService.findAllEntityByItem(itemId, page, limit));
     }
 
     @GetMapping("/{commentId}")
-    public ResponseEntity<ResponseCommentDto> findOneComment(
+    public ApiResponse<ResponseCommentDto> findOneComment(
             @PathVariable("itemId") Long itemId, @PathVariable("commentId") Long commentId) {
-        return ResponseEntity.ok(commentService.findOneById(itemId, commentId));
+        return new ApiResponse<>(HttpStatus.OK, commentService.findOneById(itemId, commentId));
     }
 
     @PutMapping("/{commentId}")
-    public ResponseEntity<ResponseDto> updateComment(
+    public ApiResponse<ResponseDto> updateComment(
             @PathVariable("itemId") Long itemId, @PathVariable("commentId") Long commentId,
             @Valid @RequestBody RequestCommentDto requestCommentDto) {
-        commentService.updateComment(itemId, commentId, requestCommentDto,getCurrentUsername());
-        return ResponseEntity.ok(ResponseDto.getInstance(UPDATE_COMMENT_MESSAGE));
+        commentService.updateComment(itemId, commentId, requestCommentDto, getCurrentUsername());
+        return new ApiResponse<>(HttpStatus.OK, getInstance(UPDATE_COMMENT_MESSAGE));
     }
 
     @PutMapping("/{commentId}/reply")
-    public ResponseEntity<ResponseDto> replyComment(
+    public ApiResponse<ResponseDto> replyComment(
             @PathVariable("itemId") Long itemId, @PathVariable("commentId") Long commentId,
             @Valid @RequestBody CommentReplyDto commentReplyDto) {
-        commentService.updateCommentReply(itemId, commentId, commentReplyDto,getCurrentUsername());
-        return ResponseEntity.ok(ResponseDto.getInstance(UPDATE_COMMENT_REPLY_MESSAGE));
+        commentService.updateCommentReply(itemId, commentId, commentReplyDto, getCurrentUsername());
+        return new ApiResponse<>(HttpStatus.OK, getInstance(UPDATE_COMMENT_REPLY_MESSAGE));
     }
 
     @DeleteMapping("/{commentId}")
-    public ResponseEntity<ResponseDto> deleteComment(
+    public ApiResponse<ResponseDto> deleteComment(
             @PathVariable("itemId") Long itemId, @PathVariable("commentId") Long commentId) {
         commentService.deleteComment(itemId, commentId, getCurrentUsername());
-        return ResponseEntity.ok(ResponseDto.getInstance(DELETE_COMMENT_MESSAGE));
+        return new ApiResponse<>(HttpStatus.OK, getInstance(DELETE_COMMENT_MESSAGE));
     }
 }

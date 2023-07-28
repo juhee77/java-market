@@ -37,8 +37,7 @@ public class ExceptionController {
     //처리되지 못한 예외 사항을 체크하기 위해서 테스트 용도
     @ExceptionHandler(RuntimeException.class)
     public ApiResponse<String> handleOtherError(RuntimeException e) {
-        ApiResponse<String> response = new ApiResponse<>(HttpStatus.valueOf(400));
-        response.setData(String.format("예외 처리 하지 않음 : %s ", e.getMessage()));
+        ApiResponse<String> response = new ApiResponse<>(HttpStatus.BAD_REQUEST, String.format("예외 처리 하지 않음 : %s ", e.getMessage()));
         return response;
     }
 }
