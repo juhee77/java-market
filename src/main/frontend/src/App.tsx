@@ -11,6 +11,7 @@ import ChatRoomList from './components/Chat/ChatRoomList';
 import ChatPage from './components/Chat/ChatPage';
 import {useContext} from "react";
 import AddItemPage from './pages/AddItemPage';
+import ItemPage from 'pages/ItemPage';
 
 function App() {
 
@@ -28,8 +29,10 @@ function App() {
                 <Route path="/profile/" element={!authCtx.isLoggedIn ? <Navigate to='/' /> : <ProfilePage />} />
                 <Route path="/chat/all/rooms" element={!authCtx.isLoggedIn ? <Navigate to='/' /> : <ChatRoomList />} />
                 <Route path="/item-add-view" element={!authCtx.isLoggedIn ? <Navigate to='/' /> :<AddItemPage/>} />
+                <Route path="/item-view/:itemId" element={<ItemPage id={''} />} />
 
                 <Route path="/chat/room/:roomId" element={<ChatPage id={''} />} />
+                
             </Routes>
 
         </Layout>

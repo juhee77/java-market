@@ -2,6 +2,7 @@ package com.lahee.market.service;
 
 import com.lahee.market.dto.salesItem.RequestSalesItemDto;
 import com.lahee.market.dto.salesItem.ResponseSalesItemDto;
+import com.lahee.market.dto.salesItem.ResponseSalesItemEachDto;
 import com.lahee.market.entity.SalesItem;
 import com.lahee.market.entity.User;
 import com.lahee.market.exception.CustomException;
@@ -46,9 +47,9 @@ public class SalesItemService {
         return articleEntityPage.map(ResponseSalesItemDto::fromEntity);
     }
 
-    public ResponseSalesItemDto readOneItem(Long id) {
+    public ResponseSalesItemEachDto readOneItem(Long id) {
         SalesItem item = getSalesItem(id);
-        return ResponseSalesItemDto.fromEntity(item);
+        return ResponseSalesItemEachDto.fromEntity(item);
     }
 
     @Transactional

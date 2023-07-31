@@ -4,6 +4,7 @@ import com.lahee.market.dto.ApiResponse;
 import com.lahee.market.dto.ResponseDto;
 import com.lahee.market.dto.salesItem.RequestSalesItemDto;
 import com.lahee.market.dto.salesItem.ResponseSalesItemDto;
+import com.lahee.market.dto.salesItem.ResponseSalesItemEachDto;
 import com.lahee.market.service.SalesItemService;
 import com.lahee.market.util.SecurityUtil;
 import jakarta.validation.Valid;
@@ -39,7 +40,7 @@ public class SalesItemController {
     }
 
     @GetMapping("/{itemId}")
-    public ApiResponse<ResponseSalesItemDto> getOneItem(@PathVariable("itemId") Long itemId) {
+    public ApiResponse<ResponseSalesItemEachDto> getOneItem(@PathVariable("itemId") Long itemId) {
         return new ApiResponse<>(HttpStatus.OK,salesItemService.readOneItem(itemId));
     }
 
