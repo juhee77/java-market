@@ -81,7 +81,7 @@ public class SalesItemService {
         }
 
         //이미지 위치를 저장한다.
-        item.setImage(String.format("/static/%d/%s", id, "item." + extension));
+        item.setImage(String.format("/%d/%s", id, "item." + extension));
     }
 
     @Transactional

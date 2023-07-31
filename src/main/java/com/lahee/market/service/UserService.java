@@ -31,12 +31,19 @@ public class UserService {
 
     public TokenDto login(LoginDto loginDto) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(loginDto.getUsername());
+        if (!passwordEncoder.matches(loginDto.getPassword(), userDetails.getPassword())) {
+            throw new CustomException(ErrorCode.INVALID_PASSWORD);
+        }
         TokenDto tokenDto = jwtTokenUtils.generateToken(userDetails);
         return tokenDto;
     }
 
     @Transactional
     public UserResponseDto signup(SignupDto signupDto) {
+        if (!signupDto.getPassword().equals(signupDto.getPasswordCheck())) {
+            throw new CustomException(ErrorCode.PASSWORD_NOT_EQUAL);
+        }
+
         User user = new User().builder()
                 .username(signupDto.getUsername())
                 .password(passwordEncoder.encode(signupDto.getPassword()))
@@ -44,6 +51,10 @@ public class UserService {
                 .build();
 
         return UserResponseDto.fromEntity(userRepository.save(user));
+    }
+
+    public UserResponseDto getUserDto(String username) {
+        return UserResponseDto.fromEntity(getUser(username));
     }
 
     public User getUser(String username) {

@@ -1,0 +1,20 @@
+/* head{
+  width: 100%;  
+}
+body{
+  margin: 50px,50px,50px,50px;
+  width: 100%;  
+  justify-content: center;
+  display: block;
+}
+table{
+  padding: auto;
+  text-align: center;
+  justify-content: center;
+  width: 80%;
+} 
+*/
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}

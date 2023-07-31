@@ -6,6 +6,7 @@ import lombok.Data;
 @Data
 public class ResponseSalesItemDto {
     Long id;
+    String seller;
     String title;
     String description;
     Integer minPriceWanted;
@@ -13,6 +14,7 @@ public class ResponseSalesItemDto {
 
     public static ResponseSalesItemDto fromEntity(SalesItem item) {
         ResponseSalesItemDto dto = new ResponseSalesItemDto();
+        dto.setSeller(item.getUser().getNickname());
         dto.setId(item.getId());
         dto.setDescription(item.getDescription());
         dto.setTitle(item.getTitle());
