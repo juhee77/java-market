@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class WebController {
 
-    @GetMapping(value =  {"", "/home",""})
+    @GetMapping(value =  {"/", "/home","","/item-view/**","/item-add-view"})
     public String forward() {
         return "forward:/static/index.html";
     }

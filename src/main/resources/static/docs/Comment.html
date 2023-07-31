@@ -520,7 +520,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /items/1/comments HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJJdGVzdCIsImlhdCI6MTY5MDcyNTk1OSwiZXhwIjoxNjkwNzI5NTU5fQ.FInstG9VAb9BGcyjcerX4HEXyFAIRpwZop1zenu4LrVeeKIFrw3L6WTlw3WlTWNOi7Qkq9mcgJHpp8TwisT44Q
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJJdGVzdCIsImlhdCI6MTY5MDgwNjI4OSwiZXhwIjoxNjkwODA5ODg5fQ.wGe307avlSq2UFQISnCEQe_MBwFYGDoCuIunAezhuIh9-JAHI09OH1v8qFhUdM96pFmr_QxTwTptFEktFAknOQ
 Content-Length: 46
 Host: localhost:8080
 
@@ -557,7 +557,7 @@ Content-Length: 52
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl 'http://localhost:8080/items/1/comments' -i -X POST \
     -H 'Content-Type: application/json;charset=UTF-8' \
-    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJJdGVzdCIsImlhdCI6MTY5MDcyNTk1OSwiZXhwIjoxNjkwNzI5NTU5fQ.FInstG9VAb9BGcyjcerX4HEXyFAIRpwZop1zenu4LrVeeKIFrw3L6WTlw3WlTWNOi7Qkq9mcgJHpp8TwisT44Q' \
+    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJJdGVzdCIsImlhdCI6MTY5MDgwNjI4OSwiZXhwIjoxNjkwODA5ODg5fQ.wGe307avlSq2UFQISnCEQe_MBwFYGDoCuIunAezhuIh9-JAHI09OH1v8qFhUdM96pFmr_QxTwTptFEktFAknOQ' \
     -d '{
   "content" : "할인 가능하신가요?"
 }'</code></pre>
@@ -576,7 +576,7 @@ Content-Length: 52
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /items/5/comments/29 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJDdGVzdCIsImlhdCI6MTY5MDcyNTk2MCwiZXhwIjoxNjkwNzI5NTYwfQ.IF2iGXjHfKZ_rZS8QbxP3UHm5dRZYA_ZFVbaAf5t5QakshljJ6WfN-tjnad3zQxL9zPuCsfIIYYY9bliqbFzOg
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJDdGVzdCIsImlhdCI6MTY5MDgwNjI5MCwiZXhwIjoxNjkwODA5ODkwfQ.hbotlxmOLLPao2UCXZeL4ycfomoc51bdDS1Zozfko7ZNY-nmM58zviMYWS6bbySwyyMGcY-J9mqb7WcPfMjKBQ
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -595,12 +595,13 @@ X-XSS-Protection: 0
 Cache-Control: no-cache, no-store, max-age=0, must-revalidate
 Pragma: no-cache
 Expires: 0
-Content-Length: 77
+Content-Length: 99
 
 {
   "id" : 29,
   "content" : "할인 가능하신가요?",
-  "reply" : null
+  "reply" : null,
+  "writer" : "Ctest"
 }</code></pre>
 </div>
 </div>
@@ -610,7 +611,7 @@ Content-Length: 77
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl 'http://localhost:8080/items/5/comments/29' -i -X GET \
     -H 'Content-Type: application/json;charset=UTF-8' \
-    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJDdGVzdCIsImlhdCI6MTY5MDcyNTk2MCwiZXhwIjoxNjkwNzI5NTYwfQ.IF2iGXjHfKZ_rZS8QbxP3UHm5dRZYA_ZFVbaAf5t5QakshljJ6WfN-tjnad3zQxL9zPuCsfIIYYY9bliqbFzOg'</code></pre>
+    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJDdGVzdCIsImlhdCI6MTY5MDgwNjI5MCwiZXhwIjoxNjkwODA5ODkwfQ.hbotlxmOLLPao2UCXZeL4ycfomoc51bdDS1Zozfko7ZNY-nmM58zviMYWS6bbySwyyMGcY-J9mqb7WcPfMjKBQ'</code></pre>
 </div>
 </div>
 </div>
@@ -626,7 +627,7 @@ Content-Length: 77
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /items/2/comments?page=2&amp;limit=10 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJDdGVzdCIsImlhdCI6MTY5MDcyNTk1OSwiZXhwIjoxNjkwNzI5NTU5fQ.1lF4OYD0vxaWdF5m-P1PJ4FR6gmVyz7kTbC0-KKapOvmcIZIRdClPDKwF5xcVIHv-A10DUfyI6LJI6XTjgE8vg
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJDdGVzdCIsImlhdCI6MTY5MDgwNjI4OSwiZXhwIjoxNjkwODA5ODg5fQ.fAFzF2auaenIF9o3GEf81gM5a5agI3djWRU2Yi3D7yd_R0Sh_oTsPzlsgIgkFm0xsIeyTSyx5Uh1e7ZFDwe-yw
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -645,35 +646,40 @@ X-XSS-Protection: 0
 Cache-Control: no-cache, no-store, max-age=0, must-revalidate
 Pragma: no-cache
 Expires: 0
-Content-Length: 833
+Content-Length: 953
 
 {
   "content" : [ {
     "id" : 22,
     "content" : "cContent20",
-    "reply" : null
+    "reply" : null,
+    "writer" : "Ctest"
   }, {
     "id" : 23,
     "content" : "cContent21",
-    "reply" : null
+    "reply" : null,
+    "writer" : "Ctest"
   }, {
     "id" : 24,
     "content" : "cContent22",
-    "reply" : null
+    "reply" : null,
+    "writer" : "Ctest"
   }, {
     "id" : 25,
     "content" : "cContent23",
-    "reply" : null
+    "reply" : null,
+    "writer" : "Ctest"
   }, {
     "id" : 26,
     "content" : "cContent24",
-    "reply" : null
+    "reply" : null,
+    "writer" : "Ctest"
   } ],
   "pageable" : {
     "sort" : {
       "empty" : false,
-      "sorted" : true,
-      "unsorted" : false
+      "unsorted" : false,
+      "sorted" : true
     },
     "offset" : 20,
     "pageNumber" : 2,
@@ -688,8 +694,8 @@ Content-Length: 833
   "number" : 2,
   "sort" : {
     "empty" : false,
-    "sorted" : true,
-    "unsorted" : false
+    "unsorted" : false,
+    "sorted" : true
   },
   "numberOfElements" : 5,
   "first" : false,
@@ -703,7 +709,7 @@ Content-Length: 833
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl 'http://localhost:8080/items/2/comments?page=2&amp;limit=10' -i -X GET \
     -H 'Content-Type: application/json;charset=UTF-8' \
-    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJDdGVzdCIsImlhdCI6MTY5MDcyNTk1OSwiZXhwIjoxNjkwNzI5NTU5fQ.1lF4OYD0vxaWdF5m-P1PJ4FR6gmVyz7kTbC0-KKapOvmcIZIRdClPDKwF5xcVIHv-A10DUfyI6LJI6XTjgE8vg'</code></pre>
+    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJDdGVzdCIsImlhdCI6MTY5MDgwNjI4OSwiZXhwIjoxNjkwODA5ODg5fQ.fAFzF2auaenIF9o3GEf81gM5a5agI3djWRU2Yi3D7yd_R0Sh_oTsPzlsgIgkFm0xsIeyTSyx5Uh1e7ZFDwe-yw'</code></pre>
 </div>
 </div>
 </div>
@@ -719,7 +725,7 @@ Content-Length: 833
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /items/3/comments/27 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJDdGVzdCIsImlhdCI6MTY5MDcyNTk2MCwiZXhwIjoxNjkwNzI5NTYwfQ.IF2iGXjHfKZ_rZS8QbxP3UHm5dRZYA_ZFVbaAf5t5QakshljJ6WfN-tjnad3zQxL9zPuCsfIIYYY9bliqbFzOg
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJDdGVzdCIsImlhdCI6MTY5MDgwNjI5MCwiZXhwIjoxNjkwODA5ODkwfQ.hbotlxmOLLPao2UCXZeL4ycfomoc51bdDS1Zozfko7ZNY-nmM58zviMYWS6bbySwyyMGcY-J9mqb7WcPfMjKBQ
 Content-Length: 45
 Host: localhost:8080
 
@@ -756,7 +762,7 @@ Content-Length: 52
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl 'http://localhost:8080/items/3/comments/27' -i -X PUT \
     -H 'Content-Type: application/json;charset=UTF-8' \
-    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJDdGVzdCIsImlhdCI6MTY5MDcyNTk2MCwiZXhwIjoxNjkwNzI5NTYwfQ.IF2iGXjHfKZ_rZS8QbxP3UHm5dRZYA_ZFVbaAf5t5QakshljJ6WfN-tjnad3zQxL9zPuCsfIIYYY9bliqbFzOg' \
+    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJDdGVzdCIsImlhdCI6MTY5MDgwNjI5MCwiZXhwIjoxNjkwODA5ODkwfQ.hbotlxmOLLPao2UCXZeL4ycfomoc51bdDS1Zozfko7ZNY-nmM58zviMYWS6bbySwyyMGcY-J9mqb7WcPfMjKBQ' \
     -d '{
   "content" : "[MODIFY] 수정된 댓글"
 }'</code></pre>
@@ -775,7 +781,7 @@ Content-Length: 52
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /items/4/comments/28/reply HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJJdGVzdCIsImlhdCI6MTY5MDcyNTk2MCwiZXhwIjoxNjkwNzI5NTYwfQ.WCs_u-wHkQFNH0-Pcn3JRcbXZKLbDvEg6R0IlBWN4LqFQbgHegBXvYXZMx_Pw2yAvNzkHmdC5qrcmDTagnBiLQ
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJJdGVzdCIsImlhdCI6MTY5MDgwNjI5MCwiZXhwIjoxNjkwODA5ODkwfQ.eOsE8gPsm-VUHSNGQHMFvmabbPocwYLXvrOr8ks3vh053hWSe7jSHGU4vvH7yIdDCfIveidK1MeeTnFxBthT-A
 Content-Length: 23
 Host: localhost:8080
 
@@ -812,7 +818,7 @@ Content-Length: 62
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl 'http://localhost:8080/items/4/comments/28/reply' -i -X PUT \
     -H 'Content-Type: application/json;charset=UTF-8' \
-    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJJdGVzdCIsImlhdCI6MTY5MDcyNTk2MCwiZXhwIjoxNjkwNzI5NTYwfQ.WCs_u-wHkQFNH0-Pcn3JRcbXZKLbDvEg6R0IlBWN4LqFQbgHegBXvYXZMx_Pw2yAvNzkHmdC5qrcmDTagnBiLQ' \
+    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJJdGVzdCIsImlhdCI6MTY5MDgwNjI5MCwiZXhwIjoxNjkwODA5ODkwfQ.eOsE8gPsm-VUHSNGQHMFvmabbPocwYLXvrOr8ks3vh053hWSe7jSHGU4vvH7yIdDCfIveidK1MeeTnFxBthT-A' \
     -d '{
   "reply" : "REPLY"
 }'</code></pre>
@@ -831,7 +837,7 @@ Content-Length: 62
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /items/6/comments/30 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJDdGVzdCIsImlhdCI6MTY5MDcyNTk2MCwiZXhwIjoxNjkwNzI5NTYwfQ.IF2iGXjHfKZ_rZS8QbxP3UHm5dRZYA_ZFVbaAf5t5QakshljJ6WfN-tjnad3zQxL9zPuCsfIIYYY9bliqbFzOg
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJDdGVzdCIsImlhdCI6MTY5MDgwNjI5MSwiZXhwIjoxNjkwODA5ODkxfQ.wiHlKPThTUWhEQUJ33OYd6YU8hBv-eBTmmcsCFcortGKSWxNu3Gwd6UUhCNHUYfZ3sfYPYlxMK-tQ0K9O7Z96Q
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -863,7 +869,7 @@ Content-Length: 49
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl 'http://localhost:8080/items/6/comments/30' -i -X DELETE \
     -H 'Content-Type: application/json;charset=UTF-8' \
-    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJDdGVzdCIsImlhdCI6MTY5MDcyNTk2MCwiZXhwIjoxNjkwNzI5NTYwfQ.IF2iGXjHfKZ_rZS8QbxP3UHm5dRZYA_ZFVbaAf5t5QakshljJ6WfN-tjnad3zQxL9zPuCsfIIYYY9bliqbFzOg'</code></pre>
+    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJDdGVzdCIsImlhdCI6MTY5MDgwNjI5MSwiZXhwIjoxNjkwODA5ODkxfQ.wiHlKPThTUWhEQUJ33OYd6YU8hBv-eBTmmcsCFcortGKSWxNu3Gwd6UUhCNHUYfZ3sfYPYlxMK-tQ0K9O7Z96Q'</code></pre>
 </div>
 </div>
 </div>

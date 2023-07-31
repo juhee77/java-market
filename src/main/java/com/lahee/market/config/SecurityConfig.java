@@ -46,8 +46,8 @@ public class SecurityConfig {
                                 .requestMatchers( //인증 관련 정보만 추가
                                         "/user/auth/**",
                                         "/api/**",
-                                        "/home","/","/index.html",
-                                        "/items"
+                                        "/home","/","","/index.html",
+                                        "/items","/item-view/**"
                                 )
                                 .permitAll()
                                 .anyRequest()
