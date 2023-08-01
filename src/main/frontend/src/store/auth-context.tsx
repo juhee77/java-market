@@ -17,8 +17,6 @@ const AuthContext = React.createContext({
     isLoggedIn: false,
     isSuccess: false,
     isGetSuccess: false,
-    signup: (username: string, password: string, passwordCheck: string, nickname: string) => {
-    },
     login: (nickname: string, password: string) => {
     },
     logout: () => {
@@ -47,19 +45,6 @@ export const AuthContextProvider: React.FC<Props> = (props) => {
     const [isGetSuccess, setIsGetSuccess] = useState<boolean>(false);
 
     const userIsLoggedIn = !!token;
-
-
-    const signupHandler = (username: string, password: string, passwordCheck: string, nickname: string) => {
-        setIsSuccess(false);
-
-        const response = authAction.signupActionHandler(username, password, passwordCheck, nickname);
-        response.then((result) => {
-            if (result !== null) {
-                console.log("sign up success")
-                setIsSuccess(true);
-            }
-        });
-    }
 
     const loginHandler = (username: string, password: string) => {
         setIsSuccess(false);
@@ -119,7 +104,6 @@ export const AuthContextProvider: React.FC<Props> = (props) => {
         isLoggedIn: userIsLoggedIn,
         isSuccess,
         isGetSuccess,
-        signup: signupHandler,
         login: loginHandler,
         logout: logoutHandler,
         getUser: getUserHandler,

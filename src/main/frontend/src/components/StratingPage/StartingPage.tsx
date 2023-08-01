@@ -45,8 +45,6 @@ const StartingPage = () => {
         navigate(`/item-view/${item.id}`);
     };
 
-    console.log(items);
-
     return (
         <div className='form-wrapper'>
             {loading ? (

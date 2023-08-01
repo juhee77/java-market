@@ -1,9 +1,10 @@
 import React, { useContext, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AuthContext from '../../store/auth-context';
+import { signupActionHandler } from 'store/auth-action';
 
 const Signup = () => {
-
+    const [isLoading, setIsLoading] = useState(false);
     let navigate = useNavigate();
     const authCtx = useContext(AuthContext);
     const passwordInputRef = useRef<HTMLInputElement>(null);
@@ -11,6 +12,8 @@ const Signup = () => {
     const nicknameInputRef = useRef<HTMLInputElement>(null);
     const usernameInputRef = useRef<HTMLInputElement>(null);
 
+
+    
     const submitHandler = async (event: React.FormEvent) => {
         event.preventDefault();
 
@@ -18,15 +21,16 @@ const Signup = () => {
         const enteredPassword = passwordInputRef.current!.value;
         const enteredNickname = nicknameInputRef.current!.value;
         const enteredRePassword = repasswordInputRef.current!.value;
+        
+        signupActionHandler(enteredUsername, enteredPassword, enteredRePassword, enteredNickname)
+        .then((result) => {
+            if (result !== null) {
+                console.log("sign up success")
+                navigate('/')
+            }
+        });
 
-        authCtx.signup(enteredUsername, enteredPassword, enteredNickname, enteredRePassword);
-
-
-        if (authCtx.isSuccess) {
-            navigate("/login", { replace: true });
-        }else{
-            navigate("/signup", { replace: true });
-        }
+    
     }
 
     return (

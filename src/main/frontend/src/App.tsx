@@ -29,7 +29,7 @@ function App() {
                 <Route path="/profile/" element={!authCtx.isLoggedIn ? <Navigate to='/' /> : <ProfilePage />} />
                 <Route path="/chat/all/rooms" element={!authCtx.isLoggedIn ? <Navigate to='/' /> : <ChatRoomList />} />
                 <Route path="/item-add-view" element={!authCtx.isLoggedIn ? <Navigate to='/' /> :<AddItemPage/>} />
-                <Route path="/item-view/:itemId" element={<ItemPage id={''} />} />
+                <Route path="/item-view/:itemId" element={<ItemPage itemId={''} />} />
 
                 <Route path="/chat/room/:roomId" element={<ChatPage id={''} />} />
                 
