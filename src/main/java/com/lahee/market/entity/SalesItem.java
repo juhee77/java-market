@@ -51,7 +51,7 @@ public class SalesItem extends BaseEntity {
         salesItem.description = requestSalesItemDto.getDescription();
         salesItem.title = requestSalesItemDto.getTitle();
         salesItem.minPriceWanted = requestSalesItemDto.getMinPriceWanted();
-        salesItem.status = ItemStatus.SELL;
+        salesItem.status = ItemStatus.SALE;
         salesItem.addUser(user);
         return salesItem;
     }
@@ -93,7 +93,7 @@ public class SalesItem extends BaseEntity {
     }
 
     public void updateSoldOutStatus() {
-        this.status = ItemStatus.SOLD;
+        this.status = ItemStatus.SOLD_OUT;
     }
 
     //해당 유저가 등록한 아이템이 아니다.

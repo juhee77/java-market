@@ -3,10 +3,7 @@ package com.lahee.market.service;
 import com.lahee.market.dto.negotiation.RequestNegotiationDto;
 import com.lahee.market.dto.negotiation.ResponseNegotiationDto;
 import com.lahee.market.dto.negotiation.UpdateNegotiationDto;
-import com.lahee.market.entity.Negotiation;
-import com.lahee.market.entity.NegotiationStatus;
-import com.lahee.market.entity.SalesItem;
-import com.lahee.market.entity.User;
+import com.lahee.market.entity.*;
 import com.lahee.market.exception.CustomException;
 import com.lahee.market.exception.ErrorCode;
 import com.lahee.market.repository.NegotiationRepository;
@@ -35,6 +32,10 @@ public class NegotiationService {
     public ResponseNegotiationDto save(Long itemId, RequestNegotiationDto dto, String username) {
         User user = userService.getUser(username);
         SalesItem salesItem = salesItemService.getSalesItem(itemId);
+        //아이템이 현재 판매중인 상품인지 확인(판매 완료 되었으면 판매하지 않는다)
+        if (!(salesItem.getStatus() == ItemStatus.SALE)) {
+            throw new CustomException(ErrorCode.ITEM_SOLD_OUT);
+        }
         Negotiation saved = Negotiation.getEntityInstance(dto, salesItem, user);
 
         return fromEntity(negotiationRepository.save(saved));

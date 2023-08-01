@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, {useContext, useEffect, useState} from 'react';
+import {Link} from 'react-router-dom';
 
 import AuthContext from '../../store/auth-context';
 
@@ -43,47 +43,58 @@ const MainNavigation = () => {
                         Home
                     </Link>
                     <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
-                    <ul className="navbar-nav">
-                        {!isLogin && (
-                         <>
-                                <li className="nav-item">
-                                    <Link className="nav-link" to="/login">
-                                        Login
-                                    </Link>
-                                </li>
-                                <li className="nav-item">
-                                    <Link className="nav-link" to="/signup">
-                                        Sign-Up
-                                    </Link>
-                                </li></>
-                       
-                        )}
-                        {isLogin && (
-                      <>
-                                <li className="nav-item">
-                                    <Link className="nav-link" to="/profile">
-                                        {nickname}
-                                    </Link>
-                                </li>
-                                <li className="nav-item">
-                                    <Link className="nav-link" to="/item-add-view">
-                                        아이템 생성
-                                    </Link>
-                                </li>
-
-                                <li className="nav-item">
-                                    <Link className="nav-link" to="/chat/all/rooms">
-                                        연락온 채팅
-                                    </Link>
-
-                                </li>
-                                <li className="nav-item">
-                                    <button className="btn btn-primary" onClick={toggleLogoutHandler}>
-                                        Logout
-                                    </button>
-                                </li>
+                        <ul className="navbar-nav">
+                            {!isLogin && (
+                                <>
+                                    <li className="nav-item">
+                                        <Link className="nav-link" to="/login">
+                                            Login
+                                        </Link>
+                                    </li>
+                                    <li className="nav-item">
+                                        <Link className="nav-link" to="/signup">
+                                            Sign-Up
+                                        </Link>
+                                    </li>
                                 </>
-                        )}
+
+                            )}
+                            {isLogin && (
+                                <>
+                                    <li className="nav-item">
+                                        <Link className="nav-link" to="/profile">
+                                            {nickname}
+                                        </Link>
+                                    </li>
+                                    <li className="nav-item">
+                                        <Link className="nav-link" to="/item-add-view">
+                                            아이템 생성
+                                        </Link>
+                                    </li>
+                                    <li className="nav-item">
+                                        <Link className="nav-link" to="/negotiation-view//approve">
+                                            나에게 도착한 제안
+                                        </Link>
+                                    </li>
+                                    <li className="nav-item">
+                                        <Link className="nav-link" to="/negotiation-view/suggest">
+                                            내가한 제안
+                                        </Link>
+                                    </li>
+
+                                    <li className="nav-item">
+                                        <Link className="nav-link" to="/chat/all/rooms">
+                                            연락온 채팅
+                                        </Link>
+
+                                    </li>
+                                    <li className="nav-item">
+                                        <button className="btn btn-primary" onClick={toggleLogoutHandler}>
+                                            Logout
+                                        </button>
+                                    </li>
+                                </>
+                            )}
                         </ul>
                     </div>
                 </div>

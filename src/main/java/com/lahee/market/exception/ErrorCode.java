@@ -25,7 +25,8 @@ public enum ErrorCode {
     INVALID_NEGOTIATION_STATUS(403, "", "정의되지 않은 제안 상태입니다."),
     SECURITY_INVALID_USER_CONTEXT(400, "", "context에 정보가 없습니다."),
     INVALID_PASSWORD(404,"" ,"패스워드가 일치하지 않습니다." ),
-    PASSWORD_NOT_EQUAL(404,"","패스워드, 패스워트 채크가 일치하지 않습니다.");
+    PASSWORD_NOT_EQUAL(404,"","패스워드, 패스워트 채크가 일치하지 않습니다."),
+    ITEM_SOLD_OUT(400,"" ,"이미 판매 완료 되었습니다" );
 
     int status;
     String code;
