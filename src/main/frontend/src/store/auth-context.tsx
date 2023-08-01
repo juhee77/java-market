@@ -21,8 +21,6 @@ const AuthContext = React.createContext({
     },
     login: (nickname: string, password: string) => {
     },
-    addItem: (title: string, description: string, minPriceWanted: string) => {
-    },
     logout: () => {
     },
     getUser: () => {
@@ -107,20 +105,6 @@ export const AuthContextProvider: React.FC<Props> = (props) => {
         })
     };
 
-    const addItemHandler = (
-        title: string,
-        description: string,
-        minPriceWanted: string) => {
-        setIsSuccess(false);
-        const data = authAction.addItemHandler(token, title, description, minPriceWanted);
-        data.then((result) => {
-            if (result !== null) {
-                console.log('아이템 등록완료');
-                setIsSuccess(true);
-            }
-        })
-    };
-
     useEffect(() => {
         if (tokenData) {
             console.log(tokenData.duration);
@@ -139,7 +123,6 @@ export const AuthContextProvider: React.FC<Props> = (props) => {
         login: loginHandler,
         logout: logoutHandler,
         getUser: getUserHandler,
-        addItem: addItemHandler
     }
 
     return (

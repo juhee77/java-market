@@ -114,4 +114,10 @@ public class SalesItemService {
         }
         return item.get();
     }
+
+    @Transactional
+    public void saveWithImg(RequestSalesItemDto requestSalesItemDto, MultipartFile file, String currentUsername) {
+        ResponseSalesItemDto save = save(requestSalesItemDto, currentUsername);
+        if (file != null) saveItemImage(save.getId(), file, currentUsername);
+    }
 }

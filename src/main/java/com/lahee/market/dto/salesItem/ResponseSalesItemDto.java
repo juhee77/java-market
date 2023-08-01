@@ -11,6 +11,7 @@ public class ResponseSalesItemDto {
     String description;
     Integer minPriceWanted;
     String status;
+    String imageUrl;
 
     public static ResponseSalesItemDto fromEntity(SalesItem item) {
         ResponseSalesItemDto dto = new ResponseSalesItemDto();
@@ -19,6 +20,7 @@ public class ResponseSalesItemDto {
         dto.setDescription(item.getDescription());
         dto.setTitle(item.getTitle());
         dto.setMinPriceWanted(item.getMinPriceWanted());
+        dto.setImageUrl(item.getImageUrl());
         dto.setStatus(item.getStatus().toString());
         return dto;
     }

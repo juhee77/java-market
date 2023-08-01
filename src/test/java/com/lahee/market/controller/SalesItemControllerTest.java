@@ -22,6 +22,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.mock.web.MockPart;
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.operation.preprocess.Preprocessors;
 import org.springframework.test.context.ActiveProfiles;
@@ -75,13 +76,13 @@ class SalesItemControllerTest {
     public void saveItem() throws Exception {
         //given
         RequestSalesItemDto dto = getRequestSalesItemDto();
-        String requestBody = new ObjectMapper().writeValueAsString(dto);
+        String requestSalesItemDto = new ObjectMapper().writeValueAsString(dto);
 
         //when
-        mockMvc.perform(post("/items")
-                        .header("Authorization", loginDto.getGrantType() + " " + loginDto.getAccessToken())
-                        .content(requestBody)
-                        .contentType(MediaType.APPLICATION_JSON))
+        MockMultipartFile jsonFile = new MockMultipartFile("requestSalesItemDto", "requestSalesItemDto", "application/json", requestSalesItemDto.getBytes(StandardCharsets.UTF_8));
+        mockMvc.perform(multipart("/items")
+                        .file(jsonFile)
+                        .header("Authorization", loginDto.getGrantType() + " " + loginDto.getAccessToken()))
 
                 .andDo(MockMvcResultHandlers.print())
                 .andDo(MockMvcRestDocumentation.document("Items/POST/item 생성 조회",
@@ -104,7 +105,7 @@ class SalesItemControllerTest {
     @DisplayName("item 단건 조회 (GET /items/{itemId})")
     public void findOne() throws Exception {
         //given
-        ResponseSalesItemDto save = salesItemService.save(getRequestSalesItemDto(),signupDto.getUsername());
+        ResponseSalesItemDto save = salesItemService.save(getRequestSalesItemDto(), signupDto.getUsername());
 
         //when
         ResultActions perform = mockMvc.perform(get("/items/{itemId}", save.getId())
@@ -134,7 +135,7 @@ class SalesItemControllerTest {
             String title = "title" + i;
             String description = "desc" + i;
             int minPriceWanted = 10000 * i;
-            salesItemService.save(new RequestSalesItemDto(title, description, minPriceWanted),signupDto.getUsername());
+            salesItemService.save(new RequestSalesItemDto(title, description, minPriceWanted), signupDto.getUsername());
         }
 
         //when
@@ -166,7 +167,7 @@ class SalesItemControllerTest {
     public void saveItemPhoto() throws Exception {
         //given
         RequestSalesItemDto reqDto = getRequestSalesItemDto();
-        ResponseSalesItemDto save = salesItemService.save(reqDto,signupDto.getUsername());
+        ResponseSalesItemDto save = salesItemService.save(reqDto, signupDto.getUsername());
 
 
         //when
@@ -197,7 +198,7 @@ class SalesItemControllerTest {
         //given
         String modify = "MODIFY";
         RequestSalesItemDto reqDto = getRequestSalesItemDto();
-        ResponseSalesItemDto save = salesItemService.save(reqDto,signupDto.getUsername());
+        ResponseSalesItemDto save = salesItemService.save(reqDto, signupDto.getUsername());
         RequestSalesItemDto updateDto = new RequestSalesItemDto(modify, modify, reqDto.getMinPriceWanted());
         String requestBody = new ObjectMapper().writeValueAsString(updateDto);
 
@@ -229,7 +230,7 @@ class SalesItemControllerTest {
     public void deleteItem() throws Exception {
         //given
         RequestSalesItemDto reqDto = getRequestSalesItemDto();
-        ResponseSalesItemDto save = salesItemService.save(reqDto,signupDto.getUsername());
+        ResponseSalesItemDto save = salesItemService.save(reqDto, signupDto.getUsername());
 
         //when
         mockMvc.perform(delete("/items/{itemId}", save.getId())

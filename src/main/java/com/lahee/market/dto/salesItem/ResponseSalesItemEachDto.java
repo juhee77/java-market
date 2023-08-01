@@ -17,6 +17,7 @@ public class ResponseSalesItemEachDto {
     Integer minPriceWanted;
     String status;
     List<ResponseCommentDto> comments;
+    String imageUrl;
 
     public static ResponseSalesItemEachDto fromEntity(SalesItem item) {
         ResponseSalesItemEachDto dto = new ResponseSalesItemEachDto();
@@ -26,6 +27,7 @@ public class ResponseSalesItemEachDto {
         dto.setTitle(item.getTitle());
         dto.setMinPriceWanted(item.getMinPriceWanted());
         dto.setStatus(item.getStatus().toString());
+        dto.setImageUrl(item.getImageUrl());
 
         dto.comments = new ArrayList<>();
         for (Comment comment : item.getComments()) {

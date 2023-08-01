@@ -273,7 +273,7 @@ class NegotiationControllerTest {
         //then
         Negotiation negotiation = negotiationRepository.findById(save.getId()).get();
         assertThat(negotiation.getStatus()).isEqualTo(NegotiationStatus.CONFIRMATION); //제안의 상태 확인
-        assertThat(item.getStatus()).isEqualTo(ItemStatus.SOLD); // 제품의 상태 확인
+        assertThat(item.getStatus()).isEqualTo(ItemStatus.SOLD_OUT); // 제품의 상태 확인
 
         List<Negotiation> bySalesItem = negotiationRepository.findBySalesItem(item);
         for (Negotiation tempNegotiation : bySalesItem) {
