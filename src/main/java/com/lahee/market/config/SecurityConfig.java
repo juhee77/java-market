@@ -48,8 +48,8 @@ public class SecurityConfig {
                                 .requestMatchers( //인증 관련 정보만 추가
                                         "/user/auth/**", "/items",
                                         //리엑트 관련 view만 분리해서 작성(이후에 배포시에는 포트를 다르게 하는 방식을 적용해야 할듯
-                                        "/home", "/", "", "/index.html","/profile",
-                                       "/item-add-view","/item-view/**" , "/chatroomlist-view","/chatroom-view/**"
+                                        "/home", "/", "","/login/**", "/signup","/index.html", "/profile",
+                                        "/item-add-view", "/item-view/**", "/chatroomlist-view", "/chatroom-view/**"
                                 )
                                 .permitAll()
                                 .anyRequest()

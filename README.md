@@ -57,7 +57,7 @@
 #### [Comment API 명세서](http://localhost:8080/static/docs/Comment.html)
 #### [Item API 명세서](http://localhost:8080/static/docs/SalesItem.html)
 #### [Negotiation API 명세서](http://localhost:8080/static/docs/Negotiation.html)    
-#### [Negotiation API 명세서](http://localhost:8080/static/docs/Chatroom.html)
+#### [Chatroom API 명세서](http://localhost:8080/static/docs/Chatroom.html)
 
 
 `post man json 파일` import 하여 사용할 수 있습니다.
