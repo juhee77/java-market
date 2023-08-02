@@ -1,5 +1,4 @@
-
-import { Navigate, Route, Routes } from 'react-router-dom';
+import {Navigate, Route, Routes} from 'react-router-dom';
 
 import Layout from './components/Layout/Layout';
 import AuthPage from './pages/AuthPage';
@@ -21,18 +20,14 @@ function App() {
     return (
         <Layout>
             <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/signup/" element={authCtx.isLoggedIn ? <Navigate to='/' /> : <CreateAccountPage />} />
-                <Route path="/login/*"
-                    element={authCtx.isLoggedIn ? <Navigate to='/' /> : <AuthPage />}
-                />
-                <Route path="/profile/" element={!authCtx.isLoggedIn ? <Navigate to='/' /> : <ProfilePage />} />
-                <Route path="/chatroomlist-view" element={!authCtx.isLoggedIn ? <Navigate to='/' /> : <ChatRoomList />} />
-                <Route path="/item-add-view" element={!authCtx.isLoggedIn ? <Navigate to='/' /> :<AddItemPage/>} />
-                <Route path="/item-view/:itemId" element={<ItemPage itemId={''} />} />
-
-                <Route path="/chatroom-view/:roomId" element={<ChatPage roomId={''} />} />
-                
+                <Route path="/" element={<HomePage/>}/>
+                <Route path="/signup/" element={authCtx.isLoggedIn ? <Navigate to='/'/> : <CreateAccountPage/>}/>
+                <Route path="/login/*" element={authCtx.isLoggedIn ? <Navigate to='/'/> : <AuthPage/>}/>
+                <Route path="/profile/" element={!authCtx.isLoggedIn ? <Navigate to='/'/> : <ProfilePage/>}/>
+                <Route path="/chatroomlist-view" element={!authCtx.isLoggedIn ? <Navigate to='/'/> : <ChatRoomList/>}/>
+                <Route path="/item-add-view" element={!authCtx.isLoggedIn ? <Navigate to='/'/> : <AddItemPage/>}/>
+                <Route path="/item-view/:itemId" element={<ItemPage itemId={''}/>}/>
+                <Route path="/chatroom-view/:roomId" element={<ChatPage roomId={''}/>}/>
             </Routes>
 
         </Layout>

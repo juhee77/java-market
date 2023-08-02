@@ -1,10 +1,10 @@
 import ItemDetails from "components/Item/ItemDetails";
-import NegotiationPage from "components/NegotiationPage";
-import React, { useContext, useEffect, useRef, useState } from "react";
-import { Params, useNavigate, useParams } from "react-router-dom";
-import { getEachItemHandler, getItemProposalHandler } from "store/auth-action";
+import NegotiationPage from "pages/NegotiationPage";
+import React, {useContext, useEffect, useState} from "react";
+import {useParams} from "react-router-dom";
+import {getEachItemHandler, getItemProposalHandler} from "store/auth-action";
 import AuthContext from "store/auth-context";
-import { Item, Negotiation } from "type/types";
+import {Item, Negotiation} from "type/types";
 
 
 type props = {
@@ -18,17 +18,15 @@ export interface ItemPagingResponse {
 const ItemPage: React.FC<props> = () => {
     const authCtx = useContext(AuthContext)
     const token = authCtx.token;
+    const [loading, setLoading] = useState<boolean>(false);
+    const [proposalLoging, setProposalLoding] = useState<boolean>(false);
     const [item, setItem] = useState<Item>();
     const [negotiations, setNegotiation] = useState<Negotiation[]>();
-    const { itemId } = useParams<string>();
+    const {itemId} = useParams<string>();
 
-    console.log(itemId)
 
-    if (itemId == null) {
-        return <p>Loading...</p>;
-    }
-
-    if (item == null) {
+    useEffect(() => {
+        setLoading(true);
         getEachItemHandler(token, itemId).then((response) => {
             if (response !== null) {
                 console.log('item얻어옴');
@@ -36,25 +34,25 @@ const ItemPage: React.FC<props> = () => {
                 setItem(itemData);
             }
         });
-    }
-    if (negotiations == null) {
+        setLoading(false);
+    }, []);
+
+    useEffect(() => {
+        setProposalLoding(true);
         getItemProposalHandler(token, itemId).then((response) => {
             if (response !== null) {
                 console.log('proposal 얻어옴');
-                const negotiations : ItemPagingResponse = response.data;
+                const negotiations: ItemPagingResponse = response.data;
                 setNegotiation(negotiations.content);
             }
         });
-    }
-
-
+        setProposalLoding(false);
+    }, []);
 
     return (
         <div className="container mt-4">
-            <h1>이번 아이템은!?</h1>
-            <ItemDetails item={item} />
-            <h1>제안들</h1>
-            <NegotiationPage negotiations={negotiations} item={item} />
+            <ItemDetails item={item}/>
+            <NegotiationPage negotiations={negotiations} item={item}/>
         </div>
     );
 };

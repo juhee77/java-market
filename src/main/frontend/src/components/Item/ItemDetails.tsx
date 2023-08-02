@@ -96,8 +96,17 @@ const ItemDetails: React.FC<Props> = ({item}) => {
                     />
                 }
             </div>
-            <p>설명 : {item.description}</p>
-            <p>가격: {item.minPriceWanted} 원</p>
+            <h4>설명 : {item.description}</h4>
+            <h4>가격: {item.minPriceWanted} 원</h4>
+
+            <hr/>
+
+            <button type="submit" onClick={handleButtonClick} className="btn btn-primary btn">
+                채팅 보내기
+            </button>
+
+            <hr/>
+
             <h3>입력된 댓글들</h3>
             {item.comments.length > 0 ? (
                 <ul>
@@ -135,10 +144,11 @@ const ItemDetails: React.FC<Props> = ({item}) => {
                 <p>No comments yet.</p>
             )}
 
+
             <h3>댓글 달기</h3>
             <form onSubmit={submitCommentHandler} className="form-horizontal">
-                <div className="form-group">
-                    <label htmlFor="comment" className="col-sm-2 control-label">
+                <div className="mb-3">
+                    <label htmlFor="comment" className="col-sm-2 form-label">
                         댓글
                     </label>
                     <input type="text" id="comment" className="form-control" required ref={commentInputRef}/>
@@ -148,11 +158,12 @@ const ItemDetails: React.FC<Props> = ({item}) => {
                 </button>
             </form>
 
+            <hr/>
 
             <h3>제안 보내기</h3>
             <form onSubmit={submitNegotiationHandler} className="form-horizontal">
-                <div className="form-group">
-                    <label htmlFor="comment" className="col-sm-2 control-label">
+                <div className="mb-3">
+                    <label htmlFor="comment" className="col-sm-2 form-label">
                         제안 가격
                     </label>
                     <input type="number" id="negotiation" className="form-control" required ref={negotiationInputRef}/>
@@ -161,12 +172,6 @@ const ItemDetails: React.FC<Props> = ({item}) => {
                     제안 보내기
                 </button>
             </form>
-
-
-            <h3>채팅 보내기</h3>
-            <button type="submit" onClick={handleButtonClick} className="btn btn-primary btn">
-                제안 보내기
-            </button>
         </div>
     );
 };

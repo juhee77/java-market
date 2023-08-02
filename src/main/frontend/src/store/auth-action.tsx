@@ -143,7 +143,7 @@ export const addNegotiation = (
 
 export const getEachItemHandler = (
     token: string,
-    itemId: string
+    itemId: string | undefined
 ) => {
     const url = '/items/' + itemId;
     return GET(url, createTokenHeader(token));
@@ -151,7 +151,7 @@ export const getEachItemHandler = (
 
 export const getItemProposalHandler = (
     token: string,
-    itemId: string
+    itemId: string | undefined
 ) => {
     const url = '/items/' + itemId + '/proposal';
     return GET(url, createTokenHeader(token));

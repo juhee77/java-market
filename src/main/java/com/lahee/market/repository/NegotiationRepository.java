@@ -15,7 +15,7 @@ import java.util.List;
 public interface NegotiationRepository extends JpaRepository<Negotiation, Long> {
     Page<Negotiation> findBySalesItem(SalesItem item, Pageable pageable);
 
-    Page<Negotiation> findByUser(User user, Pageable pageable);
+    Page<Negotiation> findByUserAndSalesItem(User user, SalesItem item, Pageable pageable);
 
     List<Negotiation> findBySalesItem(SalesItem item);
 

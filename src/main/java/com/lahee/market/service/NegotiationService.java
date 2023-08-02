@@ -50,7 +50,7 @@ public class NegotiationService {
             return negotiationRepository.findBySalesItem(salesItem, pageable).map(ResponseNegotiationDto::fromEntity);
         } else {
             //판매자가 아니라면 해당유저가 작성한 제안을 반환한다.
-            return negotiationRepository.findByUser(user, pageable).map(ResponseNegotiationDto::fromEntity);
+            return negotiationRepository.findByUserAndSalesItem(user, salesItem, pageable).map(ResponseNegotiationDto::fromEntity);
         }
     }
 
