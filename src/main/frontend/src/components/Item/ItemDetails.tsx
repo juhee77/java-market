@@ -1,21 +1,21 @@
-import React, { FormEvent, useContext, useEffect, useRef, useState } from 'react';
-import { Item } from 'type/types';
+import React, {useContext, useRef, useState} from 'react';
+import {ChatRoom, Item} from 'type/types';
 import "./ItemDetails.css"
 import AuthContext from 'store/auth-context';
-import { Params, useNavigate, useParams } from 'react-router-dom';
-import { POST } from 'store/fetch-auth-action';
-import { addComment, addNegotiation, replyComment } from 'store/auth-action';
+import {useNavigate} from 'react-router-dom';
+import {addChatroomHandler, addComment, addNegotiation, replyComment} from 'store/auth-action';
 
 type Props = {
     item: Item | undefined;
 }
 
-const ItemDetails: React.FC<Props> = ({ item }) => {
+const ItemDetails: React.FC<Props> = ({item}) => {
     const commentInputRef = useRef<HTMLInputElement>(null);
     const replyInpuputRef = useRef<HTMLInputElement>(null);
     const negotiationInputRef = useRef<HTMLInputElement>(null);
     const authCtx = useContext(AuthContext);
     const token = authCtx.token;
+    const navigate = useNavigate(); // useNavigate hook 사용
 
     const [expandedCommentIds, setExpandedCommentIds] = useState<number[]>([]);
 
@@ -69,6 +69,19 @@ const ItemDetails: React.FC<Props> = ({ item }) => {
         });
     }
 
+    const handleButtonClick = () => {
+        console.log('버튼이 클릭되었습니다!');
+
+        addChatroomHandler(token, item.id, authCtx.userObj.nickname).then((result) => {
+            if (result != null) {
+                console.log(result.data)
+                const room: ChatRoom = result.data
+                console.log("채팅방으로 이동합니다." + room);
+                navigate(`/chatroom-view/${room.id}`);
+            }
+        });
+
+    };
 
 
     return (
@@ -79,7 +92,7 @@ const ItemDetails: React.FC<Props> = ({ item }) => {
                     <img
                         src={item.imageUrl}
                         alt="Image"
-                        style={{ maxWidth: '100%', height: 'auto' }}
+                        style={{maxWidth: '100%', height: 'auto'}}
                     />
                 }
             </div>
@@ -95,14 +108,15 @@ const ItemDetails: React.FC<Props> = ({ item }) => {
                             <p className="reply">{comment.reply ? comment.reply : ''}</p>
 
 
-
                             {expandedCommentIds.includes(comment.id) && (
-                                <form onSubmit={(event) => submitReplyHandler(event, comment.id)} className="form-horizontal">
+                                <form onSubmit={(event) => submitReplyHandler(event, comment.id)}
+                                      className="form-horizontal">
                                     <div className="form-group">
                                         <label htmlFor="reply" className="col-sm-2 control-label">
                                             대댓글
                                         </label>
-                                        <input type="reply" id="reply" className="form-control" required ref={replyInpuputRef} />
+                                        <input type="reply" id="reply" className="form-control" required
+                                               ref={replyInpuputRef}/>
                                     </div>
                                     <button type="submit" className="btn btn-primary btn">
                                         대댓글 남기기
@@ -110,7 +124,8 @@ const ItemDetails: React.FC<Props> = ({ item }) => {
                                 </form>
                             )}
 
-                            <button type="button" onClick={() => toggleReplyForm(comment.id)} className="btn btn-primary btn">
+                            <button type="button" onClick={() => toggleReplyForm(comment.id)}
+                                    className="btn btn-primary btn">
                                 {expandedCommentIds.includes(comment.id) ? '대댓글 닫기' : '대댓글 작성'}
                             </button>
                         </li>
@@ -126,7 +141,7 @@ const ItemDetails: React.FC<Props> = ({ item }) => {
                     <label htmlFor="comment" className="col-sm-2 control-label">
                         댓글
                     </label>
-                    <input type="text" id="comment" className="form-control" required ref={commentInputRef} />
+                    <input type="text" id="comment" className="form-control" required ref={commentInputRef}/>
                 </div>
                 <button type="submit" className="btn btn-primary btn">
                     댓글 남기기
@@ -140,12 +155,18 @@ const ItemDetails: React.FC<Props> = ({ item }) => {
                     <label htmlFor="comment" className="col-sm-2 control-label">
                         제안 가격
                     </label>
-                    <input type="number" id="negotiation" className="form-control" required ref={negotiationInputRef} />
+                    <input type="number" id="negotiation" className="form-control" required ref={negotiationInputRef}/>
                 </div>
                 <button type="submit" className="btn btn-primary btn">
                     제안 보내기
                 </button>
             </form>
+
+
+            <h3>채팅 보내기</h3>
+            <button type="submit" onClick={handleButtonClick} className="btn btn-primary btn">
+                제안 보내기
+            </button>
         </div>
     );
 };

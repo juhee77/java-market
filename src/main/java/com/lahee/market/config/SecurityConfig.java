@@ -27,9 +27,11 @@ import org.springframework.web.filter.CorsFilter;
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final JwtTokenFilter jwtTokenFilter;
+
     @Bean
     public WebSecurityCustomizer configure() {
         return (web) -> web.ignoring()
+                .requestMatchers("/ws/**")
                 .requestMatchers("/static/**");
     }
 
@@ -46,8 +48,8 @@ public class SecurityConfig {
                                 .requestMatchers( //인증 관련 정보만 추가
                                         "/user/auth/**",
                                         "/api/**",
-                                        "/home","/","","/index.html",
-                                        "/items","/item-view/**"
+                                        "/home", "/", "", "/index.html",
+                                        "/items", "/item-view/**"
                                 )
                                 .permitAll()
                                 .anyRequest()

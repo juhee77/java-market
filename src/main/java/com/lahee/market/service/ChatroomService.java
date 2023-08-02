@@ -84,4 +84,8 @@ public class ChatroomService {
         return item.get();
     }
 
+    @Transactional
+    public void updateActivate(Chatroom room) {
+        room.updateActivate();
+    }
 }
