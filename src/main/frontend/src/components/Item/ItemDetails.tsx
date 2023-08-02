@@ -98,7 +98,8 @@ const ItemDetails: React.FC<Props> = ({item}) => {
             </div>
             <h4>설명 : {item.description}</h4>
             <h4>가격: {item.minPriceWanted} 원</h4>
-
+            <h4>판매자 : {item.seller}</h4>
+            <p>현재 판매 상태 : {item.status}</p>
             <hr/>
 
             <button type="submit" onClick={handleButtonClick} className="btn btn-primary btn">
@@ -109,34 +110,37 @@ const ItemDetails: React.FC<Props> = ({item}) => {
 
             <h3>입력된 댓글들</h3>
             {item.comments.length > 0 ? (
-                <ul>
+                <ul className="list-group container mt-4 mb-4 li-hover">
                     {item.comments.map((comment) => (
-                        <li key={comment.id}>
+                        <li className="list-group-item list-group-item-action" key={comment.id}>
                             <p>{comment.writer}의 댓글</p>
                             <p>{comment.content}</p>
-                            <p className="reply">{comment.reply ? comment.reply : ''}</p>
+                            {comment.reply != null &&
+                                <p className="reply">판매자의 대댓글 : {comment.reply ? comment.reply : ''}</p>}
 
 
                             {expandedCommentIds.includes(comment.id) && (
                                 <form onSubmit={(event) => submitReplyHandler(event, comment.id)}
                                       className="form-horizontal">
-                                    <div className="form-group">
+                                    <div className="mb-3">
                                         <label htmlFor="reply" className="col-sm-2 control-label">
                                             대댓글
                                         </label>
                                         <input type="reply" id="reply" className="form-control" required
                                                ref={replyInpuputRef}/>
                                     </div>
-                                    <button type="submit" className="btn btn-primary btn">
+                                    <button type="submit" className="btn btn-primary btn ">
                                         대댓글 남기기
                                     </button>
                                 </form>
                             )}
 
-                            <button type="button" onClick={() => toggleReplyForm(comment.id)}
-                                    className="btn btn-primary btn">
-                                {expandedCommentIds.includes(comment.id) ? '대댓글 닫기' : '대댓글 작성'}
-                            </button>
+                            {item.seller == authCtx.userObj.nickname &&
+                                <button type="button" onClick={() => toggleReplyForm(comment.id)}
+                                        className="btn btn-primary btn">
+                                    {expandedCommentIds.includes(comment.id) ? '대댓글 닫기' : '대댓글 작성'}
+                                </button>
+                            }
                         </li>
                     ))}
                 </ul>
@@ -145,13 +149,13 @@ const ItemDetails: React.FC<Props> = ({item}) => {
             )}
 
 
-            <h3>댓글 달기</h3>
             <form onSubmit={submitCommentHandler} className="form-horizontal">
                 <div className="mb-3">
                     <label htmlFor="comment" className="col-sm-2 form-label">
                         댓글
                     </label>
-                    <input type="text" id="comment" className="form-control" required ref={commentInputRef}/>
+                    <input type="text" id="comment" className="form-control" required ref={commentInputRef}
+                           placeholder='댓글을 작성해주세요'/>
                 </div>
                 <button type="submit" className="btn btn-primary btn">
                     댓글 남기기
@@ -160,13 +164,13 @@ const ItemDetails: React.FC<Props> = ({item}) => {
 
             <hr/>
 
-            <h3>제안 보내기</h3>
             <form onSubmit={submitNegotiationHandler} className="form-horizontal">
                 <div className="mb-3">
                     <label htmlFor="comment" className="col-sm-2 form-label">
                         제안 가격
                     </label>
-                    <input type="number" id="negotiation" className="form-control" required ref={negotiationInputRef}/>
+                    <input type="number" id="negotiation" className="form-control" required ref={negotiationInputRef}
+                           placeholder={String(item.minPriceWanted)}/>
                 </div>
                 <button type="submit" className="btn btn-primary btn">
                     제안 보내기

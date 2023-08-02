@@ -24,12 +24,12 @@ const ChatRoomListForm: React.FC<Props> = ({chatRooms}) => {
 
                 <ul className="list-group container mt-4 li-hover">
                     {chatRooms.filter(chatRoom =>
-                        !chatRoom.active && chatRoom.itemSeller === authCtx.userObj.username
+                        !chatRoom.active && chatRoom.itemSeller === authCtx.userObj.nickname
                     ).length === 0 ? (
                         <li className="list-group-item">없음</li>
                     ) : (
                         chatRooms.filter(chatRoom =>
-                            !chatRoom.active && chatRoom.itemSeller === authCtx.userObj.username
+                            !chatRoom.active && chatRoom.itemSeller === authCtx.userObj.nickname
                         ).map((filteredChatRoom, index) => (
                             <li
                                 key={filteredChatRoom.id}
@@ -56,7 +56,7 @@ const ChatRoomListForm: React.FC<Props> = ({chatRooms}) => {
                 </thead>
                 <tbody>
                 {chatRooms.map((chatRoom, index) => (
-                    ((chatRoom.active && chatRoom.itemSeller == authCtx.userObj.username) || (chatRoom.itemSeller != authCtx.userObj.username)) &&
+                    ((chatRoom.active && chatRoom.itemSeller == authCtx.userObj.nickname) || (chatRoom.itemSeller != authCtx.userObj.nickname)) &&
                     <tr key={chatRoom.id} onClick={() => handleChatRoomClick(chatRoom)}>
                         <td>{index + 1}</td>
                         <td>{chatRoom.roomName}</td>

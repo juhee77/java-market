@@ -64,4 +64,13 @@ public class UserService {
         }
         return user.get();
     }
+
+    public User getUserByNickName(String nickname) {
+        log.info("NICKNAME" + nickname);
+        Optional<User> user = userRepository.findByNickname(nickname);
+        if (user.isEmpty()) {
+            throw new CustomException(ErrorCode.SECURITY_INVALID_USER);
+        }
+        return user.get();
+    }
 }

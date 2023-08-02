@@ -1,9 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import AuthContext from 'store/auth-context';
 import ChatRoomListForm from './ChatRoomListForm';
-import { ChatRoom } from 'type/types';
-import { getChatroomHandler } from 'store/auth-action';
-import { response } from 'express';
+import {ChatRoom} from 'type/types';
+import {getChatroomHandler} from 'store/auth-action';
 
 
 const ChatRoomList: React.FC = () => {
@@ -16,8 +15,8 @@ const ChatRoomList: React.FC = () => {
     useEffect(() => {
         setLoading(true);
 
-        getChatroomHandler(authCtx.token).then((response) => { 
-            if(response!=null){
+        getChatroomHandler(authCtx.token).then((response) => {
+            if (response != null) {
                 console.log('채팅방 얻어옴');
                 setChatRooms(response.data)
             }
@@ -30,7 +29,7 @@ const ChatRoomList: React.FC = () => {
         return <div>{error}</div>;
     }
 
-    return <ChatRoomListForm chatRooms={chatRooms} />;
+    return <ChatRoomListForm chatRooms={chatRooms}/>;
 };
 
 export default ChatRoomList;

@@ -35,8 +35,6 @@ public class ChatdataController {
     @MessageMapping(value = "/chat/enter")
     public void enter(ChatDataRequestDto message) {
         log.info("enter: {}", message);
-        message.setMessage(message.getWriter() + "님이 입장 하셨습니다");
-
         User user = memberService.getUser(message.getWriter());
         Chatroom room = chatRoomService.getChatroom(message.getRoomId());
 

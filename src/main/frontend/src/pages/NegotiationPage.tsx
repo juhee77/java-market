@@ -33,23 +33,34 @@ const ItemDetails: React.FC<Props> = (props) => {
         <div className='mt-4 '>
             <h3>입력된 제안들</h3>
             {negotiations.length > 0 ? (
-                <ul>
+                <ul className="list-group container mt-4 li-hover">
                     {negotiations.map((negotiation) => (
-                        <li key={negotiation.id}>
+                        <li className="list-group-item list-group-item-action" key={negotiation.id}>
                             <p>{negotiation.proposalName}님이 {negotiation.suggestedPrice}원을 제안하셨습니다.</p>
                             <p> 상태 : {negotiation.status}</p>
 
                             {(
                                 <div>
-                                    <button onClick={() => handleStatusChange(negotiation.id, '확정')}>
-                                        확정
-                                    </button>
-                                    <button onClick={() => handleStatusChange(negotiation.id, '수락')}>
-                                        수락
-                                    </button>
-                                    <button onClick={() => handleStatusChange(negotiation.id, '거절')}>
-                                        거절
-                                    </button>
+                                    {
+                                        negotiation.proposalName == authCtx.userObj.nickname && negotiation.status == '수락' &&
+                                        <button className='btn btn-outline-primary'
+                                                onClick={() => handleStatusChange(negotiation.id, '확정')}>
+                                            확정
+                                        </button>
+                                    }
+                                    {
+                                        item.seller == authCtx.userObj.nickname && negotiation.status != '확정' &&
+                                        <button className='btn btn-outline-primary'
+                                                onClick={() => handleStatusChange(negotiation.id, '수락')}>
+                                            수락
+                                        </button>
+                                    }
+                                    {item.seller == authCtx.userObj.nickname && negotiation.status != '확정' &&
+                                        <button className='btn btn-outline-primary'
+                                                onClick={() => handleStatusChange(negotiation.id, '거절')}>
+                                            거절
+                                        </button>
+                                    }
                                 </div>
                             )}
 

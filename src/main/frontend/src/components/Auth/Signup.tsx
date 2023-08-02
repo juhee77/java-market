@@ -35,20 +35,20 @@ const Signup = () => {
             <h1>Create Account</h1>
             <form onSubmit={submitHandler} className="form-horizontal">
                 <div className="mb-3">
-                    <label htmlFor='username' className="col-sm-2 control-label">Your username</label>
+                    <label htmlFor='username' className="control-label">Your loginId</label>
                     <input type='username' id='username' className="form-control" required ref={usernameInputRef}/>
                 </div>
                 <div className="mb-3">
-                    <label htmlFor="password" className="col-sm-2 control-label">Your password</label>
+                    <label htmlFor="password" className="control-label">Your password</label>
                     <input type='password' id='password' className="form-control" required ref={passwordInputRef}/>
                 </div>
                 <div className="mb-3">
-                    <label htmlFor="repassword" className="col-sm-2 control-label">Your password</label>
-                    <input type='repassword' id='repassword' className="form-control" required
+                    <label htmlFor="repassword" className="control-label">Your password</label>
+                    <input type='password' id='repassword' className="form-control" required
                            ref={repasswordInputRef}/>
                 </div>
                 <div className="mb-3">
-                    <label htmlFor="nickname" className="col-sm-2 control-label">NickName</label>
+                    <label htmlFor="nickname" className="control-label">NickName</label>
                     <input type='nickname' id='nickname' className="form-control" required ref={nicknameInputRef}/>
                 </div>
 
