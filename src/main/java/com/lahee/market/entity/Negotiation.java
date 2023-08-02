@@ -2,18 +2,21 @@ package com.lahee.market.entity;
 
 import com.lahee.market.dto.negotiation.RequestNegotiationDto;
 import com.lahee.market.dto.negotiation.UpdateNegotiationDto;
-import com.lahee.market.exception.NegotiationNotMatchItemException;
-import com.lahee.market.exception.PasswordNotMatchException;
-import com.lahee.market.exception.WriterNameNotMatchException;
+import com.lahee.market.exception.CustomException;
+import com.lahee.market.exception.ErrorCode;
 import jakarta.persistence.*;
 import lombok.Getter;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import static jakarta.persistence.FetchType.LAZY;
 
 @Getter
 @Entity
 @Table(name = "negotiation")
-public class Negotiation {
+@SQLDelete(sql = "UPDATE negotiation SET deleted_at = datetime('now')  WHERE id = ?")
+@Where(clause = "deleted_at IS NULL")
+public class Negotiation extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,17 +25,20 @@ public class Negotiation {
     @JoinColumn(name = "item_id")
     private SalesItem salesItem;
     private Integer suggestedPrice;
+
     @Enumerated(EnumType.STRING)
     private NegotiationStatus status;
-    private String writer;
-    private String password;
 
-    public static Negotiation getEntityInstance(RequestNegotiationDto dto) {
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    public static Negotiation getEntityInstance(RequestNegotiationDto dto, SalesItem item, User user) {
         Negotiation negotiation = new Negotiation();
-        negotiation.password = dto.getPassword();
-        negotiation.writer = dto.getWriter();
         negotiation.suggestedPrice = dto.getSuggestedPrice();
         negotiation.status = NegotiationStatus.SUGGEST;
+        negotiation.setSalesItem(item); //연관관계 매핑
+        negotiation.setUser(user);
         return negotiation;
     }
 
@@ -57,21 +63,36 @@ public class Negotiation {
         item.addNegotiation(this);
     }
 
-    //인증 메서드
-    public void checkAuthAndThrowException(String writer, String password) {
-        if (!this.writer.equals(writer)) {
-            throw new WriterNameNotMatchException();
+    public void setUser(User user) {
+        if (this.user != null) {
+            this.user.getNegotiations().remove(this);
         }
-        if (!this.password.equals(password)) {
-            throw new PasswordNotMatchException();
-        }
+        this.user = user;
+        user.addNegotiation(this);
     }
 
     //아이템에 속한 제안이 맞는지 확인한다.
     public void validItemIdInURL(Long itemId) {
-        if (itemId != this.salesItem.getId()) {
-            throw new NegotiationNotMatchItemException();
+        if (!itemId.equals(this.salesItem.getId())) {
+            throw new CustomException(ErrorCode.NEGOTIATION_NOT_ITEM_EXCEPTION);
         }
+    }
+
+    public void validNegotiationUser(User user) {
+        if (this.user != user) {
+            throw new CustomException(ErrorCode.INVALID_NEGOTIATION_EXCEPTION);
+        }
+    }
+
+    public void validItemUser(User user) {
+        if (this.salesItem.getUser() != user) {
+            throw new CustomException(ErrorCode.INVALID_NEGOTIATION_USER_EXCEPTION);
+        }
+    }
+
+    public void delete() {
+        salesItem.deleteNegotiation(this);
+        user.deleteNegotiation(this);
     }
 }
 

@@ -1,13 +1,15 @@
 package com.lahee.market.entity;
 
 import com.lahee.market.dto.salesItem.RequestSalesItemDto;
-import com.lahee.market.exception.PasswordNotMatchException;
-import com.lahee.market.exception.WriterNameNotMatchException;
+import com.lahee.market.exception.CustomException;
+import com.lahee.market.exception.ErrorCode;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +21,9 @@ import static jakarta.persistence.FetchType.LAZY;
 @Getter
 @Entity
 @Table(name = "sales_item")
-public class SalesItem {
+@SQLDelete(sql = "UPDATE sales_item SET deleted_at = datetime('now') WHERE id = ?")
+@Where(clause = "deleted_at IS NULL")
+public class SalesItem extends BaseEntity {
     @Id
     @Column(unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,8 +34,10 @@ public class SalesItem {
     private Integer minPriceWanted;
     @Enumerated(EnumType.STRING)
     private ItemStatus status;
-    private String writer;
-    private String password;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @OneToMany(fetch = LAZY, mappedBy = "salesItem", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
@@ -40,14 +46,13 @@ public class SalesItem {
     private List<Negotiation> negotiations = new ArrayList<>();
 
 
-    public static SalesItem getEntityInstance(RequestSalesItemDto requestSalesItemDto) {
+    public static SalesItem getEntityInstance(RequestSalesItemDto requestSalesItemDto, User user) {
         SalesItem salesItem = new SalesItem();
         salesItem.description = requestSalesItemDto.getDescription();
         salesItem.title = requestSalesItemDto.getTitle();
         salesItem.minPriceWanted = requestSalesItemDto.getMinPriceWanted();
-        salesItem.status = ItemStatus.SELL;
-        salesItem.writer = requestSalesItemDto.getWriter();
-        salesItem.password = requestSalesItemDto.getPassword();
+        salesItem.status = ItemStatus.SALE;
+        salesItem.addUser(user);
         return salesItem;
     }
 
@@ -62,6 +67,11 @@ public class SalesItem {
     }
 
     //연관관계 편의 메소드
+    private void addUser(User user) {
+        this.user = user;
+        user.addItem(this);
+    }
+
     public void addComment(Comment comment) {
         if (!comments.contains(comment)) {
             comments.add(comment);
@@ -82,17 +92,14 @@ public class SalesItem {
         negotiations.remove(negotiation);
     }
 
-    //인증 메서드
-    public void checkAuthAndThrowException(String writer, String password) {
-        if (!this.writer.equals(writer)) {
-            throw new WriterNameNotMatchException();
-        }
-        if (!this.password.equals(password)) {
-            throw new PasswordNotMatchException();
-        }
+    public void updateSoldOutStatus() {
+        this.status = ItemStatus.SOLD_OUT;
     }
 
-    public void updateSoldOutStatus() {
-        this.status = ItemStatus.SOLD;
+    //해당 유저가 등록한 아이템이 아니다.
+    public void validItemIdInURL(User user) {
+        if (!this.user.equals(user)) {
+            throw new CustomException(ErrorCode.ITEM_NOT_IN_USER_EXCEPTION);
+        }
     }
 }

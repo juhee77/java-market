@@ -1,10 +1,12 @@
 package com.lahee.market.service;
 
-import com.lahee.market.dto.salesItem.DeleteItemDto;
 import com.lahee.market.dto.salesItem.RequestSalesItemDto;
 import com.lahee.market.dto.salesItem.ResponseSalesItemDto;
+import com.lahee.market.dto.salesItem.ResponseSalesItemEachDto;
 import com.lahee.market.entity.SalesItem;
-import com.lahee.market.exception.ItemNotFoundException;
+import com.lahee.market.entity.User;
+import com.lahee.market.exception.CustomException;
+import com.lahee.market.exception.ErrorCode;
 import com.lahee.market.repository.SalesItemRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +23,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,10 +31,14 @@ import java.nio.file.Path;
 @Transactional(readOnly = true)
 public class SalesItemService {
     private final SalesItemRepository salesItemRepository;
+    private final UserService userService;
 
     @Transactional
-    public ResponseSalesItemDto save(RequestSalesItemDto requestSalesItemDto) {
-        return ResponseSalesItemDto.fromEntity(salesItemRepository.save(SalesItem.getEntityInstance(requestSalesItemDto)));
+    public ResponseSalesItemDto save(RequestSalesItemDto requestSalesItemDto, String username) {
+        User user = userService.getUser(username);
+
+        SalesItem salesItem = SalesItem.getEntityInstance(requestSalesItemDto, user);
+        return ResponseSalesItemDto.fromEntity(salesItemRepository.save(salesItem));
     }
 
     public Page<ResponseSalesItemDto> readItemPaged(Integer page, Integer limit) {
@@ -40,18 +47,17 @@ public class SalesItemService {
         return articleEntityPage.map(ResponseSalesItemDto::fromEntity);
     }
 
-    public ResponseSalesItemDto readOneItem(Long id) {
-        SalesItem item = salesItemRepository.findById(id).orElseThrow(ItemNotFoundException::new);
-        return ResponseSalesItemDto.fromEntity(item);
+    public ResponseSalesItemEachDto readOneItem(Long id) {
+        SalesItem item = getSalesItem(id);
+        return ResponseSalesItemEachDto.fromEntity(item);
     }
 
     @Transactional
-    public void saveItemImage(Long id, MultipartFile image, String writer, String password) {
+    public void saveItemImage(Long id, MultipartFile image, String username) {
         //item 객체 찾기
-        SalesItem item = salesItemRepository.findById(id).orElseThrow(ItemNotFoundException::new);
-
-        //객체 작성자의 아이디 패스워드 일치 하는지 확인
-        item.checkAuthAndThrowException(writer, password);
+        User user = userService.getUser(username);
+        SalesItem item = getSalesItem(id);
+        item.validItemIdInURL(user); //해당 유저가 제어건을 가지고 있는지 확인한다.
 
         // 폴더를 만든다.
         String profileDir = String.format("media/%d/", id);
@@ -80,17 +86,38 @@ public class SalesItemService {
     }
 
     @Transactional
-    public void update(Long id, RequestSalesItemDto requestDto) {
-        SalesItem item = salesItemRepository.findById(id).orElseThrow(ItemNotFoundException::new);
-        item.checkAuthAndThrowException(requestDto.getWriter(), requestDto.getPassword());
+    public void update(Long id, RequestSalesItemDto requestDto, String username) {
+        User user = userService.getUser(username);
+        SalesItem item = getSalesItem(id);
+
+        item.validItemIdInURL(user); //해당 유저가 제어건을 가지고 있는지 확인한다.
         item.update(requestDto);
     }
 
     @Transactional
-    public void deleteItem(Long id, DeleteItemDto requestDto) {
-        SalesItem item = salesItemRepository.findById(id).orElseThrow(ItemNotFoundException::new);
-        item.checkAuthAndThrowException(requestDto.getWriter(), requestDto.getPassword());
+    public void deleteItem(Long id, String username) {
+        SalesItem item = getSalesItem(id);
+
+        User user = userService.getUser(username);
+        item.validItemIdInURL(user);//해당 유저가 제어건을 가지고 있는지 확인한다.
+
+        //연관관계중 제거
+        user.removeItem(item);
+
         salesItemRepository.deleteById(id);
     }
 
+    public SalesItem getSalesItem(Long itemId) {
+        Optional<SalesItem> item = salesItemRepository.findById(itemId);
+        if (item.isEmpty()) {
+            throw new CustomException(ErrorCode.ITEM_NOT_FOUND_EXCEPTION);
+        }
+        return item.get();
+    }
+
+    @Transactional
+    public void saveWithImg(RequestSalesItemDto requestSalesItemDto, MultipartFile file, String currentUsername) {
+        ResponseSalesItemDto save = save(requestSalesItemDto, currentUsername);
+        if (file != null) saveItemImage(save.getId(), file, currentUsername);
+    }
 }

@@ -39,13 +39,27 @@ dependencies {
 	runtimeOnly 'org.xerial:sqlite-jdbc:3.41.2.2'
 	runtimeOnly 'org.hibernate.orm:hibernate-community-dialects:6.2.4.Final'
 
-
 	//h2
 	runtimeOnly 'com.h2database:h2'
 
 	//restdocs
 	asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
 	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+
+	//security
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	testImplementation 'org.springframework.security:spring-security-test'
+	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'// 자동으로 유저 인증 객체를 불러온다.
+
+	//jwt
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+	//socket
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+	// gson
+	implementation 'com.google.code.gson:gson:2.9.0'
 
 }
 
@@ -84,3 +98,48 @@ task copyDocument(type: Copy) {
 build {
 	dependsOn copyDocument
 }
+
+def frontendDir = "$projectDir/src/main/frontend"
+
+sourceSets {
+	main {
+		resources { srcDirs = ["$projectDir/src/main/resources"]
+		}
+	}
+}
+
+processResources { dependsOn "copyReactBuildFiles" }
+
+//npm install
+task installReact(type: Exec) {
+	workingDir "$frontendDir"
+	inputs.dir "$frontendDir"
+	group = BasePlugin.BUILD_GROUP
+	if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+		commandLine "npm.cmd", "audit", "fix"
+		commandLine 'npm.cmd', 'install' }
+	else {
+		commandLine "npm", "audit", "fix" commandLine 'npm', 'install'
+	}
+}
+
+//npm build
+task buildReact(type: Exec) {
+	dependsOn "installReact"
+	workingDir "$frontendDir"
+	inputs.dir "$frontendDir"
+	group = BasePlugin.BUILD_GROUP
+	if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+		commandLine "npm.cmd", "run-script", "build"
+	} else {
+		commandLine "npm", "run-script", "build"
+	}
+}
+
+//빌드 결과 이동
+task copyReactBuildFiles(type: Copy) {
+	dependsOn "buildReact"
+	from "$frontendDir/build"
+	into "$projectDir/src/main/resources/static"
+}
+

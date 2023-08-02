@@ -2,12 +2,17 @@ package com.lahee.market.controller;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lahee.market.dto.salesItem.DeleteItemDto;
 import com.lahee.market.dto.salesItem.RequestSalesItemDto;
 import com.lahee.market.dto.salesItem.ResponseSalesItemDto;
+import com.lahee.market.dto.user.LoginDto;
+import com.lahee.market.dto.user.SignupDto;
+import com.lahee.market.dto.user.TokenDto;
+import com.lahee.market.dto.user.UserResponseDto;
 import com.lahee.market.entity.SalesItem;
 import com.lahee.market.repository.SalesItemRepository;
 import com.lahee.market.service.SalesItemService;
+import com.lahee.market.service.UserService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,6 +22,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.mock.web.MockPart;
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.operation.preprocess.Preprocessors;
 import org.springframework.test.context.ActiveProfiles;
@@ -49,22 +55,34 @@ class SalesItemControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
+    private UserService userService;
+    @Autowired
     private SalesItemRepository salesItemRepository;
     @Autowired
     private SalesItemService salesItemService;
 
+    TokenDto loginDto;
+    SignupDto signupDto;
+
+    @BeforeEach
+    void setUp() {
+        signupDto = new SignupDto("test", "test", "test", "test");
+        UserResponseDto signup = userService.signup(signupDto);
+        loginDto = userService.login(new LoginDto(signup.getUsername(), signupDto.getPassword()));
+    }
 
     @Test
     @DisplayName("item 생성 조회 (POST /items)")
     public void saveItem() throws Exception {
         //given
         RequestSalesItemDto dto = getRequestSalesItemDto();
-        String requestBody = new ObjectMapper().writeValueAsString(dto);
+        String requestSalesItemDto = new ObjectMapper().writeValueAsString(dto);
 
         //when
-        mockMvc.perform(post("/items")
-                        .content(requestBody)
-                        .contentType(MediaType.APPLICATION_JSON))
+        MockMultipartFile jsonFile = new MockMultipartFile("requestSalesItemDto", "requestSalesItemDto", "application/json", requestSalesItemDto.getBytes(StandardCharsets.UTF_8));
+        mockMvc.perform(multipart("/items")
+                        .file(jsonFile)
+                        .header("Authorization", loginDto.getGrantType() + " " + loginDto.getAccessToken()))
 
                 .andDo(MockMvcResultHandlers.print())
                 .andDo(MockMvcRestDocumentation.document("Items/POST/item 생성 조회",
@@ -80,8 +98,6 @@ class SalesItemControllerTest {
         //then
         List<SalesItem> all = salesItemRepository.findAll();
         SalesItem salesItem = all.get(0);
-        assertThat(salesItem.getWriter()).isEqualTo(dto.getWriter());
-        assertThat(salesItem.getPassword()).isEqualTo(dto.getPassword());
         assertThat(salesItem.getTitle()).isEqualTo(dto.getTitle());
     }
 
@@ -89,10 +105,11 @@ class SalesItemControllerTest {
     @DisplayName("item 단건 조회 (GET /items/{itemId})")
     public void findOne() throws Exception {
         //given
-        ResponseSalesItemDto save = salesItemService.save(getRequestSalesItemDto());
+        ResponseSalesItemDto save = salesItemService.save(getRequestSalesItemDto(), signupDto.getUsername());
 
         //when
         ResultActions perform = mockMvc.perform(get("/items/{itemId}", save.getId())
+                        .header("Authorization", loginDto.getGrantType() + " " + loginDto.getAccessToken())
                         .contentType(MediaType.APPLICATION_JSON))
 
                 .andDo(MockMvcResultHandlers.print())
@@ -118,13 +135,12 @@ class SalesItemControllerTest {
             String title = "title" + i;
             String description = "desc" + i;
             int minPriceWanted = 10000 * i;
-            String writer = "writer" + i;
-            String password = "password" + i;
-            salesItemService.save(new RequestSalesItemDto(title, description, minPriceWanted, writer, password));
+            salesItemService.save(new RequestSalesItemDto(title, description, minPriceWanted), signupDto.getUsername());
         }
 
         //when
         ResultActions perform = mockMvc.perform(get("/items")
+                        .header("Authorization", loginDto.getGrantType() + " " + loginDto.getAccessToken())
                         .param("page", String.valueOf(2))
                         .param("limit", String.valueOf(10))
                         .contentType(MediaType.APPLICATION_JSON))
@@ -146,19 +162,18 @@ class SalesItemControllerTest {
 
     @Test
     @DisplayName("item 사진 업데이트 (PUT /items/{itemId}/image)")
-    @Disabled
+//    @Disabled
     //사진 업로드의 경우 post지원시에  테스트 가능 //TODO 이미지 테스트 경우 해당 파일 제거하여 관리하도록
     public void saveItemPhoto() throws Exception {
         //given
         RequestSalesItemDto reqDto = getRequestSalesItemDto();
-        ResponseSalesItemDto save = salesItemService.save(reqDto);
+        ResponseSalesItemDto save = salesItemService.save(reqDto, signupDto.getUsername());
 
 
         //when
         mockMvc.perform(multipart("/items/{itemId}/image", save.getId())
                         .file(new MockMultipartFile("image", "image.jpg", "image/jpg", "<<jpg data>>".getBytes(StandardCharsets.UTF_8)))
-                        .param("writer", reqDto.getWriter())
-                        .param("password", reqDto.getPassword())
+                        .header("Authorization", loginDto.getGrantType() + " " + loginDto.getAccessToken())
                         .contentType(MediaType.MULTIPART_FORM_DATA))
 
                 .andDo(MockMvcResultHandlers.print())
@@ -183,12 +198,13 @@ class SalesItemControllerTest {
         //given
         String modify = "MODIFY";
         RequestSalesItemDto reqDto = getRequestSalesItemDto();
-        ResponseSalesItemDto save = salesItemService.save(reqDto);
-        RequestSalesItemDto updateDto = new RequestSalesItemDto(modify, modify, reqDto.getMinPriceWanted(), reqDto.getWriter(), reqDto.getPassword());
+        ResponseSalesItemDto save = salesItemService.save(reqDto, signupDto.getUsername());
+        RequestSalesItemDto updateDto = new RequestSalesItemDto(modify, modify, reqDto.getMinPriceWanted());
         String requestBody = new ObjectMapper().writeValueAsString(updateDto);
 
         //when
         mockMvc.perform(put("/items/{itemId}", save.getId())
+                        .header("Authorization", loginDto.getGrantType() + " " + loginDto.getAccessToken())
                         .content(requestBody)
                         .contentType(MediaType.APPLICATION_JSON))
 
@@ -214,12 +230,11 @@ class SalesItemControllerTest {
     public void deleteItem() throws Exception {
         //given
         RequestSalesItemDto reqDto = getRequestSalesItemDto();
-        ResponseSalesItemDto save = salesItemService.save(reqDto);
-        String requestBody = new ObjectMapper().writeValueAsString(new DeleteItemDto(reqDto.getWriter(), reqDto.getPassword()));
+        ResponseSalesItemDto save = salesItemService.save(reqDto, signupDto.getUsername());
 
         //when
         mockMvc.perform(delete("/items/{itemId}", save.getId())
-                        .content(requestBody)
+                        .header("Authorization", loginDto.getGrantType() + " " + loginDto.getAccessToken())
                         .contentType(MediaType.APPLICATION_JSON))
 
                 .andDo(MockMvcResultHandlers.print())
@@ -241,8 +256,6 @@ class SalesItemControllerTest {
         String title = "중고 맥북 팝니다";
         String description = "2019년 맥북 프로 13인치 모델입니다";
         int minPriceWanted = 10000;
-        String writer = "jeeho.dev";
-        String password = "1qaz2wsx";
-        return new RequestSalesItemDto(title, description, minPriceWanted, writer, password);
+        return new RequestSalesItemDto(title, description, minPriceWanted);
     }
 }

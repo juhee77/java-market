@@ -10,9 +10,10 @@ public class ResponseNegotiationDto {
     Long id;
     Integer suggestedPrice;
     String status;
+    String proposalName;
 
 
     public static ResponseNegotiationDto fromEntity(Negotiation negotiation) {
-        return new ResponseNegotiationDto(negotiation.getId(), negotiation.getSuggestedPrice(), negotiation.getStatus().getName());
+        return new ResponseNegotiationDto(negotiation.getId(), negotiation.getSuggestedPrice(), negotiation.getStatus().getName(), negotiation.getUser().getNickname());
     }
 }
