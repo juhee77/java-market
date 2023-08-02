@@ -15,20 +15,20 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RequestMapping("/user/auth")
+@RequestMapping("user/auth")
 @RestController
 @RequiredArgsConstructor
 @Slf4j
 public class UserAuthController {
     private final UserService userService;
 
-    @PostMapping("/login")
+    @PostMapping("login")
     public ApiResponse<TokenDto> login(@Valid @RequestBody LoginDto dto) {
         TokenDto tokenDto = userService.login(dto);
         return new ApiResponse<>(HttpStatus.OK,tokenDto);
     }
 
-    @PostMapping("/signup")
+    @PostMapping("signup")
     public ApiResponse<UserResponseDto> signup(@Valid @RequestBody SignupDto signupDto) {
         return new ApiResponse<>(HttpStatus.OK,userService.signup(signupDto));
     }

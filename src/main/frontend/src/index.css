@@ -14,7 +14,13 @@ table{
   width: 80%;
 } 
 */
+@font-face {
+    font-family: 'IM_Hyemin-Bold';
+    src: url('./fonts/IM_Hyemin-Regular.otf') format('woff');
+    font-weight: bold;
+    font-style: normal;
+}
 
 body {
-    font-family: source-code-pro, Menlo, Monaco, Consolas, monospace;
+    font-family: 'IM_Hyemin-Bold',source-code-pro, Menlo, Monaco, Consolas, monospace;
 }

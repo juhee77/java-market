@@ -518,9 +518,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h3 id="_request">Request</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /items/1/comments HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /items/6/comments HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJJdGVzdCIsImlhdCI6MTY5MDgwNjI4OSwiZXhwIjoxNjkwODA5ODg5fQ.wGe307avlSq2UFQISnCEQe_MBwFYGDoCuIunAezhuIh9-JAHI09OH1v8qFhUdM96pFmr_QxTwTptFEktFAknOQ
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJJdGVzdCIsImlhdCI6MTY5MDk2OTA3MSwiZXhwIjoxNjkwOTcyNjcxfQ.KIh3muiBsUvoKqs-jp52sKYmSJlofqd7NKCoaswVDoLXbaxv5cmMLYDILEgxmn7wrivYbg-kWmp4u7bzDxXCBQ
 Content-Length: 46
 Host: localhost:8080
 
@@ -555,9 +555,9 @@ Content-Length: 52
 <h4 id="_test">test</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl 'http://localhost:8080/items/1/comments' -i -X POST \
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl 'http://localhost:8080/items/6/comments' -i -X POST \
     -H 'Content-Type: application/json;charset=UTF-8' \
-    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJJdGVzdCIsImlhdCI6MTY5MDgwNjI4OSwiZXhwIjoxNjkwODA5ODg5fQ.wGe307avlSq2UFQISnCEQe_MBwFYGDoCuIunAezhuIh9-JAHI09OH1v8qFhUdM96pFmr_QxTwTptFEktFAknOQ' \
+    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJJdGVzdCIsImlhdCI6MTY5MDk2OTA3MSwiZXhwIjoxNjkwOTcyNjcxfQ.KIh3muiBsUvoKqs-jp52sKYmSJlofqd7NKCoaswVDoLXbaxv5cmMLYDILEgxmn7wrivYbg-kWmp4u7bzDxXCBQ' \
     -d '{
   "content" : "할인 가능하신가요?"
 }'</code></pre>
@@ -574,9 +574,9 @@ Content-Length: 52
 <h3 id="_request_2">Request</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /items/5/comments/29 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /items/10/comments/29 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJDdGVzdCIsImlhdCI6MTY5MDgwNjI5MCwiZXhwIjoxNjkwODA5ODkwfQ.hbotlxmOLLPao2UCXZeL4ycfomoc51bdDS1Zozfko7ZNY-nmM58zviMYWS6bbySwyyMGcY-J9mqb7WcPfMjKBQ
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJDdGVzdCIsImlhdCI6MTY5MDk2OTA3MywiZXhwIjoxNjkwOTcyNjczfQ.GV0fL0O-l5GXU6LlHhpsqOBPCBIsvf9sru6ff_J2Hp9DTR5Hw2OMicSrv-SCwb3u4w4p6IW1sEKsh7ONKuaxwg
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -609,9 +609,9 @@ Content-Length: 99
 <h4 id="_test_2">test</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl 'http://localhost:8080/items/5/comments/29' -i -X GET \
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl 'http://localhost:8080/items/10/comments/29' -i -X GET \
     -H 'Content-Type: application/json;charset=UTF-8' \
-    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJDdGVzdCIsImlhdCI6MTY5MDgwNjI5MCwiZXhwIjoxNjkwODA5ODkwfQ.hbotlxmOLLPao2UCXZeL4ycfomoc51bdDS1Zozfko7ZNY-nmM58zviMYWS6bbySwyyMGcY-J9mqb7WcPfMjKBQ'</code></pre>
+    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJDdGVzdCIsImlhdCI6MTY5MDk2OTA3MywiZXhwIjoxNjkwOTcyNjczfQ.GV0fL0O-l5GXU6LlHhpsqOBPCBIsvf9sru6ff_J2Hp9DTR5Hw2OMicSrv-SCwb3u4w4p6IW1sEKsh7ONKuaxwg'</code></pre>
 </div>
 </div>
 </div>
@@ -625,9 +625,9 @@ Content-Length: 99
 <h3 id="_request_3">Request</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /items/2/comments?page=2&amp;limit=10 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /items/7/comments?page=2&amp;limit=10 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJDdGVzdCIsImlhdCI6MTY5MDgwNjI4OSwiZXhwIjoxNjkwODA5ODg5fQ.fAFzF2auaenIF9o3GEf81gM5a5agI3djWRU2Yi3D7yd_R0Sh_oTsPzlsgIgkFm0xsIeyTSyx5Uh1e7ZFDwe-yw
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJDdGVzdCIsImlhdCI6MTY5MDk2OTA3MiwiZXhwIjoxNjkwOTcyNjcyfQ.kJ5AQidJ7h9yXzPu7lvfotm3gjfX0t1ebe7-kBS5oStW95s254Ze1ysBePQXQ5r4EKNsStkRxOeZyJeCCneHqA
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -707,9 +707,9 @@ Content-Length: 953
 <h4 id="_test_3">test</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl 'http://localhost:8080/items/2/comments?page=2&amp;limit=10' -i -X GET \
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl 'http://localhost:8080/items/7/comments?page=2&amp;limit=10' -i -X GET \
     -H 'Content-Type: application/json;charset=UTF-8' \
-    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJDdGVzdCIsImlhdCI6MTY5MDgwNjI4OSwiZXhwIjoxNjkwODA5ODg5fQ.fAFzF2auaenIF9o3GEf81gM5a5agI3djWRU2Yi3D7yd_R0Sh_oTsPzlsgIgkFm0xsIeyTSyx5Uh1e7ZFDwe-yw'</code></pre>
+    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJDdGVzdCIsImlhdCI6MTY5MDk2OTA3MiwiZXhwIjoxNjkwOTcyNjcyfQ.kJ5AQidJ7h9yXzPu7lvfotm3gjfX0t1ebe7-kBS5oStW95s254Ze1ysBePQXQ5r4EKNsStkRxOeZyJeCCneHqA'</code></pre>
 </div>
 </div>
 </div>
@@ -723,9 +723,9 @@ Content-Length: 953
 <h3 id="_request_4">Request</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /items/3/comments/27 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /items/8/comments/27 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJDdGVzdCIsImlhdCI6MTY5MDgwNjI5MCwiZXhwIjoxNjkwODA5ODkwfQ.hbotlxmOLLPao2UCXZeL4ycfomoc51bdDS1Zozfko7ZNY-nmM58zviMYWS6bbySwyyMGcY-J9mqb7WcPfMjKBQ
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJDdGVzdCIsImlhdCI6MTY5MDk2OTA3MiwiZXhwIjoxNjkwOTcyNjcyfQ.kJ5AQidJ7h9yXzPu7lvfotm3gjfX0t1ebe7-kBS5oStW95s254Ze1ysBePQXQ5r4EKNsStkRxOeZyJeCCneHqA
 Content-Length: 45
 Host: localhost:8080
 
@@ -760,9 +760,9 @@ Content-Length: 52
 <h4 id="_test_4">test</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl 'http://localhost:8080/items/3/comments/27' -i -X PUT \
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl 'http://localhost:8080/items/8/comments/27' -i -X PUT \
     -H 'Content-Type: application/json;charset=UTF-8' \
-    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJDdGVzdCIsImlhdCI6MTY5MDgwNjI5MCwiZXhwIjoxNjkwODA5ODkwfQ.hbotlxmOLLPao2UCXZeL4ycfomoc51bdDS1Zozfko7ZNY-nmM58zviMYWS6bbySwyyMGcY-J9mqb7WcPfMjKBQ' \
+    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJDdGVzdCIsImlhdCI6MTY5MDk2OTA3MiwiZXhwIjoxNjkwOTcyNjcyfQ.kJ5AQidJ7h9yXzPu7lvfotm3gjfX0t1ebe7-kBS5oStW95s254Ze1ysBePQXQ5r4EKNsStkRxOeZyJeCCneHqA' \
     -d '{
   "content" : "[MODIFY] 수정된 댓글"
 }'</code></pre>
@@ -779,9 +779,9 @@ Content-Length: 52
 <h3 id="_request_5">Request</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /items/4/comments/28/reply HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /items/9/comments/28/reply HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJJdGVzdCIsImlhdCI6MTY5MDgwNjI5MCwiZXhwIjoxNjkwODA5ODkwfQ.eOsE8gPsm-VUHSNGQHMFvmabbPocwYLXvrOr8ks3vh053hWSe7jSHGU4vvH7yIdDCfIveidK1MeeTnFxBthT-A
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJJdGVzdCIsImlhdCI6MTY5MDk2OTA3MywiZXhwIjoxNjkwOTcyNjczfQ.68uW4HrJpRIcIU90mFRjGhDD5zWOkRjYLsgY5fa1laY2rHcPMlAUHLP2a-dP0PRvemYAGqgR0EZfsMu092sk2g
 Content-Length: 23
 Host: localhost:8080
 
@@ -816,9 +816,9 @@ Content-Length: 62
 <h4 id="_test_5">test</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl 'http://localhost:8080/items/4/comments/28/reply' -i -X PUT \
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl 'http://localhost:8080/items/9/comments/28/reply' -i -X PUT \
     -H 'Content-Type: application/json;charset=UTF-8' \
-    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJJdGVzdCIsImlhdCI6MTY5MDgwNjI5MCwiZXhwIjoxNjkwODA5ODkwfQ.eOsE8gPsm-VUHSNGQHMFvmabbPocwYLXvrOr8ks3vh053hWSe7jSHGU4vvH7yIdDCfIveidK1MeeTnFxBthT-A' \
+    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJJdGVzdCIsImlhdCI6MTY5MDk2OTA3MywiZXhwIjoxNjkwOTcyNjczfQ.68uW4HrJpRIcIU90mFRjGhDD5zWOkRjYLsgY5fa1laY2rHcPMlAUHLP2a-dP0PRvemYAGqgR0EZfsMu092sk2g' \
     -d '{
   "reply" : "REPLY"
 }'</code></pre>
@@ -835,9 +835,9 @@ Content-Length: 62
 <h3 id="_request_6">Request</h3>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /items/6/comments/30 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /items/11/comments/30 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJDdGVzdCIsImlhdCI6MTY5MDgwNjI5MSwiZXhwIjoxNjkwODA5ODkxfQ.wiHlKPThTUWhEQUJ33OYd6YU8hBv-eBTmmcsCFcortGKSWxNu3Gwd6UUhCNHUYfZ3sfYPYlxMK-tQ0K9O7Z96Q
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJDdGVzdCIsImlhdCI6MTY5MDk2OTA3MywiZXhwIjoxNjkwOTcyNjczfQ.GV0fL0O-l5GXU6LlHhpsqOBPCBIsvf9sru6ff_J2Hp9DTR5Hw2OMicSrv-SCwb3u4w4p6IW1sEKsh7ONKuaxwg
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -867,9 +867,9 @@ Content-Length: 49
 <h4 id="_test_6">test</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl 'http://localhost:8080/items/6/comments/30' -i -X DELETE \
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl 'http://localhost:8080/items/11/comments/30' -i -X DELETE \
     -H 'Content-Type: application/json;charset=UTF-8' \
-    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJDdGVzdCIsImlhdCI6MTY5MDgwNjI5MSwiZXhwIjoxNjkwODA5ODkxfQ.wiHlKPThTUWhEQUJ33OYd6YU8hBv-eBTmmcsCFcortGKSWxNu3Gwd6UUhCNHUYfZ3sfYPYlxMK-tQ0K9O7Z96Q'</code></pre>
+    -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJDdGVzdCIsImlhdCI6MTY5MDk2OTA3MywiZXhwIjoxNjkwOTcyNjczfQ.GV0fL0O-l5GXU6LlHhpsqOBPCBIsvf9sru6ff_J2Hp9DTR5Hw2OMicSrv-SCwb3u4w4p6IW1sEKsh7ONKuaxwg'</code></pre>
 </div>
 </div>
 </div>
