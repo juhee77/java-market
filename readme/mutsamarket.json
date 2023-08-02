@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "d80d610d-f39e-48e0-9be5-24d676d7b1ee",
+		"_postman_id": "a9501c3b-0341-4d84-868a-44f458517d20",
 		"name": "miniporject",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "20454273"
@@ -12,6 +12,16 @@
 				{
 					"name": "댓글 생성",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJxd2VyIiwiaWF0IjoxNjkwNzkyMTM0LCJleHAiOjE2OTA3OTU3MzR9.EdefN7BSYsmXQtIiA5tQwz62_Cr2Ejdom53uop23cmPYT9Wd6WN7vZuyPuF5xWohuVj3OFYUsbjRG126xapCXg",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [
 							{
@@ -21,7 +31,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"writer\" : \"asdf\",\n  \"password\" : \"asdf\",\n  \"content\" : \"할인 가능하신가요?\"\n}"
+							"raw": "{\n  \"content\" : \"할인 가능하신가요?\"\n}"
 						},
 						"url": {
 							"raw": "http://localhost:8080/items/1/comments",
@@ -42,6 +52,16 @@
 				{
 					"name": "페이징 조회(댓글)",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJxd2VyIiwiaWF0IjoxNjkwNTA4Nzc4fQ.eKF4b7gh93pk03sa79or7PR0iqxanr2nSb1gaBQtVOW_1-AH32s1PU8KFIAxSQ0PtFKYpabhyBVB8qZgM-8GFQ",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -95,11 +115,21 @@
 				{
 					"name": "댓글 수정",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJxd2VyIiwiaWF0IjoxNjkwNTE5MzgyLCJleHAiOjE2OTA1MjI5ODJ9.ryn7mQG7og4z0_4TbBMJDhs-DbB5AikRaDRWLXGhmkofXrDB7Xt7KBDatTSkx-rYmA7jXChSb7PZeul9dGK9MQ",
+									"type": "string"
+								}
+							]
+						},
 						"method": "PUT",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"writer\" : \"asdf\",\n  \"password\" : \"asdf\",\n  \"content\" : \"MODIFY\"\n}",
+							"raw": "{\n  \"content\" : \"MODIFY\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -126,6 +156,16 @@
 				{
 					"name": "댓글 reply(응답)저장",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJxd2VyIiwiaWF0IjoxNjkwNzkyMTM0LCJleHAiOjE2OTA3OTU3MzR9.EdefN7BSYsmXQtIiA5tQwz62_Cr2Ejdom53uop23cmPYT9Wd6WN7vZuyPuF5xWohuVj3OFYUsbjRG126xapCXg",
+									"type": "string"
+								}
+							]
+						},
 						"method": "PUT",
 						"header": [
 							{
@@ -135,7 +175,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"writer\": \"qwer\",\n    \"password\": \"qwer\",\n   \"reply\" : \"안될걸용\"\n}"
+							"raw": "{\n   \"reply\" : \"안될걸용\"\n}"
 						},
 						"url": {
 							"raw": "http://localhost:8080/items/1/comments/3/reply",
@@ -158,6 +198,16 @@
 				{
 					"name": "댓글 삭제",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJxd2VyIiwiaWF0IjoxNjkwNTA4Nzc4fQ.eKF4b7gh93pk03sa79or7PR0iqxanr2nSb1gaBQtVOW_1-AH32s1PU8KFIAxSQ0PtFKYpabhyBVB8qZgM-8GFQ",
+									"type": "string"
+								}
+							]
+						},
 						"method": "DELETE",
 						"header": [
 							{
@@ -167,7 +217,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"writer\" : \"asdf\",\n  \"password\" : \"asdf\"\n}"
+							"raw": ""
 						},
 						"url": {
 							"raw": "http://localhost:8080/items/1/comments/1",
@@ -193,17 +243,50 @@
 			"item": [
 				{
 					"name": "아이템 생성",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
 					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"title\": \"qwer\",\n    \"description\": \"qwer\",\n    \"minPriceWanted\": 12000,\n    \"writer\": \"qwer\",\n    \"password\": \"qwer\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJxd2VyIiwiaWF0IjoxNjkwOTM0ODYxLCJleHAiOjE2OTA5Mzg0NjF9.YWSkgrtavHDrJhsy5ZGdy5sGFPL9wFroDZ789Mwi3BjbzqRuEkBZMkZSmXlV3DcQ_nGj1NascxfQIyLPJA8zWQ",
+									"type": "string"
 								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
 							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "requestSalesItemDto",
+									"value": "{\n    \"title\": \"qwer\",\n    \"description\": \"qwer\",\n    \"minPriceWanted\": 12000\n}",
+									"contentType": "application/json",
+									"type": "text"
+								},
+								{
+									"key": "file",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								}
+							]
 						},
 						"url": {
 							"raw": "http://localhost:8080/items",
@@ -225,6 +308,16 @@
 						"disableBodyPruning": true
 					},
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJxd2VyIiwiaWF0IjoxNjkwNTIzNTYyLCJleHAiOjE2OTA1MjcxNjJ9.3IFgDnru2jdtAQMWjNfaLB9i6EFi7W_OksaOTfjLb76-7znTXSwSXgR2VIMPnwDoKcUv1zS5L5Oas7wd6xrhqw",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"body": {
@@ -265,6 +358,16 @@
 						"disableBodyPruning": true
 					},
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJxd2VyIiwiaWF0IjoxNjkwNDM4NDI5fQ.vZJ4tyKGDA4_bRKNIkFTa9ZwHQvMuJitxnsxFE7LdqrgPTSxQ5YmPqs6wpFl1nhvqvE82oPh7qtGD9fS7BnOfA, accessTokenExpiresIn=1690438429820",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"body": {
@@ -293,11 +396,21 @@
 				{
 					"name": "아이템 수정",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJxd2VyIiwiaWF0IjoxNjkwNDI5NjU3fQ.N8DrMGMzV3hQhIKLfaz7xLaBWzkBRdfjXAHsRJJ_M-FpmGfg1-1iWyHRiu-WgcBIdPqn-3j4K5BT6nXTpT3cSw, accessTokenExpiresIn=1690429657540",
+									"type": "string"
+								}
+							]
+						},
 						"method": "PUT",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"title\": \"MODIFY\",\n    \"description\": \"2019년 d맥asdf북 프로 13인치 모델입니다\",\n    \"minPriceWanted\": 1000000,\n    \"writer\": \"qwer\",\n    \"password\": \"qwer\"\n}",
+							"raw": "{\n    \"title\": \"MODIFY\",\n    \"description\": \"2019년 d맥asdf북 프로 13인치 모델입니다\",\n    \"minPriceWanted\": 1000000\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -321,6 +434,16 @@
 				{
 					"name": "아이템 사진 업데이트",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJxd2VyIiwiaWF0IjoxNjkwNDM4NDI5fQ.vZJ4tyKGDA4_bRKNIkFTa9ZwHQvMuJitxnsxFE7LdqrgPTSxQ5YmPqs6wpFl1nhvqvE82oPh7qtGD9fS7BnOfA, accessTokenExpiresIn=1690438429820",
+									"type": "string"
+								}
+							]
+						},
 						"method": "PUT",
 						"header": [],
 						"body": {
@@ -329,17 +452,19 @@
 								{
 									"key": "image",
 									"type": "file",
-									"src": "/Users/bagjuhui/Downloads/free-icon-lion-of-judah-3436890.png"
+									"src": "/Users/bagjuhui/Downloads/8208-coffee-blob (1).png"
 								},
 								{
 									"key": "writer",
 									"value": "qwer",
-									"type": "text"
+									"type": "text",
+									"disabled": true
 								},
 								{
 									"key": "password",
 									"value": "qwer",
-									"type": "text"
+									"type": "text",
+									"disabled": true
 								}
 							]
 						},
@@ -364,6 +489,16 @@
 						"disableBodyPruning": true
 					},
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJxd2VyIiwiaWF0IjoxNjkwNDM4NDI5fQ.vZJ4tyKGDA4_bRKNIkFTa9ZwHQvMuJitxnsxFE7LdqrgPTSxQ5YmPqs6wpFl1nhvqvE82oPh7qtGD9fS7BnOfA, accessTokenExpiresIn=1690438429820",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"body": {
@@ -393,17 +528,18 @@
 				{
 					"name": "아이템 삭제",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJxd2VyIiwiaWF0IjoxNjkwNDM4NDI5fQ.vZJ4tyKGDA4_bRKNIkFTa9ZwHQvMuJitxnsxFE7LdqrgPTSxQ5YmPqs6wpFl1nhvqvE82oPh7qtGD9fS7BnOfA, accessTokenExpiresIn=1690438429820",
+									"type": "string"
+								}
+							]
+						},
 						"method": "DELETE",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"writer\": \"qwer\",\n    \"password\": \"qwer\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
 						"url": {
 							"raw": "localhost:8080/items/1",
 							"host": [
@@ -426,6 +562,16 @@
 				{
 					"name": "proposal 생성",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJxd2VyIiwiaWF0IjoxNjkwNTA4Nzc4fQ.eKF4b7gh93pk03sa79or7PR0iqxanr2nSb1gaBQtVOW_1-AH32s1PU8KFIAxSQ0PtFKYpabhyBVB8qZgM-8GFQ",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [
 							{
@@ -435,7 +581,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"writer\" : \"zxcv\",\n  \"password\" : \"zxcv\",\n  \"suggestedPrice\" : 100000\n}"
+							"raw": "{\n  \"suggestedPrice\" : 100000\n}"
 						},
 						"url": {
 							"raw": "http://localhost:8080/items/1/proposal",
@@ -455,7 +601,20 @@
 				},
 				{
 					"name": "판매자가 자신에게 온 제안들을 확인",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJxd2VyIiwiaWF0IjoxNjkwODU0NjA3LCJleHAiOjE2OTA4NTgyMDd9.9-hYuPi5bAD3yXA4vKpzi6pv9gN5Pvs9mZk7qzEsB0FLy2i9d3KY__zx2Gb1lLGtPGI3diFMfkaBUiN4bQuuAQ",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [
 							{
@@ -463,8 +622,12 @@
 								"value": "application/json;charset=UTF-8"
 							}
 						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
-							"raw": "http://localhost:8080/items/1/proposal?writer=qwer&password=qwer&page=0",
+							"raw": "http://localhost:8080/items/1/proposal?page=0",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -476,14 +639,6 @@
 								"proposal"
 							],
 							"query": [
-								{
-									"key": "writer",
-									"value": "qwer"
-								},
-								{
-									"key": "password",
-									"value": "qwer"
-								},
 								{
 									"key": "page",
 									"value": "0"
@@ -504,7 +659,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:8080/items/1/proposal?writer=zxcv&password=zxcv&page=0",
+							"raw": "http://localhost:8080/items/1/proposal?page=0",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -516,14 +671,6 @@
 								"proposal"
 							],
 							"query": [
-								{
-									"key": "writer",
-									"value": "zxcv"
-								},
-								{
-									"key": "password",
-									"value": "zxcv"
-								},
 								{
 									"key": "page",
 									"value": "0"
@@ -545,7 +692,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"suggestedPrice\" : \"500000\",\n  \"password\" : \"zxcv\",\n  \"writer\" : \"zxcv\"\n}"
+							"raw": "{\n  \"suggestedPrice\" : \"500000\"\n}"
 						},
 						"url": {
 							"raw": "http://localhost:8080/items/1/proposal/1",
@@ -567,6 +714,16 @@
 				{
 					"name": "제안자가 자신의 제안을 삭제",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJxd2VyIiwiaWF0IjoxNjkwNTE5MzgyLCJleHAiOjE2OTA1MjI5ODJ9.ryn7mQG7og4z0_4TbBMJDhs-DbB5AikRaDRWLXGhmkofXrDB7Xt7KBDatTSkx-rYmA7jXChSb7PZeul9dGK9MQ",
+									"type": "string"
+								}
+							]
+						},
 						"method": "DELETE",
 						"header": [
 							{
@@ -574,10 +731,6 @@
 								"value": "application/json;charset=UTF-8"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"writer\" : \"zxcv\",\n  \"password\" : \"zxcv\"\n}"
-						},
 						"url": {
 							"raw": "http://localhost:8080/items/1/proposal/1",
 							"protocol": "http",
@@ -598,6 +751,16 @@
 				{
 					"name": "아이템 판매자가 제안을 수락",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhc2RmIiwiaWF0IjoxNjkwODU1OTEzLCJleHAiOjE2OTA4NTk1MTN9.uNkgauxpkaJHN_il3fddvkAK8EB_jIqp1Cka4zmhnvOlwDmdgbiLz8LgplMoQ-OC0TT-hPxIp-mze6m1DCJvWg",
+									"type": "string"
+								}
+							]
+						},
 						"method": "PUT",
 						"header": [
 							{
@@ -607,7 +770,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"writer\": \"qwer\",\n    \"password\": \"qwer\",\n    \"status\" : \"수락\"\n}"
+							"raw": "{\n    \"status\" : \"수락\"\n}"
 						},
 						"url": {
 							"raw": "http://localhost:8080/items/1/proposal/1",
@@ -638,7 +801,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"password\" : \"zxcv\",\n  \"writer\" : \"zxcv\",\n  \"status\" : \"확정\"\n}"
+							"raw": "{\n  \"status\" : \"확정\"\n}"
 						},
 						"url": {
 							"raw": "http://localhost:8080/items/1/proposal/1",
@@ -726,8 +889,188 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "회원가입",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\":\"qwer\",\n    \"password\":\"password\",\n    \"nickname\":\"qwer\",\n    \"passwordCheck\" : \"password\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/user/auth/signup",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"auth",
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "로그인",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\" : \"qwer\",\n    \"password\" : \"qwer\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/user/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "chatting room",
+			"item": [
+				{
+					"name": "채팅방 생성",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJxd2VyIiwiaWF0IjoxNjkwOTQ5Nzk2LCJleHAiOjE2OTA5NTMzOTZ9.MDdec9Ko0ABknP5fPPDytRbNoLi_ft6pdl8eSNPPrRD2IVTCV84UqI_C64wZcOd0vIUhyVxz7GvkjXHylhQCDg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"itemId\" : 1,\n    \"roomName\" : \"test1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/chat/rooms",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"chat",
+								"rooms"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "입장 가능 채팅방 조회",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJxd2VyIiwiaWF0IjoxNjkwOTM0ODYxLCJleHAiOjE2OTA5Mzg0NjF9.YWSkgrtavHDrJhsy5ZGdy5sGFPL9wFroDZ789Mwi3BjbzqRuEkBZMkZSmXlV3DcQ_nGj1NascxfQIyLPJA8zWQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/chat/rooms",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"chat",
+								"rooms"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "채팅방 단일건 조회",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJxd2VyIiwiaWF0IjoxNjkwOTM0ODYxLCJleHAiOjE2OTA5Mzg0NjF9.YWSkgrtavHDrJhsy5ZGdy5sGFPL9wFroDZ789Mwi3BjbzqRuEkBZMkZSmXlV3DcQ_nGj1NascxfQIyLPJA8zWQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/chat/rooms/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"chat",
+								"rooms",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJxd2VyIiwiaWF0IjoxNjkwNDI5NjU3fQ.N8DrMGMzV3hQhIKLfaz7xLaBWzkBRdfjXAHsRJJ_M-FpmGfg1-1iWyHRiu-WgcBIdPqn-3j4K5BT6nXTpT3cSw, accessTokenExpiresIn=1690429657540",
+				"type": "string"
+			}
+		]
+	},
 	"event": [
 		{
 			"listen": "prerequest",

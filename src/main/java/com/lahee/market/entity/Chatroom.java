@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
+import static jakarta.persistence.FetchType.LAZY;
+
 @Entity
 @Table(name = "chatroom")
 @Getter
@@ -22,13 +24,13 @@ public class Chatroom extends BaseEntity {
     private Long id;
     private String roomName;
 
-    @ManyToOne
+    @ManyToOne (fetch = LAZY )
     private SalesItem item;
 
-    @ManyToOne
+    @ManyToOne (fetch = LAZY)
     private User seller;
 
-    @ManyToOne
+    @ManyToOne (fetch = LAZY)
     private User suggester;
 
     private boolean isActive; //판매자가 수락을 했는지 여부

@@ -1,0 +1,50 @@
+= 채팅방 문서
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 3
+
+== 채팅방 생성
+
+=== Request
+
+include::{snippets}/Chatroom/POST/chatroom 생성/http-request.adoc[]
+
+=== Response
+
+include::{snippets}/Chatroom/POST/chatroom 생성/http-response.adoc[]
+
+
+== 입장 가능 채팅방 조회
+
+=== Request
+
+include::{snippets}/Chatroom/GET/chatroom 전체(아이템 판매자 - 입장가능한 방들) 확인/http-request.adoc[]
+
+=== Response
+
+include::{snippets}/Chatroom/GET/chatroom 전체(아이템 판매자 - 입장가능한 방들) 확인/http-response.adoc[]
+
+== 입장 가능 채팅방 조회
+
+=== Request
+
+include::{snippets}/Chatroom/GET/chatroom 단일 채팅방 확인/http-request.adoc[]
+
+=== Response
+
+include::{snippets}/Chatroom/GET/chatroom 단일 채팅방 확인/http-response.adoc[]
+
+
+== 단일 채팅방 삭제
+
+=== Request
+
+include::{snippets}/Chatroom/DELETE/chatroom 채팅방 삭제/http-request.adoc[]
+
+=== Response
+
+include::{snippets}/Chatroom/DELETE/chatroom 채팅방 삭제/http-response.adoc[]
+
+

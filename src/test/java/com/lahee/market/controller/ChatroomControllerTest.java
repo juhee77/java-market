@@ -100,7 +100,7 @@ class ChatroomControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
 
                 .andDo(MockMvcResultHandlers.print())
-                .andDo(MockMvcRestDocumentation.document("Chatroom/GET/chatroom 전체(아이템 판매자 - 입장가능한 방들) 확인",
+                .andDo(MockMvcRestDocumentation.document("Chatroom/GET/chatroom 전체(아이템 판매자 - 입장가능한 방들) 확인회",
                         Preprocessors.preprocessRequest(prettyPrint()),
                         Preprocessors.preprocessResponse(prettyPrint())));
 
