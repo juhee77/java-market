@@ -43,6 +43,14 @@ public class UserService {
         if (!signupDto.getPassword().equals(signupDto.getPasswordCheck())) {
             throw new CustomException(ErrorCode.PASSWORD_NOT_EQUAL);
         }
+        if (userRepository.findByUsername(signupDto.getUsername()).isPresent()) {
+            throw new CustomException(ErrorCode.ALREADY_USED_USERNAME);
+        }
+
+        //TODO 구현상의 오류로 임시로 로그인 아이디와 유저 이름을 동일하게 받도록 수정 , 이후에 채팅 부분 재 수정 예정
+        if (!signupDto.getUsername().equals(signupDto.getNickname())) {
+            throw new CustomException(ErrorCode.MY_FAULT);
+        }
 
         User user = new User().builder()
                 .username(signupDto.getUsername())

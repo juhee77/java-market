@@ -31,7 +31,9 @@ public enum ErrorCode {
     DUPLICATE_CHAT_ROOM(400, "", "이미 채팅방이 존재합니다"),
     INVALID_CHAT_ROOM_USER(400, "", "해당방의 권한 있는 사용자가 아닙니다."),
 
-    INVALID_CHAT_ROOM_ID(400, "", "유효하지 않은 채팅방 아이디 입니다.");
+    INVALID_CHAT_ROOM_ID(400, "", "유효하지 않은 채팅방 아이디 입니다."),
+    ALREADY_USED_USERNAME(400,"" , "이미 사용된 유저이름 입니다"),
+    MY_FAULT(400,"SO.. SAD.." , "loginId와 username을 영어로 *동일하게* 입력해주세요 - 늦게 발견한 구현상의 오류..ㅜㅠ" );
 
     int status;
     String code;

@@ -27,12 +27,6 @@ import static com.lahee.market.util.SecurityUtil.getCurrentUsername;
 public class SalesItemController {
     private final SalesItemService salesItemService;
 
-//    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
-//    public ApiResponse<ResponseDto> saveItem(@RequestBody @Valid RequestSalesItemDto requestSalesItemDto) {
-//        salesItemService.save(requestSalesItemDto, SecurityUtil.getCurrentUsername());
-//        return new ApiResponse<>(HttpStatus.OK,getInstance(SAVE_ITEM_MESSAGE));
-//    }
-
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ApiResponse<ResponseDto> saveItemWithPhoto(
             @Valid @RequestPart RequestSalesItemDto requestSalesItemDto, @RequestPart(value = "file", required = false) MultipartFile file) {
