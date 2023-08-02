@@ -24,9 +24,14 @@ public enum ErrorCode {
     INVALID_NEGOTIATION_USER_EXCEPTION(403, "", "해당 제안 아이템의 작성자가 아닙니다."),
     INVALID_NEGOTIATION_STATUS(403, "", "정의되지 않은 제안 상태입니다."),
     SECURITY_INVALID_USER_CONTEXT(400, "", "context에 정보가 없습니다."),
-    INVALID_PASSWORD(404,"" ,"패스워드가 일치하지 않습니다." ),
-    PASSWORD_NOT_EQUAL(404,"","패스워드, 패스워트 채크가 일치하지 않습니다."),
-    ITEM_SOLD_OUT(400,"" ,"이미 판매 완료 되었습니다" );
+    INVALID_PASSWORD(404, "", "패스워드가 일치하지 않습니다."),
+    PASSWORD_NOT_EQUAL(404, "", "패스워드, 패스워트 채크가 일치하지 않습니다."),
+    ITEM_SOLD_OUT(400, "", "이미 판매 완료 되었습니다"),
+    INVALID_USER(400, "", "구독 유저가 이상합니다."),
+    DUPLICATE_CHAT_ROOM(400, "", "이미 채팅방이 존재합니다"),
+    INVALID_CHAT_ROOM_USER(400, "", "해당방의 권한 있는 사용자가 아닙니다."),
+
+    INVALID_CHAT_ROOM_ID(400, "", "유효하지 않은 채팅방 아이디 입니다.");
 
     int status;
     String code;

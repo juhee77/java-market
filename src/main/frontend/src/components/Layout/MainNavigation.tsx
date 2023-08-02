@@ -72,21 +72,9 @@ const MainNavigation = () => {
                                         </Link>
                                     </li>
                                     <li className="nav-item">
-                                        <Link className="nav-link" to="/negotiation-view//approve">
-                                            나에게 도착한 제안
-                                        </Link>
-                                    </li>
-                                    <li className="nav-item">
-                                        <Link className="nav-link" to="/negotiation-view/suggest">
-                                            내가한 제안
-                                        </Link>
-                                    </li>
-
-                                    <li className="nav-item">
                                         <Link className="nav-link" to="/chat/all/rooms">
                                             연락온 채팅
                                         </Link>
-
                                     </li>
                                     <li className="nav-item">
                                         <button className="btn btn-primary" onClick={toggleLogoutHandler}>

@@ -77,14 +77,13 @@ public class Comment extends BaseEntity {
 
     //인증메서드
     //아이템에 속한 코멘트가 맞는지 확인한다.
-
     public void validItemIdInURL(Long itemId) {
         if (salesItem.getId() != itemId) {
             throw new CustomException(ErrorCode.COMMENT_NOT_IN_ITEM_EXCEPTION);
         }
     }
-    //아이템에 속한 유저와 로그인한 유저가 맞는지 확인한다.
 
+    //아이템에 속한 유저와 로그인한 유저가 맞는지 확인한다.
     public void validCommentUser(User user) {
         if (this.user != user) {
             throw new CustomException(ErrorCode.INVALID_COMMENT_USER);
