@@ -73,22 +73,24 @@
 
 ### 프로젝트 실행 방법
 스프링 부트 3버전대는 자바 17부터 지원하기 때문에 자바17로 설정되어 있어야 합니다.  
-또한 sqlite가 설치되어있어야 합니다. 이번 리엑트를 사용하여 npm이 설지되어 있어야합니다.
+또한 sqlite가 설치되어있어야 합니다. 또한 리엑트JS를 사용하여 nodeJs가 설치되어 있어야합니다.
+nodejs는 [여기서](https://nodejs.org/ko/download)설치 하시면 됩니다. 
 
 다운받고자 하는 파일로 cd 명령어를 이용해서 이동합니다.
-1. 깃 클론   
-`git clone https://github.com/likelion-backend-5th/MiniProject_Basic_ParkJuhee.git` 을 실행합니다. 
-2.  `cd src/main/frontend`로 디렉토리를 이동합니다.
-3.  `npm start` 를 실행합니다 - npm 관련 의존성을 설치 해줍니다.
-4. `cd ...`하여 본래 프로젝트 폴더로 돌아옵니다. 
-5. 그래들을 빌드합니다.  인텔리제이에서는 사이드 바에서 gradle -> build를 실행합니다.그래들이 설치 되어 있다면 cli환경에서 `gradlew build` 을 입력하는 방법도 있습니다.  
-6. 빌드 후에는 src/main/resources/static/docs 아래 html파일이 생성된것을 확인할 수 있습니다.
-7. cli 환경에서  `java -jar build/libs/market-0.0.1-SNAPSHOT.jar`을 실행시킵니다.
+1. 깃 클론 `git clone https://github.com/likelion-backend-5th/MiniProject_Basic_ParkJuhee.git` 을 실행합니다. 
+2. ~~`cd src/main/frontend`로 디렉토리를 이동합니다.~~
+3. ~~`npm start` 를 실행합니다 - npm 관련 의존성을 설치 해줍니다.~~
+4. ~~`cd ...`하여 본래 프로젝트 폴더로 돌아옵니다.~~ -> 포크해서 진행 해보니 nodejs가 설치되어있다면 아래만 진행하여도 동작하는것 같습니다
+5. 그래들을 빌드합니다. 터미널,cli환경에서 `gradlew build` 을 입력하는 방법도 있습니다.  
+6. 빌드 후에는 src/main/resources/static/docs 아래 html파일이 생성된것을 확인할 수 있습니다. (문서화된 API명세 입니다.)
+7. 이후 cli에서 `java -jar build/libs/market-0.0.1-SNAPSHOT.jar`를 실행시킨후 [http://localhost:8080](http://localhost:8080) 실행시킵니다.
 
 ### 페이지 구성
 - [home-아이템 확인](http://localhost:8080/)  
 - [회원가입 - (채팅 구현시에 오류로  현재는 아이디와 nickname을 동일하게 해야 회원가입이 가능하도록 설정)](http://localhost:8080/signup)  
-- [로그인](http://localhost:8080/login)  
+- [로그인](http://localhost:8080/login)
+
+이후 UI는 로그인 후에 확인 가능합니다.  
 - [아이템 추가](http://localhost:8080/item-add-view)  
 - [1번 아이템 확인](http://localhost:8080/item-view/1)  
 - [나와 관련있는 채팅방 확인](http://localhost:8080/chatroomlist-view)  
