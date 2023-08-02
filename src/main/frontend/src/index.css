@@ -15,11 +15,6 @@ table{
 } 
 */
 
-@font-face {
-    font-family: 'IM_Hyemin-Bold';
-    src: url('./fonts/IM_Hyemin-Regular.ttf') format('ttf');
-}
-
 body {
-    font-family: 'IM_Hyemin-Bold', source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+    font-family: source-code-pro, Menlo, Monaco, Consolas, monospace;
 }
