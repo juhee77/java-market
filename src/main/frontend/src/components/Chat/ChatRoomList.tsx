@@ -1,14 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
 import AuthContext from 'store/auth-context';
 import ChatRoomListForm from './ChatRoomListForm';
+import { ChatRoom } from 'type/types';
+import { getChatroomHandler } from 'store/auth-action';
+import { response } from 'express';
 
-
-type ChatRoom = {
-    id: string;
-    name: string;
-    writer: string;
-    number: number;
-}
 
 const ChatRoomList: React.FC = () => {
     const authCtx = useContext(AuthContext);
@@ -19,18 +15,13 @@ const ChatRoomList: React.FC = () => {
 
     useEffect(() => {
         setLoading(true);
-        const token = authCtx.token;
 
-        fetch('/chat/room', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`,
-            },
+        getChatroomHandler(authCtx.token).then((response) => { 
+            if(response!=null){
+                console.log('채팅방 얻어옴');
+                setChatRooms(response.data)
+            }
         })
-            .then((response) => response.json())
-            .then((data) => setChatRooms(data))
-            .catch((error) => console.error(error));
 
         setLoading(false);
     }, []);

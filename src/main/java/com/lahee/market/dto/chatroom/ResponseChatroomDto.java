@@ -15,6 +15,7 @@ public class ResponseChatroomDto {
     private Long itemId;
     private String itemName;
     private String itemSeller;
+    private boolean isActive;
 
     public static ResponseChatroomDto fromEntity(Chatroom chatroom) {
         ResponseChatroomDto dto = new ResponseChatroomDto();
@@ -23,6 +24,7 @@ public class ResponseChatroomDto {
         dto.id = chatroom.getId();
         dto.itemSeller = chatroom.getSeller().getNickname();
         dto.roomName = chatroom.getRoomName();
+        dto.isActive = chatroom.isActive();
         return dto;
     }
 }

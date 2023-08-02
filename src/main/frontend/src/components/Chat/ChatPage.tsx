@@ -2,30 +2,18 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { Params, useNavigate, useParams } from "react-router-dom";
 import * as Stomp from "@stomp/stompjs";
 import AuthContext from "store/auth-context";
+import { ChatMessage, ChatRoomDetail } from "type/types";
+import { getEachChatroomHandler } from "store/auth-action";
 
-interface ChatMessage {
-    messageType: string;
-    roomId: string;
-    writer: string;
-    message: string;
-    time: string;
-}
-
-type ChatRoom = {
-    id: string;
-    name: string;
-    writer: string;
-    number: number;
-}
 type props = {
-    id: string;
+    roomId: string;
 };
 
-const ChatPage: React.FC<props> = () => {
+const ChatPage: React.FC<props> = (porps) => {
     const client = useRef<Stomp.Client | null>(null);
     const [messages, setMessages] = useState<ChatMessage[]>([]);
-    const { roomId, name } = useParams<Params>();
-    const [chatRoom, setChatRooms] = useState<ChatRoom>();
+    const [chatRoom, setChatRooms] = useState<ChatRoomDetail>();
+    const { roomId } = useParams<Params>();
 
     const [message, setMessage] = useState<string>("");
     const authCtx = useContext(AuthContext);
@@ -36,22 +24,17 @@ const ChatPage: React.FC<props> = () => {
     const token = authCtx.token;
 
     function findRoomDetail() {
-        fetch("/chat/room/enter/" + roomId, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-            },
-        })
-            .then((response) => response.json())
-            .then((data) => setChatRooms(data))
-            .catch((error) => console.error(error));
+        getEachChatroomHandler(authCtx.token, roomId).then((response) => {
+            if (response != null) {
+                setChatRooms(response.data)
+            }
+        });
     }
 
     useEffect(() => {
-        console.log("testing" + roomId + " " + name);
-        findRoomDetail();
-        connect();
+        console.log("testing" + roomId + " " );
+        findRoomDetail(); //먼저 방의 자세한 정보를 받아온다. 
+        connect(); //접속한다.
         //return () => disconnect();
     }, []);
 
@@ -114,7 +97,6 @@ const ChatPage: React.FC<props> = () => {
 
     const subDisconnect = () => {
         console.log("subDisconnect");
-        subcribeOutRoom();
         client.current?.deactivate();
     };
 
@@ -147,21 +129,6 @@ const ChatPage: React.FC<props> = () => {
         setEnter(false);
     };
 
-    const subcribeOutRoom = () => {
-        if (enter) {
-            //처음 접속 한 경우에만
-            client.current?.publish({
-                destination: "/pub/chat/subscribe/out",
-                body: JSON.stringify({
-                    roomId: roomId ? roomId : "ERROR",
-                    writer: authCtx.userObj.nickname,
-                    message: message,
-                }),
-            });
-            setEnter(false);
-        }
-    };
-
     const handleSendMessage = () => {
         if (!authCtx.token) {
             console.log("token이 없습니다.");
@@ -183,12 +150,12 @@ const ChatPage: React.FC<props> = () => {
 
     const handleOutChatRoom = () => {
         disconnect();
-        navigate("/chat/all/rooms");
+        navigate("chatroomlist-view");
     };
 
     const handleOutSubscribeChatRoom = () => {
         subDisconnect();
-        navigate("/chat/all/rooms");
+        navigate("/chatroomlist-view");
     };
 
     useEffect(() => {
@@ -201,8 +168,10 @@ const ChatPage: React.FC<props> = () => {
     return (
         <div className="chat-page-container">
             <div className="chat-header">
-                <h1>{chatRoom?.name}</h1>
-                <div>{chatRoom?.number}</div>
+                <h1>{chatRoom?.roomName}</h1>
+                <div>{chatRoom?.id}</div>
+                <div>{chatRoom?.itemSeller}</div>
+                <div>{chatRoom?.itemName}</div>
             </div>
             <div className="chat-messages-container" ref={messageContainerRef}>
                 {messages.map((msg, index) => (

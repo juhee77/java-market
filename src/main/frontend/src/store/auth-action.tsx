@@ -137,7 +137,6 @@ export const addNegotiation = (
   suggestedPrice: string
 ) => {
   const url = '/items/' + itemId + '/proposal';
-  console.log("??"+url);
   const addNegotiationObject = { suggestedPrice }
   return POST(url, addNegotiationObject, createTokenHeader(token));
 }
@@ -155,5 +154,22 @@ export const getItemProposalHandler = (
   itemId: string
 ) => {
   const url = '/items/' + itemId + '/proposal';
+  return GET(url, createTokenHeader(token));
+}
+
+export const getChatroomHandler = (
+  token: string,
+) => {
+  const url = '/chat/rooms'
+  return GET(url, createTokenHeader(token));
+}
+
+
+
+export const getEachChatroomHandler = (
+  token: string,
+  chatroomId : string|undefined
+) => {
+  const url = '/chat/rooms/'+chatroomId
   return GET(url, createTokenHeader(token));
 }

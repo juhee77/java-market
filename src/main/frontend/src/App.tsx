@@ -27,11 +27,11 @@ function App() {
                     element={authCtx.isLoggedIn ? <Navigate to='/' /> : <AuthPage />}
                 />
                 <Route path="/profile/" element={!authCtx.isLoggedIn ? <Navigate to='/' /> : <ProfilePage />} />
-                <Route path="/chat/all/rooms" element={!authCtx.isLoggedIn ? <Navigate to='/' /> : <ChatRoomList />} />
+                <Route path="/chatroomlist-view" element={!authCtx.isLoggedIn ? <Navigate to='/' /> : <ChatRoomList />} />
                 <Route path="/item-add-view" element={!authCtx.isLoggedIn ? <Navigate to='/' /> :<AddItemPage/>} />
                 <Route path="/item-view/:itemId" element={<ItemPage itemId={''} />} />
 
-                <Route path="/chat/room/:roomId" element={<ChatPage id={''} />} />
+                <Route path="/chatroom-view/:roomId" element={<ChatPage roomId={''} />} />
                 
             </Routes>
 

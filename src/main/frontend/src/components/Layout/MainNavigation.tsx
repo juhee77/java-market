@@ -72,7 +72,7 @@ const MainNavigation = () => {
                                         </Link>
                                     </li>
                                     <li className="nav-item">
-                                        <Link className="nav-link" to="/chat/all/rooms">
+                                        <Link className="nav-link" to="/chatroomlist-view">
                                             연락온 채팅
                                         </Link>
                                     </li>
