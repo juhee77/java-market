@@ -11,9 +11,29 @@ spring:
     resources:
       static-locations: file:media/,classpath:/static,classpath:/static/static
 
+  application:
+    name: hello-spring
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+    propagation:
+      consume: b3_multi
+      produce: b3_multi
+  zipkin:
+    tracing:
+      endpoint: "http://localhost:9411/api/v2/spans"
+
 jwt:
   secret: n714+9J8YzJPHXwB/j+D4TiXc8lr70oADvuEMH0y1r/t5juDBzEA0dsaN4p3AsLdZ/t20lOViNOSCTHP1RKjOA==
   accessExpirationTime: 3600
+
+logging:
+  pattern:
+    level: "%5p [%X{traceId:-},%X{spanId:-}]"
+
+
 ---
 spring:
   config:
